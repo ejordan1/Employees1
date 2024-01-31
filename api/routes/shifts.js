@@ -1,9 +1,8 @@
 import express from "express"
+import { addShift } from "../controllers/shift.js"
 
 const router = express.Router()
 
-router.get("/", (req,res)=>{
-    res.json("this is shift")
-})
+router.get("/", addShift)
 
 export default router
