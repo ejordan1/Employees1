@@ -5,8 +5,8 @@ const router = express.Router()
 
 router.get("/", getShifts)
 router.get("/:id", getShift)
-router.get("/", addShift)
-router.get("/:id", deleteShift)
-router.get("/:id", updateShift)
+router.post("/", addShift)
+router.delete("/:id", deleteShift)
+router.put("/:id", updateShift)
 
 export default router
