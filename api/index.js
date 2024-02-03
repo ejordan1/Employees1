@@ -4,12 +4,14 @@ import express from "express"
 import shiftsRoutes from "./routes/shifts.js"
 import authRoutes from "./routes/auth.js"
 import employeeRoutes from "./routes/employees.js"
+import cookieParser from "cookie-parser"
 
 const app = express()
 
 
 
 app.use(express.json())
+app.use(cookieParser())
 app.use("/api/shifts", shiftsRoutes)
 app.use("/api/employees", employeeRoutes)
 app.use("/api/auth", authRoutes)
