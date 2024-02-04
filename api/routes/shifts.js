@@ -7,6 +7,6 @@ router.get("/", getShifts)
 router.get("/:id", getShift)
 router.post("/", addShift)
 router.delete("/:id", deleteShift)
-router.put("/:id", updateShift)
+router.put("/", updateShift)
 
 export default router

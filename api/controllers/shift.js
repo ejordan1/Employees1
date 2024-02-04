@@ -37,6 +37,7 @@ export const deleteShift = (req,res)=>{
         const shiftId = req.params.id
         const q = "DELETE FROM shifts WHERE `id` = ? AND `uid` = ?"
 
+        //doesn't give an error even if the employee number is not correct, just doesn't delete
         db.query(q, [shiftId, employeeInfo.id], (err,data)=>{
             if(err) return res.status(403).json("You can delete only your posts")
 
@@ -46,6 +47,25 @@ export const deleteShift = (req,res)=>{
 }
 
 export const updateShift = (req,res)=>{
-    res.json("from controller shifts");
-}
+    const token = req.cookies.access_token;
+    if (!token) return res.status(401).json("Not authenticated");
 
+    jwt.verify(token, "jwtkey", (err, employeeInfo)=>{
+        if(err) return res.status(403).json("token is not vaild!");
+
+        //const shiftId = req.params.id;
+        const q =  "UPDATE shifts SET `starttime`=?, `endtime`=? WHERE `id` = ?";
+
+        // ignoring auth stuff for now
+        // I think I need to de-associate employee from shift, or make the logic such that
+        // when an employee is removes it removes them from the shift but doesn't delete the shift
+
+        // taking it all from the body
+        const values = [req.body.starttime, req.body.endtime, req.body.id];
+
+        db.query(q, values, (err, data) => {
+            if (err) return res.status(500).json(err);
+            return res.json("Shift has been updated");
+        });
+    })
+}
