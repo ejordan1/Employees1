@@ -11,7 +11,7 @@ export const register = (req,res)=>{
     // const q = "SELECT * FROM employees1.shifts;"
     // console.log("Connected!");
 
-    const q = "SELECT * FROM employees1.employees WHERE id = ?"
+    const q = "SELECT * FROM employees1.users WHERE id = ?"
     db.query(q, [req.body.id], (err,data)=>{
         if (err) return res.json(err)
         // in javascript it gives true for checking if length is not 0
@@ -21,12 +21,12 @@ export const register = (req,res)=>{
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt)
 
-        const q = "INSERT INTO employees(`firstname`,`lastname`,`password`, `role`) VALUES (?)"
+        const q = "INSERT INTO users(`firstname`,`lastname`,`password`, `role`) VALUES (?)"
         const values = [
             req.body.firstname,
             req.body.lastname,
             hash,
-            0
+            req.body.role
         ]
 
         // const values = [
@@ -45,7 +45,7 @@ export const register = (req,res)=>{
 
 export const login = (req,res)=>{
 
-        const q = "SELECT * FROM employees WHERE id = ?"
+        const q = "SELECT * FROM users WHERE id = ?"
 
         db.query(q, [req.body.id], (err,data)=>{
             if(err)return res.json(err);
