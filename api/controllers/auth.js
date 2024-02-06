@@ -21,11 +21,12 @@ export const register = (req,res)=>{
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt)
 
-        const q = "INSERT INTO employees(`firstname`,`lastname`,`password`) VALUES (?)"
+        const q = "INSERT INTO employees(`firstname`,`lastname`,`password`, `role`) VALUES (?)"
         const values = [
             req.body.firstname,
             req.body.lastname,
             hash,
+            0
         ]
 
         // const values = [
