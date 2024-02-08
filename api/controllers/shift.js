@@ -87,6 +87,78 @@ export const deleteShift = (req, res) => {
   });
 };
 
+export const pickupShift = (req,res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(401).json("Not authenticated");
+
+  jwt.verify(token, "jwtkey", (err, employeeInfo) => {
+    if (err) return res.status(403).json("token is not valid!");
+  const q =
+          "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id = ?"; // 
+        db.query(
+          q,
+         [req.body.shiftid],
+          (err, data) => {
+            if (err) return res.status(500).json(err);
+            if (data.length === 0)
+              return res.status(500).json("no shift was found");
+
+            if (
+              data[0].starttime == req.body.starttime &&
+              data[0].endtime == req.body.endtime
+            ) {
+              // shift matches up, allow the change to take place
+              const q =
+                "UPDATE `employees1`.`shifts` SET `uid` = ? WHERE (`id` = '?')";
+
+              db.query(q, [employeeInfo.id, req.body.shiftid], (err, data) => {
+                if (err) return res.status(500).json(err);
+                return res.json("Shift has been picked up by: " + employeeInfo.id);
+              });
+            } else {
+              return res.status(500).json("Shift data doesn't match");
+            }
+          }
+        );
+  });
+}
+
+export const dropShift = (req,res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(401).json("Not authenticated");
+
+  jwt.verify(token, "jwtkey", (err, employeeInfo) => {
+    if (err) return res.status(403).json("token is not valid!");
+  const q =
+          "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id = 5 AND s.uid = 8"; // sid = get from body, and s.uid = employeeInfo.id
+        db.query(
+          q,
+         //  [req.body.eid, req.body.shiftid],
+          (err, data) => {
+            if (err) return res.status(500).json(err);
+            if (data.length === 0)
+              return res.status(500).json("no shift was found");
+
+            if (
+              data[0].starttime == req.body.starttime &&
+              data[0].endtime == req.body.endtime
+            ) {
+              // shift matches up, allow the change to take place
+              const q =
+                "UPDATE `employees1`.`shifts` SET `uid` = NULL WHERE (`id` = '?')";
+
+              db.query(q, [req.body.shiftid], (err, data) => {
+                if (err) return res.status(500).json(err);
+                return res.json("Shift has been dropped");
+              });
+            } else {
+              return res.status(500).json("Shift data doesn't match");
+            }
+          }
+        );
+  });
+}
+
 export const updateShift = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
@@ -94,8 +166,6 @@ export const updateShift = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("token is not valid!");
 
-    switch (req.body.actionType) {
-      case "pickUpShift":
         const q =
           "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id = 5";
         db.query(
@@ -123,8 +193,6 @@ export const updateShift = (req, res) => {
             }
           }
         );
-        break;
-    }
 
     // NEXT: ADD THIS TO THE SWITCH STATEMENT
 
