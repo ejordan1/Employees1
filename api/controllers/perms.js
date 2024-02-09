@@ -73,14 +73,14 @@ export const addPerm = (req, res) => {
             // Implement verifying concurrent writes same info later
 
             //Currently working on this!
-            const q = "UPDATE perms SET (`position`, `starttime`, `endtime`, `slots`) VALUES (?)";
+            const q = "UPDATE employees1.perms SET `position`=?, `starttime`=?, `endtime`=?, `slots`=? WHERE `id`=?";
                 //UPDATE shifts SET `starttime`=?, `endtime`=?, `uid`=? WHERE `id`=?
-            const values = [req.body.position, req.body.starttime, req.body.endtime, req.body.slots];
+            const values = [req.body.position, req.body.starttime, req.body.endtime, req.body.slots, req.body.permid];
   
-          db.query(q, [values], (err, data) => {
+          db.query(q, values, (err, data) => {
             if (err) return res.status(500).send(err);
       
-            return res.status(200).json("perm has been added by admin");
+            return res.status(200).json("perm has been edited by admin");
           });
         }
       });
