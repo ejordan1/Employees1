@@ -1,15 +1,16 @@
-import express from "express"
-import {  addPerm, editPerm, getPerms } from "../controllers/perms.js"
+import express from "express";
+import {
+  addPerm,
+  deletePerm,
+  editPerm,
+  getPerms,
+} from "../controllers/perms.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/", getPerms)
-// router.get("/:id", getShift)
- router.post("/", addPerm)
-// router.delete("/admin", deleteShift)
- router.put("/", editPerm)
+router.get("/", getPerms);
+router.post("/", addPerm);
+router.put("/", editPerm);
+router.delete("/", deletePerm);
 
-// router.put("/pickup", pickupShift)
-// router.put("/drop", dropShift)
-
-export default router
+export default router;
