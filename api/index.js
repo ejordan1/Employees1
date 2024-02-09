@@ -5,7 +5,6 @@ import permsRoutes from "./routes/perms.js"
 import fillsRoutes from "./routes/fills.js"
 import shiftsRoutes from "./routes/shifts.js"
 import authRoutes from "./routes/auth.js"
-import employeeRoutes from "./routes/employees.js"
 import cookieParser from "cookie-parser"
 
 const app = express()
@@ -17,7 +16,6 @@ app.use(cookieParser())
 app.use("/api/perms", permsRoutes)
 app.use("/api/fills", fillsRoutes)
 app.use("/api/shifts", shiftsRoutes)
-app.use("/api/employees", employeeRoutes)
 app.use("/api/auth", authRoutes)
 
 app.listen(8800, ()=>{

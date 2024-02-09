@@ -70,12 +70,9 @@ export const addFill = (req, res) => {
             .json("error:" + err + " , You don't have admin privlages");
         } else {
 
-            // Implement verifying concurrent writes same info later
-
-            //Currently working on this!
             const fillId = req.body.fillid;
+            if (!fillId) return res.status(500).json("did not have fillid in body");
             const q = "DELETE FROM fills WHERE `id`=?";
-                //UPDATE shifts SET `starttime`=?, `endtime`=?, `uid`=? WHERE `id`=?
   
           db.query(q, [fillId], (err, data) => {
             if (err) return res.status(500).send(err);

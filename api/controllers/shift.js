@@ -161,7 +161,6 @@ export const dropShift = (req,res) => {
           "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id = 5 AND s.uid = 8"; // sid = get from body, and s.uid = employeeInfo.id
         db.query(
           q,
-         //  [req.body.eid, req.body.shiftid],
           (err, data) => {
             if (err) return res.status(500).json(err);
             if (data.length === 0)

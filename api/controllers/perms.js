@@ -47,7 +47,7 @@ export const addPerm = (req, res) => {
   
           db.query(q, [values], (err, data) => {
             if (err) return res.status(500).send(err);
-      
+            if (data.affectedRows === 0) return res.status(404).json("Did not affect any rows");
             return res.status(200).json("perm has been added by admin");
           });
         }
@@ -69,17 +69,12 @@ export const addPerm = (req, res) => {
             .status(401)
             .json("error:" + err + " , You don't have admin privlages");
         } else {
-
-            // Implement verifying concurrent writes same info later
-
-            //Currently working on this!
             const q = "UPDATE employees1.perms SET `position`=?, `starttime`=?, `endtime`=?, `slots`=? WHERE `id`=?";
-                //UPDATE shifts SET `starttime`=?, `endtime`=?, `uid`=? WHERE `id`=?
             const values = [req.body.position, req.body.starttime, req.body.endtime, req.body.slots, req.body.permid];
-  
+            if (!req.body.permid) return res.status(500).json("did not have permid in body");
           db.query(q, values, (err, data) => {
             if (err) return res.status(500).send(err);
-      
+            if (data.affectedRows === 0) return res.status(404).json("Did not affect any rows");
             return res.status(200).json("perm has been edited by admin");
           });
         }
@@ -102,12 +97,9 @@ export const addPerm = (req, res) => {
             .json("error:" + err + " , You don't have admin privlages");
         } else {
 
-            // Implement verifying concurrent writes same info later
-
-            //Currently working on this!
             const permId = req.body.permid;
+            if (!permId) return res.status(500).json("did not have permid in body");
             const q = "DELETE FROM perms WHERE `id`=?";
-                //UPDATE shifts SET `starttime`=?, `endtime`=?, `uid`=? WHERE `id`=?
   
           db.query(q, [permId], (err, data) => {
             if (err) return res.status(500).send(err);
