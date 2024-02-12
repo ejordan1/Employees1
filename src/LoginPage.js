@@ -30,6 +30,7 @@ function LoginPage() {
         try {
           const res = await axios.post("/auth/login", {id, password});
           setUser(res.data);
+          
         } catch (err) {
           console.log(err);
         }

@@ -1,15 +1,22 @@
-import logo from './logo.svg';
 import AvailableShifts from './AvailableShifts';
-import LoginPage from './Login';
+import LoginPage from './LoginPage';
 import './App.css';
+import Navbar from './Navbar';
+import { BrowserRouter } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
+    <BrowserRouter>
+    <Routes>
+    <Route exact path="/" element ={<LoginPage/>}/>
+    <Route exact path="/available" element ={<AvailableShifts/>}/>
+    </Routes>
     <div className="App">
-     hello
-     {/* <AvailableShifts/> */}
-     <LoginPage></LoginPage>
+
+     <Navbar></Navbar>
     </div>
+    </BrowserRouter>
   );
 }
 

@@ -35,9 +35,15 @@ function AvailableShifts() {
 
       
       return (
-        <div style = {getStyle()} class = "AvailableShifts">
-          <p>hello AvailableShifts</p>
-          <p>{avilableShifts}</p>
+        <div style = {getStyle()} className = "AvailableShifts">
+          <p>{avilableShifts.map((shift)=>
+          <div>
+            <p>{shift.starttime}</p>
+            <p>{shift.endtime}</p>
+            </div>
+          )}</p>
+
+          <p></p>
         </div>
         
       );
