@@ -3,10 +3,10 @@ import { addShift, getAllShifts, getMyShifts, getAvailableShifts, editShift, del
 
 const router = express.Router()
 
-router.get("/admin", getAllShifts)
-router.post("/admin", addShift)
-router.delete("/admin", deleteShift)
-router.put("/admin", editShift)
+router.get("/admin/all", getAllShifts)
+router.post("/admin/add", addShift)
+router.put("/admin/delete", deleteShift)
+router.put("/admin/edit", editShift)
 
 router.get("/available", getAvailableShifts)
 router.get("/myshifts", getMyShifts)

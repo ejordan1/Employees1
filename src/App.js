@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import { BrowserRouter } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
 import MyShifts from './MyShifts';
+import AllShifts from './AllShifts';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
     <Route exact path="/" element ={<LoginPage/>}/>
     <Route exact path="/available" element ={<AvailableShifts/>}/>
     <Route exact path="/myshifts" element ={<MyShifts/>}/>
+    <Route exact path="/allshifts" element ={<AllShifts/>}/>
     </Routes>
     <div className="App">
 

@@ -75,9 +75,9 @@ export const addShift = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "INSERT INTO shifts(`starttime`, `endtime`, `uid`) VALUES (?)";
+          "INSERT INTO shifts(`starttime`, `endtime`, `position`, `uid`) VALUES (?)";
 
-        const values = [req.body.starttime, req.body.endtime, req.body.uid];
+        const values = [req.body.starttime, req.body.endtime, req.body.position, req.body.uid];
 
         db.query(q, [values], (err, data) => {
           if (err) return res.status(500).json(err);
@@ -108,7 +108,7 @@ export const editShift = (req, res) => {
           req.body.starttime,
           req.body.endtime,
           req.body.uid,
-          req.body.id,
+          req.body.id
         ];
 
         db.query(q, values, (err, data) => {
