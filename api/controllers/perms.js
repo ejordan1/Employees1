@@ -22,9 +22,10 @@ export const getPerms = (req, res) => {
         employees1.fills.permid,
         employees1.fills.uid,
         employees1.users.firstname,
-        employees1.users.lastname 
-        FROM employees1.perms JOIN employees1.fills    ON employees1.perms.id =  fills.permid
-        JOIN employees1.users ON employees1.users.id =  employees1.fills.uid`;
+        employees1.users.lastname,
+        employees1.perms.slots
+        FROM employees1.perms LEFT JOIN employees1.fills    ON employees1.perms.id =  fills.permid
+        LEFT JOIN employees1.users ON employees1.users.id =  employees1.fills.uid`;
 
         db.query(getAllPermsQuery, (err, data) => {
           if (err) return res.status(500).send(err);

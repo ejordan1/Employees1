@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/", getPerms);
 router.get("/:id", getPermsByUserId)
 router.post("/", addPerm);
-router.put("/", editPerm);
-router.delete("/", deletePerm);
+router.put("/edit", editPerm);
+router.delete("/delete", deletePerm);
 
 export default router;
