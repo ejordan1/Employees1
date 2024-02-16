@@ -1,6 +1,7 @@
 import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
+
 export const getPerms = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
@@ -16,7 +17,9 @@ export const getPerms = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const getAllPermsQuery = `
-        SELECT employees1.perms.starttime, 
+        SELECT 
+        employees1.perms.id, 
+        employees1.perms.starttime, 
         employees1.perms.endtime, 
         employees1.perms.position, 
         employees1.fills.permid,
