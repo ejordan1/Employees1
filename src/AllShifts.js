@@ -18,6 +18,20 @@ function AllShifts() {
       }
     }
 
+    const [createShiftInputs, setCreateShiftInputs] = useState({
+      starttime: 0,
+      endtime: 0,
+      position: "",
+      uid: null
+    });
+
+    const handleCreateShiftChange = (e) => {
+      setCreateShiftInputs((prev) => ({
+        ...prev,
+        [e.target.name]: e.target.value,
+      }));
+    };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,15 +91,15 @@ function AllShifts() {
         }
       };
 
-      const handleSubmitAdd = async (e) => {
+      const handleSubmitCreate = async (e) => {
         e.preventDefault();
         try {
           const bodyvalues = {
             // doing this later
-             starttime: 112,
-             endtime: 113,
-             position: "housekeeping",
-             uid: 9
+             starttime: createShiftInputs.starttime,
+             endtime: createShiftInputs.endtime,
+             position: createShiftInputs.position,
+             uid: createShiftInputs.uid
           }
            const res = await axios.post(`/shifts/admin/add`, bodyvalues);
         } catch (err) {
@@ -113,10 +127,45 @@ function AllShifts() {
             <button id={shift.id} onClick={handleSubmitDelete}>Delete Shift</button>
             <p>{shift.starttime}</p>
             <p>{shift.endtime}</p>
+            <p>{"uid: " + shift.uid}</p>
             </div>
           )}
 
-          <p><button onClick={handleSubmitAdd}>Add Shift</button></p>
+          <div className="createShiftForm">
+        <h1>Create Shift</h1>
+        <form>
+          <input
+            required
+            type="number"
+            placeholder="starttime"
+            name="starttime"
+            onChange={handleCreateShiftChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="endtime"
+            name="endtime"
+            onChange={handleCreateShiftChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="uid (optional)"
+            name="uid"
+            onChange={handleCreateShiftChange}
+          />
+          <input
+            required
+            type="text"
+            placeholder="position"
+            name="position"
+            onChange={handleCreateShiftChange}
+          />
+          <button onClick={handleSubmitCreate}>Create Shift</button>
+        </form>
+      </div>
+
         </div>
         
       );
