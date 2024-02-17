@@ -13,6 +13,6 @@ router.get("/", getPerms);
 router.get("/:id", getPermsByUserId)
 router.post("/", addPerm);
 router.put("/edit", editPerm);
-router.delete("/delete", deletePerm);
+router.put("/delete", deletePerm);
 
 export default router;

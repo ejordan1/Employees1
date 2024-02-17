@@ -148,10 +148,10 @@ export const editPerm = (req, res) => {
           req.body.starttime,
           req.body.endtime,
           req.body.slots,
-          req.body.permid,
+          req.body.id,
         ];
-        if (!req.body.permid)
-          return res.status(500).json("did not have permid in body");
+        if (!req.body.id)
+          return res.status(500).json("did not have id in body");
         db.query(q, values, (err, data) => {
           if (err) return res.status(500).send(err);
           if (data.affectedRows === 0)
@@ -163,6 +163,7 @@ export const editPerm = (req, res) => {
   });
 };
 
+// still need to verify that the starttime and endtime match what the user client sent
 export const deletePerm = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
@@ -177,11 +178,11 @@ export const deletePerm = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const permId = req.body.permid;
-        if (!permId) return res.status(500).json("did not have permid in body");
+        const id = req.body.id;
+        if (!id) return res.status(500).json("did not have id in body");
         const q = "DELETE FROM perms WHERE `id`=?";
 
-        db.query(q, [permId], (err, data) => {
+        db.query(q, [id], (err, data) => {
           if (err) return res.status(500).send(err);
 
           if (data.affectedRows === 0)
@@ -189,7 +190,7 @@ export const deletePerm = (req, res) => {
 
           return res
             .status(200)
-            .json("perm: " + permId + " has been deleted by admin");
+            .json("perm: " + id + " has been deleted by admin");
         });
       }
     });

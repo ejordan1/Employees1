@@ -4,13 +4,13 @@ import axios from "axios";
 function AllPerms() {
   const [allPermsFills, setAllPermFills] = useState([]);
 
-  function getPermById(id) {
-    for (let i = 0; i < allPermsFills.length; i++) {
-      if (allPermsFills[i].id == id) {
-        return allPermsFills[i];
-      }
-    }
-  }
+  // function getPermById(id) {
+  //   for (let i = 0; i < allPermsFills.length; i++) {
+  //     if (allPermsFills[i].id == id) {
+  //       return allPermsFills[i];
+  //     }
+  //   }
+  // }
 
   function createPermDictFromData(userPermsData) {
     let permsDict = {};
@@ -55,24 +55,46 @@ function AllPerms() {
     fetchData();
   }, []);
 
+  const [editPermInputs, setEditPermInputs] = useState({
+    id: 0,
+    starttime: 0,
+    endtime: 0,
+    slots: 0,
+    position: ""
+  });
+
+  const [createPermInputs, setCreatePermInputs] = useState({
+    starttime: 0,
+    endtime: 0,
+    slots: 0,
+    position: ""
+  });
+
+  const handleEditPermChange = (e) => {
+    setEditPermInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleCreatePermChange = (e) => {
+    setCreatePermInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   // might be a bad way to do this but works:
   // button id is set to the shift id, and is grabbed with e.target.id
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      let shiftById = getPermById(e.target.id);
       const bodyvalues = {
         // doing this later
         // shiftid: shiftById.id,
         // starttime: shiftById.starttime,
         // endtime: shiftById.endtime
 
-        starttime: 532, // get input values from user
-        endtime: 839, // get input values from user
-        uid: 3, // get input values from user
-        id: 8, // get input values from user
+        starttime: editPermInputs.starttime,
+        endtime: editPermInputs.endtime,
+        position: editPermInputs.position,
+        slots: editPermInputs.slots,
+        id: editPermInputs.id,
       };
-      console.log(shiftById);
       const res = await axios.put(`/perms/edit`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
@@ -84,14 +106,10 @@ function AllPerms() {
   const handleSubmitDelete = async (e) => {
     e.preventDefault();
     try {
-      let shiftById = getPermById(e.target.id);
       const bodyvalues = {
         // doing this later
-        shiftid: shiftById.id,
-        starttime: shiftById.starttime,
-        endtime: shiftById.endtime,
+        id: e.target.id
       };
-      console.log(shiftById);
       const res = await axios.put(`/perms/delete`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
@@ -100,15 +118,15 @@ function AllPerms() {
     }
   };
 
-  const handleSubmitAdd = async (e) => {
+  const handleSubmitCreate = async (e) => {
     e.preventDefault();
     try {
       const bodyvalues = {
         // doing this later
-        starttime: 112,
-        endtime: 113,
-        position: "permposition",
-        slots: 99,
+        starttime: createPermInputs.starttime,
+        endtime: createPermInputs.endtime,
+        position: createPermInputs.position,
+        slots: createPermInputs.slots,
       };
       const res = await axios.post(`/perms`, bodyvalues);
     } catch (err) {
@@ -148,18 +166,103 @@ function AllPerms() {
             <p>{permUserKey}</p>
           ))} */}
 
-            {Object.entries(allPermsFills[permKey].permUsers).map((keyvalue) => (
-              <div>
-            <p>{"fillId: " + keyvalue[0] + ", uid: " + keyvalue[1].uid + ", " + keyvalue[1].firstname + ", " + keyvalue[1].lastname}</p>
-            </div>
-          ))}
+            {Object.entries(allPermsFills[permKey].permUsers).map(
+              (keyvalue) => (
+                <div>
+                  <p>
+                    {"fillId: " +
+                      keyvalue[0] +
+                      ", uid: " +
+                      keyvalue[1].uid +
+                      ", " +
+                      keyvalue[1].firstname +
+                      ", " +
+                      keyvalue[1].lastname}
+                  </p>
+                </div>
+              )
+            )}
           </div>
         </div>
       ))}
 
-      <p>
-        <button onClick={handleSubmitAdd}>Create new Perm</button>
-      </p>
+      <div className="editPermForm">
+        <h1>Edit Perm</h1>
+        <form>
+          <input
+            required
+            type="number"
+            placeholder="id"
+            name="id"
+            onChange={handleEditPermChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="starttime"
+            name="starttime"
+            onChange={handleEditPermChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="endtime"
+            name="endtime"
+            onChange={handleEditPermChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="slots"
+            name="slots"
+            onChange={handleEditPermChange}
+          />
+          <input
+            required
+            type="text"
+            placeholder="position"
+            name="position"
+            onChange={handleEditPermChange}
+          />
+          <button onClick={handleSubmitEdit}>Edit Perm</button>
+        </form>
+      </div>
+      
+
+      <div className="createPermForm">
+        <h1>Create Perm</h1>
+        <form>
+          <input
+            required
+            type="number"
+            placeholder="starttime"
+            name="starttime"
+            onChange={handleCreatePermChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="endtime"
+            name="endtime"
+            onChange={handleCreatePermChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="slots"
+            name="slots"
+            onChange={handleCreatePermChange}
+          />
+          <input
+            required
+            type="text"
+            placeholder="position"
+            name="position"
+            onChange={handleCreatePermChange}
+          />
+          <button onClick={handleSubmitCreate}>Create Perm</button>
+        </form>
+      </div>
     </div>
   );
 }
