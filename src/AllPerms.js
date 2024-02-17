@@ -17,7 +17,7 @@ function AllPerms() {
 
     Object.keys(userPermsData).forEach((key) => {
       let dataRow = userPermsData[key];
-        
+
       // create perm objects if doesn't exist
       if (!permsDict.hasOwnProperty(dataRow.id)) {
         permsDict[dataRow.id] = {
@@ -31,7 +31,7 @@ function AllPerms() {
 
       // if it has the user info, add a new entry to the perm.permUsers
       if (dataRow.firstname && dataRow.lastname && dataRow.uid) {
-        permsDict[dataRow.permid].permUsers[dataRow.id] = {
+        permsDict[dataRow.id].permUsers[dataRow.fillid] = {
           // naming it by the permUser id.
           firstname: dataRow.firstname,
           lastname: dataRow.lastname,
@@ -130,22 +130,30 @@ function AllPerms() {
     <div style={getStyle()} className="AllShifts">
       {Object.keys(allPermsFills).map((permKey) => (
         <div>
-            <p>PermId: {permKey}</p>
-            <p>Position {allPermsFills[permKey].position}</p>
-            <p>Starttime {allPermsFills[permKey].starttime}</p>
-            <p>EndTime {allPermsFills[permKey].endtime}</p>
-            <p>Slots: {allPermsFills[permKey].starttime}</p>
+          <p>PermId: {permKey}</p>
+          <p>Position {allPermsFills[permKey].position}</p>
+          <p>Starttime {allPermsFills[permKey].starttime}</p>
+          <p>EndTime {allPermsFills[permKey].endtime}</p>
+          <p>Slots: {allPermsFills[permKey].starttime}</p>
           <button id={permKey} onClick={handleSubmitEdit}>
             Edit Perm
           </button>
-          <button id={permKey} onClick={handleSubmitDelete}> 
-          {/* shouldn't use same id for two buttons */}
+          <button id={permKey} onClick={handleSubmitDelete}>
+            {/* shouldn't use same id for two buttons */}
             Delete Perm
           </button>
-          {/* <p>{perm.starttime}</p>
-          <p>{perm.endtime}</p> */}
-          {/* <p>{perm.position}</p>
-            <p>{perm.slots}</p> */}
+
+          <div>
+            {/* {Object.keys(allPermsFills[permKey].permUsers).map((permUserKey) => (
+            <p>{permUserKey}</p>
+          ))} */}
+
+            {Object.entries(allPermsFills[permKey].permUsers).map((keyvalue) => (
+              <div>
+            <p>{"fillId: " + keyvalue[0] + ", uid: " + keyvalue[1].uid + ", " + keyvalue[1].firstname + ", " + keyvalue[1].lastname}</p>
+            </div>
+          ))}
+          </div>
         </div>
       ))}
 
