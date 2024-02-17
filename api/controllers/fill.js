@@ -72,9 +72,9 @@ export const addFill = (req, res) => {
 
             const fillId = req.body.fillid;
             if (!fillId) return res.status(500).json("did not have fillid in body");
-            const q = "DELETE FROM fills WHERE `id`=?";
+            const q = "DELETE FROM fills WHERE `fillid`=?";
   
-          db.query(q, [fillId], (err, data) => {
+          db.query(q, fillId, (err, data) => {
             if (err) return res.status(500).send(err);
 
             if (data.affectedRows === 0) return res.status(404).json("Did not affect any rows");

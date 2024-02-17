@@ -60,14 +60,19 @@ function AllPerms() {
     starttime: 0,
     endtime: 0,
     slots: 0,
-    position: ""
+    position: "",
   });
 
   const [createPermInputs, setCreatePermInputs] = useState({
     starttime: 0,
     endtime: 0,
     slots: 0,
-    position: ""
+    position: "",
+  });
+
+  const [createUserPermInputs, setCreateUserPermInputs] = useState({
+    permid: 0,
+    uid: 0
   });
 
   const handleEditPermChange = (e) => {
@@ -75,7 +80,17 @@ function AllPerms() {
   };
 
   const handleCreatePermChange = (e) => {
-    setCreatePermInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setCreatePermInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleCreateUserPermChange = (e) => {
+    setCreateUserPermInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   // might be a bad way to do this but works:
@@ -108,7 +123,7 @@ function AllPerms() {
     try {
       const bodyvalues = {
         // doing this later
-        id: e.target.id
+        id: e.target.id,
       };
       const res = await axios.put(`/perms/delete`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
@@ -129,6 +144,35 @@ function AllPerms() {
         slots: createPermInputs.slots,
       };
       const res = await axios.post(`/perms`, bodyvalues);
+    } catch (err) {
+      //setError(err.response.data);
+    }
+  };
+
+  const handleSubmitCreateUserPerm = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        // doing this later
+        permid: createUserPermInputs.permid,
+        uid: createUserPermInputs.uid
+      };
+      const res = await axios.post(`/fills/add`, bodyvalues);
+    } catch (err) {
+      //setError(err.response.data);
+    }
+  };
+
+  const handleSubmitDeleteUserPerm = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        // doing this later
+        fillid: e.target.id,
+      };
+      const res = await axios.put(`/fills/delete`, bodyvalues);
+      // const res = await axios.get(`/shifts/available`);
+      //navigate("/");
     } catch (err) {
       //setError(err.response.data);
     }
@@ -179,6 +223,9 @@ function AllPerms() {
                       ", " +
                       keyvalue[1].lastname}
                   </p>
+                  <button id={keyvalue[0]} onClick={handleSubmitDeleteUserPerm}>
+                    Delete UserPerm
+                  </button>
                 </div>
               )
             )}
@@ -227,7 +274,6 @@ function AllPerms() {
           <button onClick={handleSubmitEdit}>Edit Perm</button>
         </form>
       </div>
-      
 
       <div className="createPermForm">
         <h1>Create Perm</h1>
@@ -261,6 +307,27 @@ function AllPerms() {
             onChange={handleCreatePermChange}
           />
           <button onClick={handleSubmitCreate}>Create Perm</button>
+        </form>
+      </div>
+
+      <div className="createUserPermForm">
+        <h1>Create UserPerm</h1>
+        <form>
+          <input
+            required
+            type="number"
+            placeholder="permid"
+            name="permid"
+            onChange={handleCreateUserPermChange}
+          />
+          <input
+            required
+            type="number"
+            placeholder="uid"
+            name="uid"
+            onChange={handleCreateUserPermChange}
+          />
+          <button onClick={handleSubmitCreateUserPerm}>Create User Perm</button>
         </form>
       </div>
     </div>
