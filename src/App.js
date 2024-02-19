@@ -1,13 +1,13 @@
-import AvailableShifts from './AvailableShifts';
-import LoginPage from './LoginPage';
+import AvailableShifts from './Components/AvailableShifts';
+import LoginPage from './Components/LoginPage';
 import './App.css';
-import Navbar from './Navbar';
+import Navbar from './Components/Navbar';
 import { BrowserRouter } from 'react-router-dom';
 import { Routes, Route } from "react-router-dom";
-import MyShifts from './MyShifts';
-import AllShifts from './AllShifts';
-import AllPerms from './AllPerms';
-import MyPerms from './MyPerms';
+import MyShifts from './Components/MyShifts';
+import AllShifts from './Components/AllShifts';
+import AllPerms from './Components/AllPerms';
+import MyPerms from './Components/MyPerms';
 
 function App() {
   return (

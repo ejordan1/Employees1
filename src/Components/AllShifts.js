@@ -67,7 +67,7 @@ function AllShifts() {
           // const res = await axios.get(`/shifts/available`);
           //navigate("/");
         } catch (err) {
-          //setError(err.response.data);
+          console.log(err);
         }
       };
 
@@ -87,7 +87,7 @@ function AllShifts() {
           // const res = await axios.get(`/shifts/available`);
           //navigate("/");
         } catch (err) {
-          //setError(err.response.data);
+          console.log(err);
         }
       };
 
@@ -103,7 +103,7 @@ function AllShifts() {
           }
            const res = await axios.post(`/shifts/admin/add`, bodyvalues);
         } catch (err) {
-          //setError(err.response.data);
+          console.log(err);
         }
       };
 

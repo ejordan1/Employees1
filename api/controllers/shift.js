@@ -136,9 +136,7 @@ export const deleteShift = (req, res) => {
       } else {
         const shiftId = req.body.shiftid;
         const q = "DELETE FROM shifts WHERE `id` = ?";
-        // AND `uid` = ?" deleted from before
 
-        //doesn't give an error even if the employee number is not correct, just doesn't delete
         db.query(q, [shiftId, employeeInfo.id], (err, data) => {
           if (err)
             return res.status(403).json("You can delete only your shifts");
@@ -166,7 +164,6 @@ export const pickupShift = (req, res) => {
         data[0].starttime == req.body.starttime &&
         data[0].endtime == req.body.endtime
       ) {
-        // shift matches up, allow the change to take place
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = ? WHERE (`id` = '?')";
 
@@ -200,7 +197,6 @@ export const dropShift = (req, res) => {
         data[0].starttime == req.body.starttime &&
         data[0].endtime == req.body.endtime
       ) {
-        // shift matches up, allow the change to take place
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = NULL WHERE (`id` = '?')";
 

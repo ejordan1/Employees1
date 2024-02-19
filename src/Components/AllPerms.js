@@ -113,8 +113,9 @@ function AllPerms() {
       const res = await axios.put(`/perms/edit`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
+      console.log(res);
     } catch (err) {
-      //setError(err.response.data);
+      console.log(err);
     }
   };
 
@@ -129,7 +130,7 @@ function AllPerms() {
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
     } catch (err) {
-      //setError(err.response.data);
+      console.log(err);
     }
   };
 
@@ -145,7 +146,7 @@ function AllPerms() {
       };
       const res = await axios.post(`/perms`, bodyvalues);
     } catch (err) {
-      //setError(err.response.data);
+      console.log(err);
     }
   };
 
@@ -159,7 +160,7 @@ function AllPerms() {
       };
       const res = await axios.post(`/perms_users/add`, bodyvalues);
     } catch (err) {
-      //setError(err.response.data);
+      console.log(err);
     }
   };
 
@@ -174,7 +175,7 @@ function AllPerms() {
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
     } catch (err) {
-      //setError(err.response.data);
+      console.log(err);
     }
   };
 

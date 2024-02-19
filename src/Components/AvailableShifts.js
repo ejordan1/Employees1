@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function MyShifts() {
+function AvailableShifts() {
 
 
 
-    const [myShifts, setMyShifts] = useState([]);
+    const [availableShifts, setAvailableShifts] = useState([]);
 
     function getShiftById(id)
     {
-      for (let i = 0; i <  myShifts.length; i++)
+      for (let i = 0; i <  availableShifts.length; i++)
       {
-        if (myShifts[i].id == id)
+        if (availableShifts[i].id == id)
         {
-          return myShifts[i];
+          return availableShifts[i];
         }
       }
+      // availableShifts.forEach((shift) => {
+      //   if (shift.id == id)
+      //   {
+      //     return shift.starttime;
+      //   }
+      // })
     }
 
 
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const res = await axios.get(`/shifts/myshifts`);
-            setMyShifts(res.data);
+            const res = await axios.get(`/shifts/available`);
+            setAvailableShifts(res.data);
           } catch (err) {
             console.log(err);
           }
@@ -40,15 +46,14 @@ function MyShifts() {
           const bodyvalues = {
             shiftid: shiftById.id,
             starttime: shiftById.starttime,
-            endtime: shiftById.endtime,
-            uid: shiftById.uid
+            endtime: shiftById.endtime
           }
           console.log(shiftById);
-           const res = await axios.put(`/shifts/drop`, bodyvalues);
+           const res = await axios.put(`/shifts/pickup`, bodyvalues);
           // const res = await axios.get(`/shifts/available`);
           //navigate("/");
         } catch (err) {
-          //setError(err.response.data);
+          console.log(err);
         }
       };
 
@@ -65,10 +70,10 @@ function MyShifts() {
 
       
       return (
-        <div style = {getStyle()} className = "MyShifts">
-          {myShifts.map((shift)=>
+        <div style = {getStyle()} className = "AvailableShifts">
+          {availableShifts.map((shift)=>
           <div>
-            <button id={shift.id} onClick={handleSubmit}>Drop</button>
+            <button id={shift.id} onClick={handleSubmit}>Pick Up</button>
             <p>{shift.starttime}</p>
             <p>{shift.endtime}</p>
             </div>
@@ -80,4 +85,4 @@ function MyShifts() {
       );
 }
 
-export default MyShifts;
+export default AvailableShifts;

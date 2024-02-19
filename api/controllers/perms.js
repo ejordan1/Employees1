@@ -147,7 +147,7 @@ export const editPerm = (req, res) => {
         db.query(q, values, (err, data) => {
           if (err) return res.status(500).send(err);
           if (data.affectedRows === 0)
-            return res.status(404).json("Did not affect any rows");
+            return res.status(404).json("Did not affect any row, id probably didn't match");
           return res.status(200).json("perm has been edited by admin");
         });
       }
