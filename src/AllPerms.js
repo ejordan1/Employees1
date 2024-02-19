@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function AllPerms() {
-  const [allPermsFills, setAllPermFills] = useState([]);
+  const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
 
   // function getPermById(id) {
   //   for (let i = 0; i < allPermsFills.length; i++) {
@@ -31,7 +31,7 @@ function AllPerms() {
 
       // if it has the user info, add a new entry to the perm.permUsers
       if (dataRow.firstname && dataRow.lastname && dataRow.uid) {
-        permsDict[dataRow.id].permUsers[dataRow.fillid] = {
+        permsDict[dataRow.id].permUsers[dataRow.perm_userid] = {
           // naming it by the permUser id.
           firstname: dataRow.firstname,
           lastname: dataRow.lastname,
@@ -46,7 +46,7 @@ function AllPerms() {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/perms`);
-        setAllPermFills(createPermDictFromData(res.data));
+        setAllPermsAndPermsUsers(createPermDictFromData(res.data));
         console.log("hello");
       } catch (err) {
         console.log(err);
@@ -157,7 +157,7 @@ function AllPerms() {
         permid: createUserPermInputs.permid,
         uid: createUserPermInputs.uid
       };
-      const res = await axios.post(`/fills/add`, bodyvalues);
+      const res = await axios.post(`/perms_users/add`, bodyvalues);
     } catch (err) {
       //setError(err.response.data);
     }
@@ -168,9 +168,9 @@ function AllPerms() {
     try {
       const bodyvalues = {
         // doing this later
-        fillid: e.target.id,
+        perm_userid: e.target.id,
       };
-      const res = await axios.put(`/fills/delete`, bodyvalues);
+      const res = await axios.put(`/perms_users/delete`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
     } catch (err) {
@@ -190,16 +190,13 @@ function AllPerms() {
 
   return (
     <div style={getStyle()} className="AllShifts">
-      {Object.keys(allPermsFills).map((permKey) => (
+      {Object.keys(allPermsAndPermsUsers).map((permKey) => (
         <div>
           <p>PermId: {permKey}</p>
-          <p>Position {allPermsFills[permKey].position}</p>
-          <p>Starttime {allPermsFills[permKey].starttime}</p>
-          <p>EndTime {allPermsFills[permKey].endtime}</p>
-          <p>Slots: {allPermsFills[permKey].starttime}</p>
-          <button id={permKey} onClick={handleSubmitEdit}>
-            Edit Perm
-          </button>
+          <p>Position {allPermsAndPermsUsers[permKey].position}</p>
+          <p>Starttime {allPermsAndPermsUsers[permKey].starttime}</p>
+          <p>EndTime {allPermsAndPermsUsers[permKey].endtime}</p>
+          <p>Slots: {allPermsAndPermsUsers[permKey].starttime}</p>
           <button id={permKey} onClick={handleSubmitDelete}>
             {/* shouldn't use same id for two buttons */}
             Delete Perm
@@ -210,11 +207,11 @@ function AllPerms() {
             <p>{permUserKey}</p>
           ))} */}
 
-            {Object.entries(allPermsFills[permKey].permUsers).map(
+            {Object.entries(allPermsAndPermsUsers[permKey].permUsers).map(
               (keyvalue) => (
                 <div>
                   <p>
-                    {"fillId: " +
+                    {"perm_userid: " +
                       keyvalue[0] +
                       ", uid: " +
                       keyvalue[1].uid +

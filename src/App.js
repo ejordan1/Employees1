@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import MyShifts from './MyShifts';
 import AllShifts from './AllShifts';
 import AllPerms from './AllPerms';
+import MyPerms from './MyPerms';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
     <Route exact path="/" element ={<LoginPage/>}/>
     <Route exact path="/available" element ={<AvailableShifts/>}/>
     <Route exact path="/myshifts" element ={<MyShifts/>}/>
+    <Route exact path="/myperms" element ={<MyPerms/>}/>
     <Route exact path="/allshifts" element ={<AllShifts/>}/>
     <Route exact path="/allperms" element ={<AllPerms/>}/>
     </Routes>

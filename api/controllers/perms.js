@@ -22,14 +22,14 @@ export const getPerms = (req, res) => {
         employees1.perms.starttime, 
         employees1.perms.endtime, 
         employees1.perms.position,
-        employees1.fills.fillid,
-        employees1.fills.permid,
-        employees1.fills.uid,
+        employees1.perms_users.perm_userid,
+        employees1.perms_users.permid,
+        employees1.perms_users.uid,
         employees1.users.firstname,
         employees1.users.lastname,
         employees1.perms.slots
-        FROM employees1.perms LEFT JOIN employees1.fills    ON employees1.perms.id =  fills.permid
-        LEFT JOIN employees1.users ON employees1.users.id =  employees1.fills.uid`;
+        FROM employees1.perms LEFT JOIN employees1.perms_users    ON employees1.perms.id =  perms_users.permid
+        LEFT JOIN employees1.users ON employees1.users.id =  employees1.perms_users.uid`;
 
         db.query(getAllPermsQuery, (err, data) => {
           if (err) return res.status(500).send(err);
@@ -53,36 +53,28 @@ export const getPermsByUserId = (req, res) => {
         SELECT employees1.perms.starttime, 
         employees1.perms.endtime, 
         employees1.perms.position, 
-        employees1.fills.permid,
-        employees1.fills.uid,
+        employees1.perms_users.permid,
+        employees1.perms_users.uid,
         employees1.users.firstname,
         employees1.users.lastname 
-        FROM employees1.perms JOIN employees1.fills    ON employees1.perms.id =  fills.permid
-        JOIN employees1.users ON employees1.users.id =  employees1.fills.uid
+        FROM employees1.perms JOIN employees1.perms_users    ON employees1.perms.id =  perms_users.permid
+        JOIN employees1.users ON employees1.users.id =  employees1.perms_users.uid
         WHERE employees1.users.id = ?`;
 
     const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
     db.query(getRoleQuery, [employeeInfo.id], (err, data) => {
       if (err || data[0].role != "admin") {
-        // individual user accessing db
-        if (req.params.id != employeeInfo.id) {
-          return res
-            .status(401)
-            .json(
-              "error:" +
-                err +
-                " , non-admin trying to access schedule of another employee"
-            );
-        } else {
-          // otherwise get their perm schedule
           db.query(getPermsByIdQuery, [employeeInfo.id], (err, data) => {
             if (err) return res.status(500).send(err);
 
             return res.status(200).json(data);
           });
-        }
       } else {
-        db.query(getPermsByIdQuery, [req.params.id], (err, data) => {
+        if (!req.body.id)
+        {
+          res.status(500).send(err);
+        }
+        db.query(getPermsByIdQuery, [req.body.id], (err, data) => {
           if (err) return res.status(500).send(err);
 
           return res.status(200).json(data);

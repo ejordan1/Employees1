@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
-export const getFills = (req, res) => {
+export const getPerm_User = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
 
@@ -15,7 +15,7 @@ export const getFills = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const q = "SELECT * FROM fills";
+        const q = "SELECT * FROM perms_users";
 
         db.query(q, (err, data) => {
           if (err) return res.status(500).send(err);
@@ -27,7 +27,7 @@ export const getFills = (req, res) => {
   });
 };
 
-export const addFill = (req, res) => {
+export const addPerm_User = (req, res) => {
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated");
   
@@ -41,21 +41,21 @@ export const addFill = (req, res) => {
             .status(401)
             .json("error:" + err + " , You don't have admin privlages");
         } else {
-            const q = "INSERT INTO fills(`permid`, `uid`) VALUES (?)";
+            const q = "INSERT INTO perms_users(`permid`, `uid`) VALUES (?)";
 
             const values = [req.body.permid, req.body.uid];
   
           db.query(q, [values], (err, data) => {
             if (err) return res.status(500).send(err);
             if (data.affectedrows === 0) return res.status(404).json("Did not affect any rows");
-            return res.status(200).json("fill has been added");
+            return res.status(200).json("perm_user has been added");
           });
         }
       });
     });
   };
 
-  export const deleteFill = (req, res) => {
+  export const deletePerm_User = (req, res) => {
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated");
   
@@ -70,16 +70,16 @@ export const addFill = (req, res) => {
             .json("error:" + err + " , You don't have admin privlages");
         } else {
 
-            const fillId = req.body.fillid;
-            if (!fillId) return res.status(500).json("did not have fillid in body");
-            const q = "DELETE FROM fills WHERE `fillid`=?";
+            const perm_userid = req.body.perm_userid;
+            if (!perm_userid) return res.status(500).json("did not have perm_userid in body");
+            const q = "DELETE FROM perms_users WHERE `perm_userid`=?";
   
-          db.query(q, fillId, (err, data) => {
+          db.query(q, perm_userid, (err, data) => {
             if (err) return res.status(500).send(err);
 
             if (data.affectedRows === 0) return res.status(404).json("Did not affect any rows");
       
-            return res.status(200).json("fill: " + fillId +  " has been deleted by admin");
+            return res.status(200).json("perms_users: " + perm_userid +  " has been deleted by admin");
           });
         }
       });

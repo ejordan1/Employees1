@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 router.get("/", getPerms);
-router.get("/:id", getPermsByUserId)
+router.get("/byid", getPermsByUserId)
 router.post("/", addPerm);
 router.put("/edit", editPerm);
 router.put("/delete", deletePerm);
