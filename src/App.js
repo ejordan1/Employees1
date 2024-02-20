@@ -12,6 +12,8 @@ import MyPerms from './Components/MyPerms';
 function App() {
   return (
     <BrowserRouter>
+     <Navbar></Navbar>
+
     <Routes>
     <Route exact path="/" element ={<LoginPage/>}/>
     <Route exact path="/available" element ={<AvailableShifts/>}/>
@@ -22,7 +24,7 @@ function App() {
     </Routes>
     <div className="App">
 
-     <Navbar></Navbar>
+
     </div>
     </BrowserRouter>
   );
