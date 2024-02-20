@@ -52,27 +52,48 @@ function MyShifts() {
     }
   };
 
-  var getStyle = () => {
+  const getStyle = () => {
     return {
       display: "grid",
-      gap: "20px",
+      gap: "5px",
       gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+      margin: "0px 30px 0px 30px"
     };
   };
 
-  var getTitleStyle = () => {
+  const getTitleStyle = () => {
     return {
       textAlign: "center"
+    };
+  };
+
+  const getWeekdayStyle = () => {
+    return {
+      textAlign: "center",
+      color: "darkGreen",
+      fontSize: "20px"
+
+    };
+  };
+
+  const getWeekOfStyle = () => {
+    return {
+      textAlign: "center",
+      color: "lightBlue",
+      fontSize: "20px"
+
     };
   };
 
   return (
     <div style={getTitleStyle()}>
             <h1 >Your Active Shifts</h1>
+
+    <h1 style={getWeekOfStyle()}>Feburary 9 - Feburary 23</h1>
     <div style={getStyle()} className="MyShifts">
 
       <div>
-        <h1>Sunday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Sunday 2/9</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
@@ -92,7 +113,7 @@ function MyShifts() {
       </div>
 
       <div>
-        <h1>Monday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Monday</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
@@ -112,7 +133,7 @@ function MyShifts() {
       </div>
 
       <div>
-        <h1>Tuesday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Tuesday</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
@@ -132,7 +153,7 @@ function MyShifts() {
       </div>
 
       <div>
-        <h1>Wednesday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Wednesday</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
@@ -152,7 +173,7 @@ function MyShifts() {
       </div>
 
       <div>
-        <h1>Thrusday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Thursday</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
@@ -172,7 +193,7 @@ function MyShifts() {
       </div>
 
       <div>
-        <h1>Friday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Friday</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
@@ -192,7 +213,156 @@ function MyShifts() {
       </div>
 
       <div>
-        <h1>Saturday</h1>{" "}
+        <h1 style={getWeekdayStyle()}>Saturday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+
+
+
+
+
+      <p></p>
+    </div>
+    <div style={getStyle()} className="MyShifts">
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Sunday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Monday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Tuesday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Wednesday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Thursday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Friday</h1>{" "}
+        <div>
+          {" "}
+          {myShifts.map((shift) => (
+            <div>
+              <SingleMyShift
+                id={shift.id}
+                position={shift.position}
+                starttime={shift.starttime}
+                endtime={shift.endtime}
+                drop={handleSubmit}
+              >
+                asdf
+              </SingleMyShift>
+            </div>
+          ))}
+        </div>{" "}
+      </div>
+
+      <div>
+        <h1 style={getWeekdayStyle()}>Saturday</h1>{" "}
         <div>
           {" "}
           {myShifts.map((shift) => (
