@@ -6,6 +6,8 @@ import styles from "./MyShifts.module.scss";
 function MyShifts() {
   const [myShifts, setMyShifts] = useState([]);
 
+  const [availableShifts, setAvailableShifts] = useState([]);
+
   const weekdays = [
     "Sunday",
     "Monday",
@@ -16,10 +18,21 @@ function MyShifts() {
     "Saturday",
   ];
 
-  function getShiftById(id) {
+  function getMyShiftById(id) {
     for (let i = 0; i < myShifts.length; i++) {
       if (myShifts[i].id == id) {
         return myShifts[i];
+      }
+    }
+  }
+
+  function getAvailableShiftById(id)
+  {
+    for (let i = 0; i <  availableShifts.length; i++)
+    {
+      if (availableShifts[i].id == id)
+      {
+        return availableShifts[i];
       }
     }
   }
@@ -36,10 +49,22 @@ function MyShifts() {
     fetchData();
   }, []);
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/shifts/available`);
+        setAvailableShifts(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleDropSubmit = async (e) => {
     e.preventDefault();
     try {
-      let shiftById = getShiftById(e.target.id);
+      let shiftById = getMyShiftById(e.target.id);
       const bodyvalues = {
         shiftid: shiftById.id,
         starttime: shiftById.starttime,
@@ -53,23 +78,22 @@ function MyShifts() {
     }
   };
 
-  const getStyle = () => {
-    return {
-
-    };
-  };
-
-
-  const getWeekdayStyle = () => {
-    return {
-
-    };
-  };
-
-  const getWeekOfStyle = () => {
-    return {
-
-    };
+  const handlePickupSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let shiftById = getAvailableShiftById(e.target.id);
+      const bodyvalues = {
+        shiftid: shiftById.id,
+        starttime: shiftById.starttime,
+        endtime: shiftById.endtime
+      }
+      console.log(shiftById);
+       const res = await axios.put(`/shifts/pickup`, bodyvalues);
+      // const res = await axios.get(`/shifts/available`);
+      //navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -79,7 +103,7 @@ function MyShifts() {
       </div>
 
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
-      <div className={styles.gridContainer}>
+      <div className={styles.shiftsContainer}>
         <div >
           <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
           <div>
@@ -91,7 +115,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -111,10 +135,21 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
+                <div className = "AvailableShifts">
+          {availableShifts.map((shift)=>
+          <div>
+            <button id={shift.id} onClick={handlePickupSubmit}>Pick Up</button>
+            <p>{shift.starttime}</p>
+            <p>{shift.endtime}</p>
+            </div>
+          )}
+
+          <p></p>
+        </div>
               </div>
             ))}
           </div>{" "}
@@ -131,7 +166,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -151,7 +186,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -171,7 +206,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -191,7 +226,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -211,7 +246,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -222,7 +257,7 @@ function MyShifts() {
 
         <p></p>
       </div>
-      <div className={styles.gridContainer}>
+      <div className={styles.shiftsContainer}>
         <div>
           <h1 className={styles.weekday}>Sunday</h1>{" "}
           <div>
@@ -234,7 +269,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -254,7 +289,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -274,7 +309,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -294,7 +329,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -314,7 +349,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -334,7 +369,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>
@@ -354,7 +389,7 @@ function MyShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  drop={handleSubmit}
+                  drop={handleDropSubmit}
                 >
                   asdf
                 </SingleMyShift>

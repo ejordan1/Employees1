@@ -7,7 +7,7 @@ function AvailableShifts() {
 
     const [availableShifts, setAvailableShifts] = useState([]);
 
-    function getShiftById(id)
+    function getAvailableShiftById(id)
     {
       for (let i = 0; i <  availableShifts.length; i++)
       {
@@ -16,12 +16,6 @@ function AvailableShifts() {
           return availableShifts[i];
         }
       }
-      // availableShifts.forEach((shift) => {
-      //   if (shift.id == id)
-      //   {
-      //     return shift.starttime;
-      //   }
-      // })
     }
 
 
@@ -42,7 +36,7 @@ function AvailableShifts() {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          let shiftById = getShiftById(e.target.id);
+          let shiftById = getAvailableShiftById(e.target.id);
           const bodyvalues = {
             shiftid: shiftById.id,
             starttime: shiftById.starttime,
