@@ -4,8 +4,11 @@ import styles from "./SingleAllShift.module.scss";
 
 function SingleAllShift(props) {
 
+
+    const getBackgroundColor = props.uid ? styles.filled : styles.empty;
+
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${getBackgroundColor}`}>
       <p>{props.position}</p>
       <div className={styles.times}>
         <p>{props.starttime}</p>

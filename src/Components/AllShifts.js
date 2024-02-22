@@ -105,7 +105,7 @@ function AllShifts() {
   return (
     <div className="AllShifts">
       <div>
-        <h1 className={styles.pageTitle}>Your Active Shifts</h1>
+        <h1 className={styles.pageTitle}>Admin Schedule</h1>
       </div>
 
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
@@ -121,7 +121,7 @@ function AllShifts() {
                   position={shift.position}
                   starttime={shift.starttime}
                   endtime={shift.endtime}
-                  
+                  uid={shift.uid}
                 >
                   asdf
                 </SingleAllShift>
