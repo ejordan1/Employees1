@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import SingleMyShift from "./SingleMyShift";
+import SingleMyShift from "./SingleMyShift.js";
+import SingleAvailableShift from "./SingleAvailableShift.js"
 import styles from "./MyShifts.module.scss";
 
 function MyShifts() {
@@ -140,12 +141,12 @@ function MyShifts() {
                   asdf
                 </SingleMyShift>
                 <div className = "AvailableShifts">
-          {availableShifts.map((shift)=>
-          <div>
-            <button id={shift.id} onClick={handlePickupSubmit}>Pick Up</button>
-            <p>{shift.starttime}</p>
-            <p>{shift.endtime}</p>
-            </div>
+          {availableShifts.map((availableShift)=>
+          <SingleAvailableShift id = {availableShift.id} position={availableShift.position} starttime= {availableShift.starttime}endtime={availableShift.endtime} pickup={handlePickupSubmit}>
+            <button id={availableShift.id} onClick={handlePickupSubmit}>Pick Up</button>
+            <p>{availableShift.starttime}</p>
+            <p>{availableShift.endtime}</p>
+            </SingleAvailableShift>
           )}
 
           <p></p>
