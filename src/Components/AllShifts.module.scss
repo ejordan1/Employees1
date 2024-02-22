@@ -1,0 +1,26 @@
+.shiftsContainer {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin: 0px 30px 0px 30px;
+}
+
+body {
+  background-color: rgb(207, 250, 207);
+}
+
+.pageTitle {
+  text-align: center;
+}
+
+.weekday {
+  text-align: center;
+  color: darkGreen;
+  font-size: 20px;
+}
+
+.weekOfTitle {
+  text-align: center;
+  color: lightBlue;
+  font-size: 20px;
+}

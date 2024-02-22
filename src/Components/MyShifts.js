@@ -9,16 +9,6 @@ function MyShifts() {
 
   const [availableShifts, setAvailableShifts] = useState([]);
 
-  const weekdays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
   function getMyShiftById(id) {
     for (let i = 0; i < myShifts.length; i++) {
       if (myShifts[i].id == id) {
