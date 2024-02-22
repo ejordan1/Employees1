@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./AllShifts.module.scss";
 import SingleAllShift from "./SingleAllShift";
+import Modal from "./EditShiftModal";
 
 function AllShifts() {
   const [allShifts, setAllShifts] = useState([]);
@@ -107,7 +108,7 @@ function AllShifts() {
       <div>
         <h1 className={styles.pageTitle}>Admin Schedule</h1>
       </div>
-
+      <Modal></Modal>
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
         <div>
