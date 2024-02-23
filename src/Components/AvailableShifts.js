@@ -52,19 +52,10 @@ function AvailableShifts() {
       };
 
 
-    var getStyle = () => {
-        return  {
-          display: "flex",
-          gap: "20px",
-            flexWrap: "wrap",
-            margin: "50px",
-            justifyContent: "space-around",
-        };
-      };
 
       
       return (
-        <div style = {getStyle()} className = "AvailableShifts">
+        <div  className = "AvailableShifts">
           {availableShifts.map((shift)=>
           <div>
             <button id={shift.id} onClick={handleSubmit}>Pick Up</button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import styles from "./AllPerms.module.scss";
 
 function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
@@ -190,7 +191,7 @@ function AllPerms() {
   };
 
   return (
-    <div style={getStyle()} className="AllShifts">
+    <div className={styles.AllPerms}>
       {Object.keys(allPermsAndPermsUsers).map((permKey) => (
         <div>
           <p>PermId: {permKey}</p>

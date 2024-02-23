@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import styles from "./MyPerms.module.scss"
 
 function MyPerms() {
 
@@ -22,19 +23,10 @@ function MyPerms() {
       // button id is set to the shift id, and is grabbed with e.target.id
 
 
-    var getStyle = () => {
-        return  {
-          display: "flex",
-          gap: "20px",
-            flexWrap: "wrap",
-            margin: "50px",
-            justifyContent: "space-around",
-        };
-      };
 
       
       return (
-        <div style = {getStyle()} className = "MyPerms">
+        <div className = {styles.container}>
             <h1>My Perms</h1>
           {myPerms.map((perm)=>
           <div>
@@ -43,7 +35,6 @@ function MyPerms() {
             </div>
           )}
 
-          <p></p>
         </div>
         
       );
