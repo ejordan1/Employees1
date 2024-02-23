@@ -1,8 +1,24 @@
 import React, { useState } from "react";
-import "./EditShiftModal.module.scss";
+import "./AddShiftModal.module.scss";
+import axios from "axios";
+import styles from "./AddShiftModal.module.scss"
 
-export default function EditShiftModal() {
+export default function AddShiftModal() {
   const [modal, setModal] = useState(false);
+
+  const [createShiftInputs, setCreateShiftInputs] = useState({
+    starttime: 0,
+    endtime: 0,
+    position: "",
+    uid: null,
+  });
+
+  const handleCreateShiftChange = (e) => {
+    setCreateShiftInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const toggleModal = () => {
     setModal(!modal);
@@ -14,19 +30,35 @@ export default function EditShiftModal() {
     document.body.classList.remove('active-modal')
   }
 
+  const handleSubmitCreate = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        // doing this later
+        starttime: createShiftInputs.starttime,
+        endtime: createShiftInputs.endtime,
+        position: createShiftInputs.position,
+        uid: createShiftInputs.uid,
+      };
+      const res = await axios.post(`/shifts/admin/add`, bodyvalues);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
-      <button onClick={toggleModal} className="btn-modal">
-        Open
+      <button onClick={toggleModal} className={styles.btn-modal}>
+        Open add
       </button>
 
       {modal && (
-        <div className="modal">
-          <div onClick={toggleModal} className="overlay"></div>
-          <div className="modal-content">
-            <p>edit shift modal</p>
-          {/* <div className="createShiftForm">
-        <h1>Edit Shift</h1>
+        <div className={styles.modal}>
+          <div onClick={toggleModal} className={styles.overlay}></div>
+          <div className={styles.modalContent}>
+            
+          <div className={"createShiftForm"}>
+        <h1>Add Shift</h1>
         <form>
           <input
             required
@@ -58,10 +90,10 @@ export default function EditShiftModal() {
           />
           <button onClick={handleSubmitCreate}>Create Shift</button>
         </form>
-      </div> */}
+      </div>
 
             <button className="close-modal" onClick={toggleModal}>
-              CLOSE
+              CLOSE add
             </button>
           </div>
         </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./AllPerms.module.scss";
+import SingleAllperm from "./SingleAllPerm.js"
+import SingleAllPerm from "./SingleAllPerm.js";
 
 function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
@@ -192,13 +194,21 @@ function AllPerms() {
 
   return (
     <div className={styles.AllPerms}>
-      {Object.keys(allPermsAndPermsUsers).map((permKey) => (
+      <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
+      <div className={styles.shiftsContainer}>
         <div>
-          <p>PermId: {permKey}</p>
-          <p>Position {allPermsAndPermsUsers[permKey].position}</p>
-          <p>Starttime {allPermsAndPermsUsers[permKey].starttime}</p>
-          <p>EndTime {allPermsAndPermsUsers[permKey].endtime}</p>
-          <p>Slots: {allPermsAndPermsUsers[permKey].starttime}</p>
+          <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
+          <div>
+
+          {Object.keys(allPermsAndPermsUsers).map((permKey) => (
+
+        <div>
+                      <SingleAllPerm id={permKey} position={allPermsAndPermsUsers[permKey].position}
+                      starttime={allPermsAndPermsUsers[permKey].starttime}
+                      endtime={allPermsAndPermsUsers[permKey].endtime}
+              slots={allPermsAndPermsUsers[permKey].slots}
+                      ></SingleAllPerm>
+
           <button id={permKey} onClick={handleSubmitDelete}>
             {/* shouldn't use same id for two buttons */}
             Delete Perm
@@ -231,6 +241,28 @@ function AllPerms() {
           </div>
         </div>
       ))}
+
+
+
+
+            {/* {" "}
+            {allShifts.map((perm) => (
+              <div>
+                <SingleAllPerm
+                  id={perm.id}
+                  position={perm.position}
+                  starttime={perm.starttime}
+                  endtime={perm.endtime}
+                >
+                  asdf
+                </SingleAllPerm>
+              </div>
+            ))} */}
+          </div>{" "}
+        </div>
+      </div>
+      
+
 
       <div className="editPermForm">
         <h1>Edit Perm</h1>

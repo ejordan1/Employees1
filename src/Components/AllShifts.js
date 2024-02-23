@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./AllShifts.module.scss";
 import SingleAllShift from "./SingleAllShift";
-import Modal from "./EditShiftModal";
+import EditShiftModal from "./EditShiftModal";
+import AddShiftModal from "./AddShiftModal";
 
 function AllShifts() {
   const [allShifts, setAllShifts] = useState([]);
@@ -14,20 +15,6 @@ function AllShifts() {
       }
     }
   }
-
-  const [createShiftInputs, setCreateShiftInputs] = useState({
-    starttime: 0,
-    endtime: 0,
-    position: "",
-    uid: null,
-  });
-
-  const handleCreateShiftChange = (e) => {
-    setCreateShiftInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -86,29 +73,13 @@ function AllShifts() {
     }
   };
 
-  const handleSubmitCreate = async (e) => {
-    e.preventDefault();
-    try {
-      const bodyvalues = {
-        // doing this later
-        starttime: createShiftInputs.starttime,
-        endtime: createShiftInputs.endtime,
-        position: createShiftInputs.position,
-        uid: createShiftInputs.uid,
-      };
-      const res = await axios.post(`/shifts/admin/add`, bodyvalues);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
   return (
     <div className="AllShifts">
       <div>
         <h1 className={styles.pageTitle}>Admin Schedule</h1>
       </div>
-      <Modal></Modal>
+      <p> next is add </p>
+      <AddShiftModal></AddShiftModal>
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
         <div>
@@ -130,11 +101,6 @@ function AllShifts() {
             ))}
           </div>{" "}
         </div>
-
-
-
-
-        <p></p>
       </div>
 
       {/* {allShifts.map((shift) => (
@@ -150,41 +116,6 @@ function AllShifts() {
           <p>{"uid: " + shift.uid}</p>
         </div>
       ))} */}
-
-      <div className="createShiftForm">
-        <h1>Create Shift</h1>
-        <form>
-          <input
-            required
-            type="number"
-            placeholder="starttime"
-            name="starttime"
-            onChange={handleCreateShiftChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="endtime"
-            name="endtime"
-            onChange={handleCreateShiftChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="uid (optional)"
-            name="uid"
-            onChange={handleCreateShiftChange}
-          />
-          <input
-            required
-            type="text"
-            placeholder="position"
-            name="position"
-            onChange={handleCreateShiftChange}
-          />
-          <button onClick={handleSubmitCreate}>Create Shift</button>
-        </form>
-      </div>
     </div>
   );
 }
