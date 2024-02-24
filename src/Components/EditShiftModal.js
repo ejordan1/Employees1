@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 
 export default function EditShiftModal(props) {
-  const [modal, setModal] = useState(false);
+  //const [modal, setModal] = useState(false);
 
   const [editShiftInputs, setEditShiftInputs] = useState({
     starttime: 0,
@@ -39,20 +39,25 @@ export default function EditShiftModal(props) {
       const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
+
+      // I would close modal here
     } catch (err) {
       console.log(err);
     }
   };
 
   const toggleModal = () => {
-    setModal(!modal);
+    // setModal(!modal);
+    props.closeModal();
   };
 
-  if(modal) {
-    document.body.classList.add('active-modal')
-  } else {
-    document.body.classList.remove('active-modal')
-  }
+
+  // IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION 
+  // if(modal) {
+  //   document.body.classList.add('active-modal')
+  // } else {
+  //   document.body.classList.remove('active-modal')
+  // }
 
   return (
     <>
@@ -60,7 +65,7 @@ export default function EditShiftModal(props) {
         Open
       </button>
 
-      {modal && (
+      {
         <div className={styles.modal}>
           <div onClick={toggleModal} className={styles.overlay}></div>
           <div className={styles.modalContent}>
@@ -75,28 +80,28 @@ export default function EditShiftModal(props) {
           <input
             required
             type="number"
-            placeholder={props.starttime}
+            value={props.starttime}
             name="starttime"
             onChange={handleEditShiftChange}
           />
           <input
             required
             type="number"
-            placeholder={props.endtime}
+            value={props.endtime}
             name="endtime"
             onChange={handleEditShiftChange}
           /> 
           <input
             required
             type="number"
-            placeholder={props.uid}
+            value={props.uid}
             name="uid"
             onChange={handleEditShiftChange}
           />
           <input
             required
             type="text"
-            placeholder={props.position}
+            value={props.position}
             name="position"
             onChange={handleEditShiftChange}
           />
@@ -109,13 +114,14 @@ export default function EditShiftModal(props) {
             </button>
           </div>
         </div>
-      )}
+      }
       
     </>
   );
 }
 
 EditShiftModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     position: PropTypes.string.isRequired,
     starttime: PropTypes.number.isRequired,
