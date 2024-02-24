@@ -1,8 +1,48 @@
 import React, { useState } from "react";
-import "./EditShiftModal.module.scss";
+import styles from "./EditShiftModal.module.scss";
+import PropTypes from "prop-types";
+import axios from "axios";
 
-export default function EditShiftModal() {
+export default function EditShiftModal(props) {
   const [modal, setModal] = useState(false);
+
+  const [editShiftInputs, setEditShiftInputs] = useState({
+    starttime: 0,
+    endtime: 0,
+    position: "",
+    uid: null,
+  });
+
+  const handleEditShiftChange = (e) => {
+    setEditShiftInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmitEdit = async (e) => {
+    e.preventDefault();
+    try {
+    //   let shiftById = getShiftById(e.target.id);
+      const bodyvalues = {
+        // doing this later
+        // shiftid: shiftById.id,
+        // starttime: shiftById.starttime,
+        // endtime: shiftById.endtime
+
+        starttime: editShiftInputs.starttime, // get input values from user
+        endtime: editShiftInputs.endtime, // get input values from user
+        uid: editShiftInputs.uid, // get input values from user
+        id: props.id, // get input values from user
+      };
+
+      const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
+      // const res = await axios.get(`/shifts/available`);
+      //navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleModal = () => {
     setModal(!modal);
@@ -16,49 +56,53 @@ export default function EditShiftModal() {
 
   return (
     <>
-      <button onClick={toggleModal} className="btn-modal">
+      <button onClick={toggleModal} className={styles.btnModal}>
         Open
       </button>
 
       {modal && (
-        <div className="modal">
-          <div onClick={toggleModal} className="overlay"></div>
-          <div className="modal-content">
-            <p>edit shift modal</p>
-          {/* <div className="createShiftForm">
+        <div className={styles.modal}>
+          <div onClick={toggleModal} className={styles.overlay}></div>
+          <div className={styles.modalContent}>
+            <p>id: {props.id} </p>
+            <p>starttime: {props.starttime} </p>
+            <p>endtime: {props.endtime} </p>
+            <p>uid: {props.uid} </p>
+            <p>position: {props.position} </p>
+          <div className="editShiftForm">
         <h1>Edit Shift</h1>
         <form>
           <input
             required
             type="number"
-            placeholder="starttime"
+            placeholder={props.starttime}
             name="starttime"
-            onChange={handleCreateShiftChange}
+            onChange={handleEditShiftChange}
           />
           <input
             required
             type="number"
-            placeholder="endtime"
+            placeholder={props.endtime}
             name="endtime"
-            onChange={handleCreateShiftChange}
-          />
+            onChange={handleEditShiftChange}
+          /> 
           <input
             required
             type="number"
-            placeholder="uid (optional)"
+            placeholder={props.uid}
             name="uid"
-            onChange={handleCreateShiftChange}
+            onChange={handleEditShiftChange}
           />
           <input
             required
             type="text"
-            placeholder="position"
+            placeholder={props.position}
             name="position"
-            onChange={handleCreateShiftChange}
+            onChange={handleEditShiftChange}
           />
-          <button onClick={handleSubmitCreate}>Create Shift</button>
+          <button onClick={handleSubmitEdit}>Edit 555 Shift</button>
         </form>
-      </div> */}
+      </div>
 
             <button className="close-modal" onClick={toggleModal}>
               CLOSE
@@ -70,3 +114,12 @@ export default function EditShiftModal() {
     </>
   );
 }
+
+EditShiftModal.propTypes = {
+    id: PropTypes.number.isRequired,
+    position: PropTypes.string.isRequired,
+    starttime: PropTypes.number.isRequired,
+    endtime: PropTypes.number.isRequired,
+    uid: PropTypes.number,
+    //drop: PropTypes.func.isRequired,
+  };

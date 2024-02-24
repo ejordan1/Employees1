@@ -8,6 +8,16 @@ import AddShiftModal from "./AddShiftModal";
 function AllShifts() {
   const [allShifts, setAllShifts] = useState([]);
 
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const [modalEditShift, setModalEditShift] = useState({
+    id: null,
+    position: "",
+    starttime: 0,
+    endtime: 0,
+    uid: 0,
+  })
+
   function getShiftById(id) {
     for (let i = 0; i < allShifts.length; i++) {
       if (allShifts[i].id == id) {
@@ -30,23 +40,21 @@ function AllShifts() {
 
   // might be a bad way to do this but works:
   // button id is set to the shift id, and is grabbed with e.target.id
-  const handleSubmitEdit = async (e) => {
+  const handleEdit = async (e) => {
     e.preventDefault();
     try {
       let shiftById = getShiftById(e.target.id);
-      const bodyvalues = {
-        // doing this later
-        // shiftid: shiftById.id,
-        // starttime: shiftById.starttime,
-        // endtime: shiftById.endtime
 
-        starttime: 532, // get input values from user
-        endtime: 839, // get input values from user
-        uid: 3, // get input values from user
-        id: 8, // get input values from user
-      };
-      console.log(shiftById);
-      const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
+        setModalEditShift({
+          starttime: shiftById.starttime, // get input values from user
+          endtime: shiftById.endtime, // get input values from user
+          uid: shiftById.uid, // get input values from user
+          id: shiftById.id, // get input values from user
+          position: shiftById.position
+        })
+      
+      // console.log(shiftById);
+      // const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
     } catch (err) {
@@ -97,15 +105,20 @@ function AllShifts() {
                 >
                   asdf
                 </SingleAllShift>
+                <button id={shift.id} onClick={handleEdit}>Edit Shift</button>
               </div>
+              
             ))}
           </div>{" "}
         </div>
+        
       </div>
+
+      <EditShiftModal editModalVisible={editModalVisible} id={modalEditShift.id} position={modalEditShift.position} starttime={modalEditShift.starttime} endtime={modalEditShift.endtime} uid={modalEditShift.uid}></EditShiftModal>
 
       {/* {allShifts.map((shift) => (
         <div>
-          <button id={shift.id} onClick={handleSubmitEdit}>
+          <button id={shift.id} onClick={handleEdit}>
             Edit Shift
           </button>
           <button id={shift.id} onClick={handleSubmitDelete}>

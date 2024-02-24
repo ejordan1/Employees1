@@ -57,7 +57,7 @@ export default function AddShiftModal() {
           <div onClick={toggleModal} className={styles.overlay}></div>
           <div className={styles.modalContent}>
             
-          <div className={"createShiftForm"}>
+          <div className="createShiftForm">
         <h1>Add Shift</h1>
         <form>
           <input
