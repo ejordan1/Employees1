@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./AllPerms.module.scss";
-import SingleAllperm from "./SingleAllPerm.js"
+import SingleAllperm from "./SingleAllPerm.js";
 import SingleAllPerm from "./SingleAllPerm.js";
+import EditPermModal from "./EditPermModal.js";
 
 function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
+
+  const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const [modalEditPerm, setModalEditPerm] = useState({
+    id: null,
+    position: "",
+    starttime: 0,
+    endtime: 0,
+    slots: 0,
+  });
 
   // function getPermById(id) {
   //   for (let i = 0; i < allPermsFills.length; i++) {
@@ -75,7 +86,7 @@ function AllPerms() {
 
   const [createUserPermInputs, setCreateUserPermInputs] = useState({
     permid: 0,
-    uid: 0
+    uid: 0,
   });
 
   const handleEditPermChange = (e) => {
@@ -101,22 +112,18 @@ function AllPerms() {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      const bodyvalues = {
-        // doing this later
-        // shiftid: shiftById.id,
-        // starttime: shiftById.starttime,
-        // endtime: shiftById.endtime
+      let permById = allPermsAndPermsUsers[e.target.id];
 
-        starttime: editPermInputs.starttime,
-        endtime: editPermInputs.endtime,
-        position: editPermInputs.position,
-        slots: editPermInputs.slots,
-        id: editPermInputs.id,
-      };
-      const res = await axios.put(`/perms/edit`, bodyvalues);
+      setModalEditPerm({
+        starttime: permById.starttime, // get input values from user
+        endtime: permById.endtime, // get input values from user
+        slots: permById.slots, // get input values from user
+        id: e.target.id, // get input values from user
+        position: permById.position,
+      });
+      setEditModalVisible(true);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -159,7 +166,7 @@ function AllPerms() {
       const bodyvalues = {
         // doing this later
         permid: createUserPermInputs.permid,
-        uid: createUserPermInputs.uid
+        uid: createUserPermInputs.uid,
       };
       const res = await axios.post(`/perms_users/add`, bodyvalues);
     } catch (err) {
@@ -182,68 +189,71 @@ function AllPerms() {
     }
   };
 
-  var getStyle = () => {
-    return {
-      display: "flex",
-      gap: "20px",
-      flexWrap: "wrap",
-      margin: "50px",
-      justifyContent: "space-around",
-    };
+
+  const closeModal = () => {
+    setEditModalVisible(false);
   };
 
   return (
     <div className={styles.AllPerms}>
+      {editModalVisible && (<EditPermModal
+        closeModal={closeModal}
+        id={modalEditPerm.id}
+        position={modalEditPerm.position}
+        starttime={modalEditPerm.starttime}
+        endtime={modalEditPerm.endtime}
+        slots={modalEditPerm.slots}
+      ></EditPermModal>)}
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
         <div>
           <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
           <div>
+            {Object.keys(allPermsAndPermsUsers).map((permKey) => (
+              <div>
+                <SingleAllPerm
+                  id={permKey}
+                  position={allPermsAndPermsUsers[permKey].position}
+                  starttime={allPermsAndPermsUsers[permKey].starttime}
+                  endtime={allPermsAndPermsUsers[permKey].endtime}
+                  slots={allPermsAndPermsUsers[permKey].slots}
+                ></SingleAllPerm>
+<button id={permKey} onClick={handleSubmitDelete}>delete perm</button>
+                <button id={permKey} onClick={handleSubmitEdit}>
+                  {/* shouldn't use same id for two buttons */}
+                  Edit Perm
+                </button>
 
-          {Object.keys(allPermsAndPermsUsers).map((permKey) => (
-
-        <div>
-                      <SingleAllPerm id={permKey} position={allPermsAndPermsUsers[permKey].position}
-                      starttime={allPermsAndPermsUsers[permKey].starttime}
-                      endtime={allPermsAndPermsUsers[permKey].endtime}
-              slots={allPermsAndPermsUsers[permKey].slots}
-                      ></SingleAllPerm>
-
-          <button id={permKey} onClick={handleSubmitDelete}>
-            {/* shouldn't use same id for two buttons */}
-            Delete Perm
-          </button>
-
-          <div>
-            {/* {Object.keys(allPermsFills[permKey].permUsers).map((permUserKey) => (
+                <div>
+                  {/* {Object.keys(allPermsFills[permKey].permUsers).map((permUserKey) => (
             <p>{permUserKey}</p>
           ))} */}
 
-            {Object.entries(allPermsAndPermsUsers[permKey].permUsers).map(
-              (keyvalue) => (
-                <div>
-                  <p>
-                    {"perm_userid: " +
-                      keyvalue[0] +
-                      ", uid: " +
-                      keyvalue[1].uid +
-                      ", " +
-                      keyvalue[1].firstname +
-                      ", " +
-                      keyvalue[1].lastname}
-                  </p>
-                  <button id={keyvalue[0]} onClick={handleSubmitDeleteUserPerm}>
-                    Delete UserPerm
-                  </button>
+                  {Object.entries(allPermsAndPermsUsers[permKey].permUsers).map(
+                    (keyvalue) => (
+                      <div>
+                        <p>
+                          {"perm_userid: " +
+                            keyvalue[0] +
+                            ", uid: " +
+                            keyvalue[1].uid +
+                            ", " +
+                            keyvalue[1].firstname +
+                            ", " +
+                            keyvalue[1].lastname}
+                        </p>
+                        <button
+                          id={keyvalue[0]}
+                          onClick={handleSubmitDeleteUserPerm}
+                        >
+                          Delete UserPerm
+                        </button>
+                      </div>
+                    )
+                  )}
                 </div>
-              )
-            )}
-          </div>
-        </div>
-      ))}
-
-
-
+              </div>
+            ))}
 
             {/* {" "}
             {allShifts.map((perm) => (
@@ -261,8 +271,6 @@ function AllPerms() {
           </div>{" "}
         </div>
       </div>
-      
-
 
       <div className="editPermForm">
         <h1>Edit Perm</h1>
@@ -302,7 +310,7 @@ function AllPerms() {
             name="position"
             onChange={handleEditPermChange}
           />
-          <button onClick={handleSubmitEdit}>Edit Perm</button>
+          {/* <button onClick={handleSubmitEdit}>Edit Perm</button> */}
         </form>
       </div>
 

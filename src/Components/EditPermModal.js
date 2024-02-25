@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import styles from "./EditShiftModal.module.scss";
+import styles from "./EditPermModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
 
-export default function EditShiftModal(props) {
+export default function EditPermModal(props) {
   //const [modal, setModal] = useState(false);
 
-  const editShiftDefaultValues = {
+  const editPermDefaultValues = {
     starttime: 0,
     endtime: 0,
-    position: "",
-    uid: null,
+    slots: 0,
+    position: ""
   }
-  const [editShiftInputs, setEditShiftInputs] = useState({
-    editShiftDefaultValues
+  const [editPermInputs, setEditPermInputs] = useState({
+    editPermDefaultValues
   });
 
-  const handleEditShiftChange = (e) => {
-    setEditShiftInputs((prev) => ({
+  const handleEditPermChange = (e) => {
+    setEditPermInputs((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -32,14 +32,20 @@ export default function EditShiftModal(props) {
         // shiftid: shiftById.id,
         // starttime: shiftById.starttime,
         // endtime: shiftById.endtime
+        id: props.id,
+        starttime: editPermInputs.starttime,
+        endtime: editPermInputs.endtime,
+        position: editPermInputs.position,
+        slots: editPermInputs.slots,
+        // id: editPermInputs.id
 
-        starttime: editShiftInputs.starttime, // get input values from user
-        endtime: editShiftInputs.endtime, // get input values from user
-        uid: editShiftInputs.uid, // get input values from user
-        id: props.id, // get input values from user
+        // starttime: editPermInputs.starttime, // get input values from user
+        // endtime: editPermInputs.endtime, // get input values from user
+        // // uid: editPermInputs.uid, // get input values from user
+        // id: props.id, // get input values from user
       };
 
-      const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
+      const res = await axios.put(`/perms/edit`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
 
@@ -50,26 +56,26 @@ export default function EditShiftModal(props) {
   };
 
   const toggleModal = () => {
-    setEditShiftInputs(editShiftDefaultValues);
+    setEditPermInputs(editPermDefaultValues);
     props.closeModal();
   };
 
-  const handleSubmitDelete = async (e) => {
-    e.preventDefault();
-    try {
-      const bodyvalues = {
-        starttime: editShiftInputs.starttime, // get input values from user
-        endtime: editShiftInputs.endtime, // get input values from user
-        uid: editShiftInputs.uid, // get input values from user
-        id: props.id, // get input values from user
-      };
-      const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+//   const handleSubmitDelete = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const bodyvalues = {
+//         starttime: editPermInputs.starttime, // get input values from user
+//         endtime: editPermInputs.endtime, // get input values from user
+//         uid: editPermInputs.uid, // get input values from user
+//         id: props.id, // get input values from user
+//       };
+//       const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+//       // const res = await axios.get(`/shifts/available`);
+//       //navigate("/");
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
 
   // IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION 
@@ -92,41 +98,41 @@ export default function EditShiftModal(props) {
             <p>id: {props.id} </p>
             <p>starttime: {props.starttime} </p>
             <p>endtime: {props.endtime} </p>
-            <p>uid: {props.uid} </p>
             <p>position: {props.position} </p>
-          <div className="editShiftForm">
-        <h1>Edit Shift</h1>
+            <p>slots: {props.position} </p>
+          <div className="editPermForm">
+        <h1>Edit Perm</h1>
         <form>
           <input
             required
             type="number"
             placeholder={props.starttime}
             name="starttime"
-            onChange={handleEditShiftChange}
+            onChange={handleEditPermChange}
           />
           <input
             required
             type="number"
             placeholder={props.endtime}
             name="endtime"
-            onChange={handleEditShiftChange}
+            onChange={handleEditPermChange}
           /> 
           <input
             required
             type="number"
-            placeholder={props.uid}
-            name="uid"
-            onChange={handleEditShiftChange}
+            placeholder={props.slots}
+            name="slots"
+            onChange={handleEditPermChange}
           />
           <input
             required
             type="text"
             placeholder={props.position}
             name="position"
-            onChange={handleEditShiftChange}
+            onChange={handleEditPermChange}
           />
-          <button onClick={handleSubmitEdit}>Edit  Shift</button>
-          <button onClick={handleSubmitDelete}>Delete Shift</button>
+          <button onClick={handleSubmitEdit}>Edit  Perm</button>
+          {/* <button onClick={handleSubmitDelete}>Delete Perm</button> */}
         </form>
       </div>
 
@@ -141,12 +147,11 @@ export default function EditShiftModal(props) {
   );
 }
 
-EditShiftModal.propTypes = {
+EditPermModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     position: PropTypes.string.isRequired,
     starttime: PropTypes.number.isRequired,
     endtime: PropTypes.number.isRequired,
-    uid: PropTypes.number,
-    //drop: PropTypes.func.isRequired,
+    slots: PropTypes.number.isRequired
   };
