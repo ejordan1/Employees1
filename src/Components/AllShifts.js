@@ -46,48 +46,22 @@ function AllShifts() {
       let shiftById = getShiftById(e.target.id);
 
       setModalEditShift({
-        starttime: shiftById.starttime, // get input values from user
-        endtime: shiftById.endtime, // get input values from user
-        uid: shiftById.uid, // get input values from user
-        id: shiftById.id, // get input values from user
+        starttime: shiftById.starttime,
+        endtime: shiftById.endtime,
+        uid: shiftById.uid,
+        id: shiftById.id,
         position: shiftById.position,
       });
 
       setEditModalVisible(true);
-
-      // console.log(shiftById);
-      // const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
     } catch (err) {
       console.log(err);
     }
   };
 
-  // const handleSubmitDelete = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     let shiftById = getShiftById(e.target.id);
-  //     const bodyvalues = {
-  //       // doing this later
-  //       shiftid: shiftById.id,
-  //       starttime: shiftById.starttime,
-  //       endtime: shiftById.endtime,
-  //     };
-  //     console.log(shiftById);
-  //     const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
-  //     // const res = await axios.get(`/shifts/available`);
-  //     //navigate("/");
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const closeModal = () => {
     setEditModalVisible(false);
   };
-
-  // const editModalVisibility = editModalVisible ? styles.visible : styles.hidden;
 
   return (
     <div className="AllShifts">
@@ -131,21 +105,7 @@ function AllShifts() {
           endtime={modalEditShift.endtime}
           uid={modalEditShift.uid}
         ></EditShiftModal>
-      
-
-      {/* {allShifts.map((shift) => (
-        <div>
-          <button id={shift.id} onClick={handleEdit}>
-            Edit Shift
-          </button>
-          <button id={shift.id} onClick={handleSubmitDelete}>
-            Delete Shift
-          </button>
-          <p>{shift.starttime}</p>
-          <p>{shift.endtime}</p>
-          <p>{"uid: " + shift.uid}</p>
-        </div>
-      ))} */}
+    
     </div>
   );
 }

@@ -40,6 +40,7 @@ export default function AddPermModal() {
         slots: createPermInputs.slots,
       };
       const res = await axios.post(`/perms`, bodyvalues);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

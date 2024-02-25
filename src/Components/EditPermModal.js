@@ -55,7 +55,6 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        // doing this later
         permid: props.id,
         uid: createUserPermInputs.uid,
       };
@@ -70,11 +69,10 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        // doing this later
         perm_userid: e.target.id,
       };
       const res = await axios.put(`/perms_users/delete`, bodyvalues);
-      // const res = await axios.get(`/shifts/available`);
+      toggleModal();
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -84,31 +82,17 @@ export default function EditPermModal(props) {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      //   let shiftById = getShiftById(e.target.id);
       const bodyvalues = {
-        // doing this later
-        // shiftid: shiftById.id,
-        // starttime: shiftById.starttime,
-        // endtime: shiftById.endtime
         id: props.id,
         starttime: editPermInputs.starttime,
         endtime: editPermInputs.endtime,
         position: editPermInputs.position,
         slots: editPermInputs.slots,
-        // id: editPermInputs.id
-
-        // starttime: editPermInputs.starttime, // get input values from user
-        // endtime: editPermInputs.endtime, // get input values from user
-        // // uid: editPermInputs.uid, // get input values from user
-        // id: props.id, // get input values from user
       };
 
       const res = await axios.put(`/perms/edit`, bodyvalues);
+      toggleModal();
       window.location.reload();
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
-
-      // I would close modal here
     } catch (err) {
       console.log(err);
     }
@@ -125,8 +109,8 @@ export default function EditPermModal(props) {
         slots: editPermInputs.slots,
       };
       const res = await axios.put(`/perms/delete`, bodyvalues);
+      toggleModal();
       window.location.reload();
-      // const res = await axios.get(`/shifts/available`);
     } catch (err) {
       console.log(err);
     }
@@ -144,8 +128,6 @@ export default function EditPermModal(props) {
           <button onClick={toggleModal} className={styles.btnModal}>
             Open
           </button>
-
-          {/* need to look here: these should be props, or the in class one of editPermInputs? */}
           {
             <div className={styles.modal}>
               <div onClick={toggleModal} className={styles.overlay}></div>
@@ -227,7 +209,6 @@ export default function EditPermModal(props) {
                     />
                     <button onClick={handleSubmitEdit}>Edit Perm</button>
                     <button onClick={handleSubmitDelete}>Delete Perm</button>
-                    {/* <button onClick={handleSubmitDelete}>Delete Perm</button> */}
                   </form>
                 </div>
 

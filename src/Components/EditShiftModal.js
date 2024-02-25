@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 import axios from "axios";
 
 export default function EditShiftModal(props) {
-  //const [modal, setModal] = useState(false);
-
   const editShiftDefaultValues = {
     starttime: 0,
     endtime: 0,
@@ -16,14 +14,14 @@ export default function EditShiftModal(props) {
     editShiftDefaultValues,
   });
 
-  useEffect(()=>{
-    setEditShiftInputs({    
+  useEffect(() => {
+    setEditShiftInputs({
       starttime: props.starttime,
       endtime: props.endtime,
       position: props.position,
       uid: props.uid,
-    })
-},[props.isVisible]);
+    });
+  }, [props.isVisible]);
 
   const handleEditShiftChange = (e) => {
     setEditShiftInputs((prev) => ({
@@ -35,26 +33,17 @@ export default function EditShiftModal(props) {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      //   let shiftById = getShiftById(e.target.id);
       const bodyvalues = {
-        // doing this later
-        // shiftid: shiftById.id,
-        // starttime: shiftById.starttime,
-        // endtime: shiftById.endtime
-
-        starttime: editShiftInputs.starttime, // get input values from user
-        endtime: editShiftInputs.endtime, // get input values from user
-        uid: editShiftInputs.uid, // get input values from user
-        id: props.id, // get input values from user
-        position: editShiftInputs.position
+        starttime: editShiftInputs.starttime,
+        endtime: editShiftInputs.endtime,
+        uid: editShiftInputs.uid,
+        id: props.id,
+        position: editShiftInputs.position,
       };
 
       const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
+      toggleModal();
       window.location.reload();
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
-
-      // I would close modal here
     } catch (err) {
       console.log(err);
     }
@@ -69,26 +58,25 @@ export default function EditShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        starttime: editShiftInputs.starttime, // get input values from user
-        endtime: editShiftInputs.endtime, // get input values from user
-        uid: editShiftInputs.uid, // get input values from user
-        id: props.id, // get input values from user
+        starttime: editShiftInputs.starttime,
+        endtime: editShiftInputs.endtime,
+        uid: editShiftInputs.uid,
+        id: props.id,
       };
       const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+      toggleModal();
       window.location.reload();
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
     } catch (err) {
       console.log(err);
     }
   };
 
-  // IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION
-  // if(modal) {
-  //   document.body.classList.add('active-modal')
-  // } else {
-  //   document.body.classList.remove('active-modal')
-  // }
+  //IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION
+  if (props.isVisible) {
+    document.body.classList.add("active-modal");
+  } else {
+    document.body.classList.remove("active-modal");
+  }
 
   return (
     <div>
@@ -163,5 +151,4 @@ EditShiftModal.propTypes = {
   starttime: PropTypes.number.isRequired,
   endtime: PropTypes.number.isRequired,
   uid: PropTypes.number,
-  //drop: PropTypes.func.isRequired,
 };

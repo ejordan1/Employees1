@@ -4,12 +4,14 @@ import {
   deletePerm,
   editPerm,
   getPerms,
+  getMyPerms,
   getPermsByUserId,
 } from "../controllers/perms.js";
 
 const router = express.Router();
 
 router.get("/", getPerms);
+router.get("/myperms", getMyPerms);
 router.get("/byid", getPermsByUserId);
 router.post("/", addPerm);
 router.put("/edit", editPerm);

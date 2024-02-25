@@ -69,16 +69,15 @@ function AllPerms() {
       let permById = allPermsAndPermsUsers[e.target.id];
 
       setModalEditPerm({
-        starttime: permById.starttime, // get input values from user
-        endtime: permById.endtime, // get input values from user
-        slots: permById.slots, // get input values from user
-        id: e.target.id, // get input values from user
+        starttime: permById.starttime,
+        endtime: permById.endtime,
+        slots: permById.slots,
+        id: e.target.id,
         position: permById.position,
         permUsers: permById.permUsers,
       });
       setEditModalVisible(true);
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
+
     } catch (err) {
       console.log(err);
     }
@@ -122,9 +121,6 @@ function AllPerms() {
                   </button>
 
                   <div>
-                    {/* {Object.keys(allPermsFills[permKey].permUsers).map((permUserKey) => (
-            <p>{permUserKey}</p>
-          ))} */}
 
                     {Object.entries(
                       allPermsAndPermsUsers[permKey].permUsers

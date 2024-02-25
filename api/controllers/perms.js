@@ -84,6 +84,36 @@ export const getPermsByUserId = (req, res) => {
   });
 };
 
+export const getMyPerms = (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(401).json("Not authenticated");
+
+  jwt.verify(token, "jwtkey", (err, employeeInfo) => {
+    if (err) return res.status(403).json("Token is not valid!");
+
+    const getPermsByIdQuery = `
+        SELECT employees1.perms.starttime, 
+        employees1.perms.endtime, 
+        employees1.perms.position, 
+        employees1.perms_users.permid,
+        employees1.perms_users.uid,
+        employees1.users.firstname,
+        employees1.users.lastname 
+        FROM employees1.perms JOIN employees1.perms_users    ON employees1.perms.id =  perms_users.permid
+        JOIN employees1.users ON employees1.users.id =  employees1.perms_users.uid
+        WHERE employees1.users.id = ?`;
+
+    const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
+
+        db.query(getPermsByIdQuery, [employeeInfo.id], (err, data) => {
+          if (err) return res.status(500).send(err);
+
+          return res.status(200).json(data);
+        });
+
+  });
+};
+
 export const addPerm = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
