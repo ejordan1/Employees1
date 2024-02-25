@@ -103,12 +103,13 @@ export const editShift = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "UPDATE shifts SET `starttime`=?, `endtime`=?, `uid`=? WHERE `id`=?";
+          "UPDATE shifts SET `starttime`=?, `endtime`=?, `position`=?, `uid`=? WHERE `id`=?";
         const values = [
           req.body.starttime,
           req.body.endtime,
+          req.body.position,
           req.body.uid,
-          req.body.id
+          req.body.id,
         ];
 
         db.query(q, values, (err, data) => {

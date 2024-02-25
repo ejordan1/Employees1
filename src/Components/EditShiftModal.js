@@ -46,6 +46,7 @@ export default function EditShiftModal(props) {
         endtime: editShiftInputs.endtime, // get input values from user
         uid: editShiftInputs.uid, // get input values from user
         id: props.id, // get input values from user
+        position: editShiftInputs.position
       };
 
       const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
@@ -112,28 +113,28 @@ export default function EditShiftModal(props) {
                     <input
                       required
                       type="number"
-                      placeholder={props.starttime}
+                      defaultValue={props.starttime}
                       name="starttime"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="number"
-                      placeholder={props.endtime}
+                      defaultValue={props.endtime}
                       name="endtime"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="number"
-                      placeholder={props.uid}
+                      defaultValue={props.uid}
                       name="uid"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="text"
-                      placeholder={props.position}
+                      defaultValue={props.position}
                       name="position"
                       onChange={handleEditShiftChange}
                     />
