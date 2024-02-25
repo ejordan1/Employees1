@@ -135,14 +135,15 @@ function AllPerms() {
       <AddPermModal>Create Perm</AddPermModal>
     <div className={styles.AllPerms}>
 
-      {editModalVisible && (<EditPermModal
+      <EditPermModal
+        isVisible={editModalVisible}
         closeModal={closeModal}
         id={modalEditPerm.id}
         position={modalEditPerm.position}
         starttime={modalEditPerm.starttime}
         endtime={modalEditPerm.endtime}
         slots={modalEditPerm.slots}
-      ></EditPermModal>)}
+      ></EditPermModal>
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
         <div>

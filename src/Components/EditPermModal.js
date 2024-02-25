@@ -78,32 +78,9 @@ export default function EditPermModal(props) {
     props.closeModal();
   };
 
-//   const handleSubmitDelete = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const bodyvalues = {
-//         starttime: editPermInputs.starttime, // get input values from user
-//         endtime: editPermInputs.endtime, // get input values from user
-//         uid: editPermInputs.uid, // get input values from user
-//         id: props.id, // get input values from user
-//       };
-//       const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
-//       // const res = await axios.get(`/shifts/available`);
-//       //navigate("/");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-
-  // IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION 
-  // if(modal) {
-  //   document.body.classList.add('active-modal')
-  // } else {
-  //   document.body.classList.remove('active-modal')
-  // }
-
   return (
+    <div>
+      {props.isVisible && (
     <>
       <button onClick={toggleModal} className={styles.btnModal}>
         Open
@@ -163,10 +140,13 @@ export default function EditPermModal(props) {
       }
       
     </>
+      )}
+    </div>
   );
 }
 
 EditPermModal.propTypes = {
+  isVisible: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     position: PropTypes.string.isRequired,
