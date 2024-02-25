@@ -134,7 +134,7 @@ export const deleteShift = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const shiftId = req.body.shiftid;
+        const shiftId = req.body.id;
         const q = "DELETE FROM shifts WHERE `id` = ?";
 
         db.query(q, [shiftId, employeeInfo.id], (err, data) => {

@@ -6,11 +6,14 @@ import axios from "axios";
 export default function EditShiftModal(props) {
   //const [modal, setModal] = useState(false);
 
-  const [editShiftInputs, setEditShiftInputs] = useState({
+  const editShiftDefaultValues = {
     starttime: 0,
     endtime: 0,
     position: "",
     uid: null,
+  }
+  const [editShiftInputs, setEditShiftInputs] = useState({
+    editShiftDefaultValues
   });
 
   const handleEditShiftChange = (e) => {
@@ -47,8 +50,25 @@ export default function EditShiftModal(props) {
   };
 
   const toggleModal = () => {
-    // setModal(!modal);
+    setEditShiftInputs(editShiftDefaultValues);
     props.closeModal();
+  };
+
+  const handleSubmitDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        starttime: editShiftInputs.starttime, // get input values from user
+        endtime: editShiftInputs.endtime, // get input values from user
+        uid: editShiftInputs.uid, // get input values from user
+        id: props.id, // get input values from user
+      };
+      const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+      // const res = await axios.get(`/shifts/available`);
+      //navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
 
@@ -105,7 +125,8 @@ export default function EditShiftModal(props) {
             name="position"
             onChange={handleEditShiftChange}
           />
-          <button onClick={handleSubmitEdit}>Edit 555 Shift</button>
+          <button onClick={handleSubmitEdit}>Edit  Shift</button>
+          <button onClick={handleSubmitDelete}>Delete Shift</button>
         </form>
       </div>
 
