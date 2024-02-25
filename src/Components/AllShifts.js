@@ -121,8 +121,9 @@ function AllShifts() {
           </div>{" "}
         </div>
       </div>
-      {editModalVisible && (
+      
         <EditShiftModal
+        isVisible={editModalVisible}
           closeModal={closeModal}
           id={modalEditShift.id}
           position={modalEditShift.position}
@@ -130,7 +131,7 @@ function AllShifts() {
           endtime={modalEditShift.endtime}
           uid={modalEditShift.uid}
         ></EditShiftModal>
-      )}
+      
 
       {/* {allShifts.map((shift) => (
         <div>

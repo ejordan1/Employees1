@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./EditShiftModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -11,10 +11,19 @@ export default function EditShiftModal(props) {
     endtime: 0,
     position: "",
     uid: null,
-  }
+  };
   const [editShiftInputs, setEditShiftInputs] = useState({
-    editShiftDefaultValues
+    editShiftDefaultValues,
   });
+
+  useEffect(()=>{
+    setEditShiftInputs({    
+      starttime: props.starttime,
+      endtime: props.endtime,
+      position: props.position,
+      uid: props.uid,
+    })
+},[props.isVisible]);
 
   const handleEditShiftChange = (e) => {
     setEditShiftInputs((prev) => ({
@@ -26,7 +35,7 @@ export default function EditShiftModal(props) {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-    //   let shiftById = getShiftById(e.target.id);
+      //   let shiftById = getShiftById(e.target.id);
       const bodyvalues = {
         // doing this later
         // shiftid: shiftById.id,
@@ -71,8 +80,7 @@ export default function EditShiftModal(props) {
     }
   };
 
-
-  // IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION 
+  // IS THIS IMPORTANT? MAYBE TEST ON MOBILE VERSION
   // if(modal) {
   //   document.body.classList.add('active-modal')
   // } else {
@@ -80,73 +88,77 @@ export default function EditShiftModal(props) {
   // }
 
   return (
-    <>
-      <button onClick={toggleModal} className={styles.btnModal}>
-        Open
-      </button>
+    <div>
+      {props.isVisible && (
+        <>
+          <button onClick={toggleModal} className={styles.btnModal}>
+            Open
+          </button>
 
-      {
-        <div className={styles.modal}>
-          <div onClick={toggleModal} className={styles.overlay}></div>
-          <div className={styles.modalContent}>
-            <p>id: {props.id} </p>
-            <p>starttime: {props.starttime} </p>
-            <p>endtime: {props.endtime} </p>
-            <p>uid: {props.uid} </p>
-            <p>position: {props.position} </p>
-          <div className="editShiftForm">
-        <h1>Edit Shift</h1>
-        <form>
-          <input
-            required
-            type="number"
-            placeholder={props.starttime}
-            name="starttime"
-            onChange={handleEditShiftChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder={props.endtime}
-            name="endtime"
-            onChange={handleEditShiftChange}
-          /> 
-          <input
-            required
-            type="number"
-            placeholder={props.uid}
-            name="uid"
-            onChange={handleEditShiftChange}
-          />
-          <input
-            required
-            type="text"
-            placeholder={props.position}
-            name="position"
-            onChange={handleEditShiftChange}
-          />
-          <button onClick={handleSubmitEdit}>Edit  Shift</button>
-          <button onClick={handleSubmitDelete}>Delete Shift</button>
-        </form>
-      </div>
+          {
+            <div className={styles.modal}>
+              <div onClick={toggleModal} className={styles.overlay}></div>
+              <div className={styles.modalContent}>
+                <p>id: {props.id} </p>
+                <p>starttime: {props.starttime} </p>
+                <p>endtime: {props.endtime} </p>
+                <p>uid: {props.uid} </p>
+                <p>position: {props.position} </p>
+                <div className="editShiftForm">
+                  <h1>Edit Shift</h1>
+                  <form>
+                    <input
+                      required
+                      type="number"
+                      placeholder={props.starttime}
+                      name="starttime"
+                      onChange={handleEditShiftChange}
+                    />
+                    <input
+                      required
+                      type="number"
+                      placeholder={props.endtime}
+                      name="endtime"
+                      onChange={handleEditShiftChange}
+                    />
+                    <input
+                      required
+                      type="number"
+                      placeholder={props.uid}
+                      name="uid"
+                      onChange={handleEditShiftChange}
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder={props.position}
+                      name="position"
+                      onChange={handleEditShiftChange}
+                    />
+                    <button onClick={handleSubmitEdit}>Edit Shift</button>
+                    <button onClick={handleSubmitDelete}>Delete Shift</button>
+                  </form>
+                </div>
 
-            <button className="close-modal" onClick={toggleModal}>
-              CLOSE
-            </button>
-          </div>
-        </div>
-      }
-      
-    </>
+                <button className="close-modal" onClick={toggleModal}>
+                  CLOSE
+                </button>
+              </div>
+            </div>
+          }
+        </>
+      )}
+    </div>
   );
 }
 
 EditShiftModal.propTypes = {
-    closeModal: PropTypes.func.isRequired,
-    id: PropTypes.number.isRequired,
-    position: PropTypes.string.isRequired,
-    starttime: PropTypes.number.isRequired,
-    endtime: PropTypes.number.isRequired,
-    uid: PropTypes.number,
-    //drop: PropTypes.func.isRequired,
-  };
+  isVisible: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  position: PropTypes.string.isRequired,
+  starttime: PropTypes.number.isRequired,
+  endtime: PropTypes.number.isRequired,
+  uid: PropTypes.number,
+  //drop: PropTypes.func.isRequired,
+};

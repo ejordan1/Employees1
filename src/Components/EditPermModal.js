@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./EditPermModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -10,11 +10,25 @@ export default function EditPermModal(props) {
     starttime: 0,
     endtime: 0,
     slots: 0,
-    position: ""
-  }
+    position: "",
+    permUsers: {},
+  };
   const [editPermInputs, setEditPermInputs] = useState({
-    editPermDefaultValues
+    editPermDefaultValues,
   });
+
+  useEffect(() => {
+    if (props.isVisible) {
+      setEditPermInputs({
+        id: props.id,
+        position: props.position,
+        starttime: props.starttime,
+        endtime: props.endtime,
+        slots: props.slots,
+        permUsers: props.permUsers,
+      });
+    }
+  }, [props.isVisible]);
 
   const handleEditPermChange = (e) => {
     setEditPermInputs((prev) => ({
@@ -26,7 +40,7 @@ export default function EditPermModal(props) {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-    //   let shiftById = getShiftById(e.target.id);
+      //   let shiftById = getShiftById(e.target.id);
       const bodyvalues = {
         // doing this later
         // shiftid: shiftById.id,
@@ -81,65 +95,81 @@ export default function EditPermModal(props) {
   return (
     <div>
       {props.isVisible && (
-    <>
-      <button onClick={toggleModal} className={styles.btnModal}>
-        Open
-      </button>
+        <>
+          <button onClick={toggleModal} className={styles.btnModal}>
+            Open
+          </button>
 
-      {
-        <div className={styles.modal}>
-          <div onClick={toggleModal} className={styles.overlay}></div>
-          <div className={styles.modalContent}>
-            <p>id: {props.id} </p>
-            <p>starttime: {props.starttime} </p>
-            <p>endtime: {props.endtime} </p>
-            <p>position: {props.position} </p>
-            <p>slots: {props.position} </p>
-          <div className="editPermForm">
-        <h1>Edit Perm</h1>
-        <form>
-          <input
-            required
-            type="number"
-            placeholder={props.starttime}
-            name="starttime"
-            onChange={handleEditPermChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder={props.endtime}
-            name="endtime"
-            onChange={handleEditPermChange}
-          /> 
-          <input
-            required
-            type="number"
-            placeholder={props.slots}
-            name="slots"
-            onChange={handleEditPermChange}
-          />
-          <input
-            required
-            type="text"
-            placeholder={props.position}
-            name="position"
-            onChange={handleEditPermChange}
-          />
-          <button onClick={handleSubmitEdit}>Edit  Perm</button>
-          <button onClick={handleSubmitDelete}>Delete  Perm</button>
-          {/* <button onClick={handleSubmitDelete}>Delete Perm</button> */}
-        </form>
-      </div>
+          {/* need to look here: these should be props, or the in class one of editPermInputs? */}
+          {
+            <div className={styles.modal}>
+              <div onClick={toggleModal} className={styles.overlay}></div>
+              <div className={styles.modalContent}>
+                <p>id: {props.id} </p>
+                <p>starttime: {props.starttime} </p>
+                <p>endtime: {props.endtime} </p>
+                <p>position: {props.position} </p>
+                <p>slots: {props.position} </p>
+                {editPermInputs.permUsers &&
+                  Object.entries(editPermInputs.permUsers).map((keyvalue) => (
+                    <div>
+                      <p>
+                        {"perm_userid: " +
+                          keyvalue[0] +
+                          ", uid: " +
+                          keyvalue[1].uid +
+                          ", " +
+                          keyvalue[1].firstname +
+                          ", " +
+                          keyvalue[1].lastname}
+                      </p>
+                    </div>
+                  ))}
 
-            <button className="close-modal" onClick={toggleModal}>
-              CLOSE
-            </button>
-          </div>
-        </div>
-      }
-      
-    </>
+                <div className="editPermForm">
+                  <h1>Edit Perm</h1>
+                  <form>
+                    <input
+                      required
+                      type="number"
+                      placeholder={props.starttime}
+                      name="starttime"
+                      onChange={handleEditPermChange}
+                    />
+                    <input
+                      required
+                      type="number"
+                      placeholder={props.endtime}
+                      name="endtime"
+                      onChange={handleEditPermChange}
+                    />
+                    <input
+                      required
+                      type="number"
+                      placeholder={props.slots}
+                      name="slots"
+                      onChange={handleEditPermChange}
+                    />
+                    <input
+                      required
+                      type="text"
+                      placeholder={props.position}
+                      name="position"
+                      onChange={handleEditPermChange}
+                    />
+                    <button onClick={handleSubmitEdit}>Edit Perm</button>
+                    <button onClick={handleSubmitDelete}>Delete Perm</button>
+                    {/* <button onClick={handleSubmitDelete}>Delete Perm</button> */}
+                  </form>
+                </div>
+
+                <button className="close-modal" onClick={toggleModal}>
+                  CLOSE
+                </button>
+              </div>
+            </div>
+          }
+        </>
       )}
     </div>
   );
@@ -147,10 +177,11 @@ export default function EditPermModal(props) {
 
 EditPermModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    id: PropTypes.number.isRequired,
-    position: PropTypes.string.isRequired,
-    starttime: PropTypes.number.isRequired,
-    endtime: PropTypes.number.isRequired,
-    slots: PropTypes.number.isRequired
-  };
+  closeModal: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  position: PropTypes.string.isRequired,
+  starttime: PropTypes.number.isRequired,
+  endtime: PropTypes.number.isRequired,
+  slots: PropTypes.number.isRequired,
+  permUsers: PropTypes.object.isRequired,
+};

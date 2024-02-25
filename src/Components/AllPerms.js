@@ -15,6 +15,7 @@ function AllPerms() {
     starttime: 0,
     endtime: 0,
     slots: 0,
+    permUsers: {}
   });
 
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -101,6 +102,7 @@ function AllPerms() {
         slots: permById.slots, // get input values from user
         id: e.target.id, // get input values from user
         position: permById.position,
+        permUsers: permById.permUsers,
       });
       setEditModalVisible(true);
       // const res = await axios.get(`/shifts/available`);
@@ -143,6 +145,7 @@ function AllPerms() {
         starttime={modalEditPerm.starttime}
         endtime={modalEditPerm.endtime}
         slots={modalEditPerm.slots}
+        permUsers={modalEditPerm.permUsers}
       ></EditPermModal>
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
