@@ -55,6 +55,24 @@ export default function EditPermModal(props) {
     }
   };
 
+  const handleSubmitDelete = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        id: props.id,
+        starttime: editPermInputs.starttime,
+        endtime: editPermInputs.endtime,
+        position: editPermInputs.position,
+        slots: editPermInputs.slots,
+      };
+      const res = await axios.put(`/perms/delete`, bodyvalues);
+      // const res = await axios.get(`/shifts/available`);
+      //navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const toggleModal = () => {
     setEditPermInputs(editPermDefaultValues);
     props.closeModal();
@@ -132,6 +150,7 @@ export default function EditPermModal(props) {
             onChange={handleEditPermChange}
           />
           <button onClick={handleSubmitEdit}>Edit  Perm</button>
+          <button onClick={handleSubmitDelete}>Delete  Perm</button>
           {/* <button onClick={handleSubmitDelete}>Delete Perm</button> */}
         </form>
       </div>
