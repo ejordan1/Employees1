@@ -61,46 +61,19 @@ function AllPerms() {
     };
     fetchData();
   }, []);
-  const [createPermInputs, setCreatePermInputs] = useState({
-    starttime: 0,
-    endtime: 0,
-    slots: 0,
-    position: "",
-  });
 
   const [createUserPermInputs, setCreateUserPermInputs] = useState({
     permid: 0,
     uid: 0,
   });
 
-  const handleCreatePermChange = (e) => {
-    setCreatePermInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+
 
   const handleCreateUserPermChange = (e) => {
     setCreateUserPermInputs((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-  };
-
-  const handleSubmitCreate = async (e) => {
-    e.preventDefault();
-    try {
-      const bodyvalues = {
-        // doing this later
-        starttime: createPermInputs.starttime,
-        endtime: createPermInputs.endtime,
-        position: createPermInputs.position,
-        slots: createPermInputs.slots,
-      };
-      const res = await axios.post(`/perms`, bodyvalues);
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   const handleSubmitCreateUserPerm = async (e) => {
@@ -229,41 +202,6 @@ function AllPerms() {
             ))} */}
           </div>{" "}
         </div>
-      </div>
-
-      <div className="createPermForm">
-        <h1>Create Perm</h1>
-        <form>
-          <input
-            required
-            type="number"
-            placeholder="starttime"
-            name="starttime"
-            onChange={handleCreatePermChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="endtime"
-            name="endtime"
-            onChange={handleCreatePermChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="slots"
-            name="slots"
-            onChange={handleCreatePermChange}
-          />
-          <input
-            required
-            type="text"
-            placeholder="position"
-            name="position"
-            onChange={handleCreatePermChange}
-          />
-          <button onClick={handleSubmitCreate}>Create Perm</button>
-        </form>
       </div>
 
       <div className="createUserPermForm">

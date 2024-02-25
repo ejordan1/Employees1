@@ -5,11 +5,12 @@ import styles from "./SingleAllPerm.module.scss";
 function SingleAllPerm(props) {
   return (
     <div className={`${styles.container}`}>
-      <p>{props.position}</p>
+      <p>id: {props.id}</p>
+      <p>position: {props.position}</p>
       <div className={styles.times}>
-        <p>{props.starttime}</p>
+        <p>st: {props.starttime}</p>
         <p>-</p>
-        <p>{props.endtime}</p>
+        <p>et: {props.endtime}</p>
         <p>slots: {props.slots}</p>
       </div>
     </div>
