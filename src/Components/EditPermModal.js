@@ -37,6 +37,46 @@ export default function EditPermModal(props) {
     }));
   };
 
+  const handleCreateUserPermChange = (e) => {
+    setCreateUserPermInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const [createUserPermInputs, setCreateUserPermInputs] = useState({
+    uid: 0,
+  });
+
+  const handleSubmitCreateUserPerm = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        // doing this later
+        permid: props.id,
+        uid: createUserPermInputs.uid,
+      };
+      const res = await axios.post(`/perms_users/add`, bodyvalues);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleSubmitDeleteUserPerm = async (e) => {
+    e.preventDefault();
+    try {
+      const bodyvalues = {
+        // doing this later
+        perm_userid: e.target.id,
+      };
+      const res = await axios.put(`/perms_users/delete`, bodyvalues);
+      // const res = await axios.get(`/shifts/available`);
+      //navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
@@ -123,9 +163,29 @@ export default function EditPermModal(props) {
                           ", " +
                           keyvalue[1].lastname}
                       </p>
+                      <button id={keyvalue[0]} onClick={handleSubmitDeleteUserPerm}>
+                      Delete User Perm
+                    </button>
                     </div>
                   ))}
 
+                <div className="createUserPermForm">
+                  <h1>Create UserPerm</h1>
+                  <form>
+                    <input
+                      required
+                      type="number"
+                      placeholder="uid"
+                      name="uid"
+                      onChange={handleCreateUserPermChange}
+                    />
+                    <button onClick={handleSubmitCreateUserPerm}>
+                      Create User Perm
+                    </button>
+                  </form>
+                </div>
+
+{/* initial values */}
                 <div className="editPermForm">
                   <h1>Edit Perm</h1>
                   <form>

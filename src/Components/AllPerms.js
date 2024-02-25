@@ -4,7 +4,7 @@ import styles from "./AllPerms.module.scss";
 import SingleAllperm from "./SingleAllPerm.js";
 import SingleAllPerm from "./SingleAllPerm.js";
 import EditPermModal from "./EditPermModal.js";
-import AddPermModal from "./AddPermModal.js"
+import AddPermModal from "./AddPermModal.js";
 
 function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
@@ -15,7 +15,7 @@ function AllPerms() {
     starttime: 0,
     endtime: 0,
     slots: 0,
-    permUsers: {}
+    permUsers: {},
   });
 
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -63,34 +63,6 @@ function AllPerms() {
     fetchData();
   }, []);
 
-  const [createUserPermInputs, setCreateUserPermInputs] = useState({
-    permid: 0,
-    uid: 0,
-  });
-
-
-
-  const handleCreateUserPermChange = (e) => {
-    setCreateUserPermInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmitCreateUserPerm = async (e) => {
-    e.preventDefault();
-    try {
-      const bodyvalues = {
-        // doing this later
-        permid: createUserPermInputs.permid,
-        uid: createUserPermInputs.uid,
-      };
-      const res = await axios.post(`/perms_users/add`, bodyvalues);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
@@ -112,22 +84,6 @@ function AllPerms() {
     }
   };
 
-  const handleSubmitDeleteUserPerm = async (e) => {
-    e.preventDefault();
-    try {
-      const bodyvalues = {
-        // doing this later
-        perm_userid: e.target.id,
-      };
-      const res = await axios.put(`/perms_users/delete`, bodyvalues);
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
   const closeModal = () => {
     setEditModalVisible(false);
   };
@@ -135,44 +91,44 @@ function AllPerms() {
   return (
     <div>
       <AddPermModal>Create Perm</AddPermModal>
-    <div className={styles.AllPerms}>
-
-      <EditPermModal
-        isVisible={editModalVisible}
-        closeModal={closeModal}
-        id={modalEditPerm.id}
-        position={modalEditPerm.position}
-        starttime={modalEditPerm.starttime}
-        endtime={modalEditPerm.endtime}
-        slots={modalEditPerm.slots}
-        permUsers={modalEditPerm.permUsers}
-      ></EditPermModal>
-      <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
-      <div className={styles.shiftsContainer}>
-        <div>
-          <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
+      <div className={styles.AllPerms}>
+        <EditPermModal
+          isVisible={editModalVisible}
+          closeModal={closeModal}
+          id={modalEditPerm.id}
+          position={modalEditPerm.position}
+          starttime={modalEditPerm.starttime}
+          endtime={modalEditPerm.endtime}
+          slots={modalEditPerm.slots}
+          permUsers={modalEditPerm.permUsers}
+        ></EditPermModal>
+        <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
+        <div className={styles.shiftsContainer}>
           <div>
-            {Object.keys(allPermsAndPermsUsers).map((permKey) => (
-              <div>
-                <SingleAllPerm
-                  id={permKey}
-                  position={allPermsAndPermsUsers[permKey].position}
-                  starttime={allPermsAndPermsUsers[permKey].starttime}
-                  endtime={allPermsAndPermsUsers[permKey].endtime}
-                  slots={allPermsAndPermsUsers[permKey].slots}
-                ></SingleAllPerm>
-                <button id={permKey} onClick={handleSubmitEdit}>
-                  {/* shouldn't use same id for two buttons */}
-                  Edit Perm
-                </button>
-
+            <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
+            <div>
+              {Object.keys(allPermsAndPermsUsers).map((permKey) => (
                 <div>
-                  {/* {Object.keys(allPermsFills[permKey].permUsers).map((permUserKey) => (
+                  <SingleAllPerm
+                    id={permKey}
+                    position={allPermsAndPermsUsers[permKey].position}
+                    starttime={allPermsAndPermsUsers[permKey].starttime}
+                    endtime={allPermsAndPermsUsers[permKey].endtime}
+                    slots={allPermsAndPermsUsers[permKey].slots}
+                  ></SingleAllPerm>
+                  <button id={permKey} onClick={handleSubmitEdit}>
+                    {/* shouldn't use same id for two buttons */}
+                    Edit Perm
+                  </button>
+
+                  <div>
+                    {/* {Object.keys(allPermsFills[permKey].permUsers).map((permUserKey) => (
             <p>{permUserKey}</p>
           ))} */}
 
-                  {Object.entries(allPermsAndPermsUsers[permKey].permUsers).map(
-                    (keyvalue) => (
+                    {Object.entries(
+                      allPermsAndPermsUsers[permKey].permUsers
+                    ).map((keyvalue) => (
                       <div>
                         <p>
                           {"perm_userid: " +
@@ -185,50 +141,14 @@ function AllPerms() {
                             keyvalue[1].lastname}
                         </p>
                       </div>
-                    )
-                  )}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-
-            {/* {" "}
-            {allShifts.map((perm) => (
-              <div>
-                <SingleAllPerm
-                  id={perm.id}
-                  position={perm.position}
-                  starttime={perm.starttime}
-                  endtime={perm.endtime}
-                >
-                  asdf
-                </SingleAllPerm>
-              </div>
-            ))} */}
-          </div>{" "}
+              ))}
+            </div>{" "}
+          </div>
         </div>
       </div>
-
-      <div className="createUserPermForm">
-        <h1>Create UserPerm</h1>
-        <form>
-          <input
-            required
-            type="number"
-            placeholder="permid"
-            name="permid"
-            onChange={handleCreateUserPermChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="uid"
-            name="uid"
-            onChange={handleCreateUserPermChange}
-          />
-          <button onClick={handleSubmitCreateUserPerm}>Create User Perm</button>
-        </form>
-      </div>
-    </div>
     </div>
   );
 }
