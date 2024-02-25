@@ -64,24 +64,24 @@ function AllShifts() {
     }
   };
 
-  const handleSubmitDelete = async (e) => {
-    e.preventDefault();
-    try {
-      let shiftById = getShiftById(e.target.id);
-      const bodyvalues = {
-        // doing this later
-        shiftid: shiftById.id,
-        starttime: shiftById.starttime,
-        endtime: shiftById.endtime,
-      };
-      console.log(shiftById);
-      const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleSubmitDelete = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let shiftById = getShiftById(e.target.id);
+  //     const bodyvalues = {
+  //       // doing this later
+  //       shiftid: shiftById.id,
+  //       starttime: shiftById.starttime,
+  //       endtime: shiftById.endtime,
+  //     };
+  //     console.log(shiftById);
+  //     const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+  //     // const res = await axios.get(`/shifts/available`);
+  //     //navigate("/");
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const closeModal = () => {
     setEditModalVisible(false);

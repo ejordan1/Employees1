@@ -41,6 +41,7 @@ export default function AddShiftModal() {
         uid: createShiftInputs.uid,
       };
       const res = await axios.post(`/shifts/admin/add`, bodyvalues);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

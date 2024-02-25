@@ -49,6 +49,7 @@ export default function EditShiftModal(props) {
       };
 
       const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
+      window.location.reload();
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
 
@@ -73,6 +74,7 @@ export default function EditShiftModal(props) {
         id: props.id, // get input values from user
       };
       const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+      window.location.reload();
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
     } catch (err) {

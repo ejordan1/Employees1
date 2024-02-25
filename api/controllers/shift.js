@@ -156,7 +156,7 @@ export const pickupShift = (req, res) => {
     if (err) return res.status(403).json("token is not valid!");
     const q =
       "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id = ?"; //
-    db.query(q, [req.body.shiftid], (err, data) => {
+    db.query(q, [req.body.id], (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
@@ -167,7 +167,7 @@ export const pickupShift = (req, res) => {
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = ? WHERE (`id` = '?')";
 
-        db.query(q, [employeeInfo.id, req.body.shiftid], (err, data) => {
+        db.query(q, [employeeInfo.id, req.body.id], (err, data) => {
           if (err) return res.status(500).json(err);
           return res.json("Shift has been picked up by: " + employeeInfo.id);
         });
@@ -188,7 +188,7 @@ export const dropShift = (req, res) => {
     const q =
       "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
 
-    const values = [req.body.shiftid, req.body.uid];
+    const values = [req.body.id, req.body.uid];
     db.query(q, values, (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
@@ -200,7 +200,7 @@ export const dropShift = (req, res) => {
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = NULL WHERE (`id` = '?')";
 
-        db.query(q, [req.body.shiftid], (err, data) => {
+        db.query(q, [req.body.id], (err, data) => {
           if (err) return res.status(500).json(err);
           return res.json("Shift has been dropped");
         });

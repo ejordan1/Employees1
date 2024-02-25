@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import styles from "./EditPermModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function EditPermModal(props) {
   //const [modal, setModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const editPermDefaultValues = {
     starttime: 0,
@@ -57,6 +60,7 @@ export default function EditPermModal(props) {
         uid: createUserPermInputs.uid,
       };
       const res = await axios.post(`/perms_users/add`, bodyvalues);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -71,7 +75,7 @@ export default function EditPermModal(props) {
       };
       const res = await axios.put(`/perms_users/delete`, bodyvalues);
       // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -100,6 +104,7 @@ export default function EditPermModal(props) {
       };
 
       const res = await axios.put(`/perms/edit`, bodyvalues);
+      window.location.reload();
       // const res = await axios.get(`/shifts/available`);
       //navigate("/");
 
@@ -120,8 +125,8 @@ export default function EditPermModal(props) {
         slots: editPermInputs.slots,
       };
       const res = await axios.put(`/perms/delete`, bodyvalues);
+      window.location.reload();
       // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -163,9 +168,12 @@ export default function EditPermModal(props) {
                           ", " +
                           keyvalue[1].lastname}
                       </p>
-                      <button id={keyvalue[0]} onClick={handleSubmitDeleteUserPerm}>
-                      Delete User Perm
-                    </button>
+                      <button
+                        id={keyvalue[0]}
+                        onClick={handleSubmitDeleteUserPerm}
+                      >
+                        Delete User Perm
+                      </button>
                     </div>
                   ))}
 
@@ -185,35 +193,35 @@ export default function EditPermModal(props) {
                   </form>
                 </div>
 
-{/* initial values */}
+                {/* initial values */}
                 <div className="editPermForm">
                   <h1>Edit Perm</h1>
                   <form>
                     <input
                       required
                       type="number"
-                      placeholder={props.starttime}
+                      defaultValue={props.starttime}
                       name="starttime"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="number"
-                      placeholder={props.endtime}
+                      defaultValue={props.endtime}
                       name="endtime"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="number"
-                      placeholder={props.slots}
+                      defaultValue={props.slots}
                       name="slots"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="text"
-                      placeholder={props.position}
+                      defaultValue={props.position}
                       name="position"
                       onChange={handleEditPermChange}
                     />

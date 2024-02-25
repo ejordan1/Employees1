@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SingleMyShift from "./SingleMyShift.js";
-import SingleAvailableShift from "./SingleAvailableShift.js"
+import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
+import PickupShiftModal from "./PickupShiftModal.js"
 
 function MyShifts() {
   const [myShifts, setMyShifts] = useState([]);
 
   const [availableShifts, setAvailableShifts] = useState([]);
+
+  const [pickupModalVisible, setPickupModalVisible] = useState(false);
+
+  const [modalPickupShift, setModalPickupShift] = useState({
+    id: null,
+    position: "",
+    starttime: 0,
+    endtime: 0,
+  });
 
   function getMyShiftById(id) {
     for (let i = 0; i < myShifts.length; i++) {
@@ -17,12 +27,9 @@ function MyShifts() {
     }
   }
 
-  function getAvailableShiftById(id)
-  {
-    for (let i = 0; i <  availableShifts.length; i++)
-    {
-      if (availableShifts[i].id == id)
-      {
+  function getAvailableShiftById(id) {
+    for (let i = 0; i < availableShifts.length; i++) {
+      if (availableShifts[i].id == id) {
         return availableShifts[i];
       }
     }
@@ -52,18 +59,23 @@ function MyShifts() {
     fetchData();
   }, []);
 
+  const closeModal = () => {
+    setPickupModalVisible(false);
+  };
+
   const handleDropSubmit = async (e) => {
     e.preventDefault();
     try {
       let shiftById = getMyShiftById(e.target.id);
       const bodyvalues = {
-        shiftid: shiftById.id,
+        id: shiftById.id,
         starttime: shiftById.starttime,
         endtime: shiftById.endtime,
         uid: shiftById.uid,
       };
       console.log(shiftById);
       const res = await axios.put(`/shifts/drop`, bodyvalues);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -73,15 +85,14 @@ function MyShifts() {
     e.preventDefault();
     try {
       let shiftById = getAvailableShiftById(e.target.id);
-      const bodyvalues = {
-        shiftid: shiftById.id,
+      const values = {
+        id: shiftById.id,
         starttime: shiftById.starttime,
-        endtime: shiftById.endtime
-      }
-      console.log(shiftById);
-       const res = await axios.put(`/shifts/pickup`, bodyvalues);
-      // const res = await axios.get(`/shifts/available`);
-      //navigate("/");
+        endtime: shiftById.endtime,
+        position: shiftById.position
+      };
+      setModalPickupShift(values);
+      setPickupModalVisible(true);
     } catch (err) {
       console.log(err);
     }
@@ -89,13 +100,21 @@ function MyShifts() {
 
   return (
     <div>
+      <PickupShiftModal
+        isVisible={pickupModalVisible}
+        closeModal={closeModal}
+        id={modalPickupShift.id}
+        position={modalPickupShift.position}
+        starttime={modalPickupShift.starttime}
+        endtime={modalPickupShift.endtime}
+      ></PickupShiftModal>
       <div>
         <h1 className={styles.pageTitle}>Your Active Shifts</h1>
       </div>
 
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
-        <div >
+        <div>
           <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
           <div>
             {" "}
@@ -130,17 +149,28 @@ function MyShifts() {
                 >
                   asdf
                 </SingleMyShift>
-                <div className = "AvailableShifts">
-          {availableShifts.map((availableShift)=>
-          <SingleAvailableShift id = {availableShift.id} position={availableShift.position} starttime= {availableShift.starttime}endtime={availableShift.endtime} pickup={handlePickupSubmit}>
-            <button id={availableShift.id} onClick={handlePickupSubmit}>Pick Up</button>
-            <p>{availableShift.starttime}</p>
-            <p>{availableShift.endtime}</p>
-            </SingleAvailableShift>
-          )}
+                <div className="AvailableShifts">
+                  {availableShifts.map((availableShift) => (
+                    <SingleAvailableShift
+                      id={availableShift.id}
+                      position={availableShift.position}
+                      starttime={availableShift.starttime}
+                      endtime={availableShift.endtime}
+                      pickup={handlePickupSubmit}
+                    >
+                      <button
+                        id={availableShift.id}
+                        onClick={handlePickupSubmit}
+                      >
+                        Pick Up
+                      </button>
+                      <p>{availableShift.starttime}</p>
+                      <p>{availableShift.endtime}</p>
+                    </SingleAvailableShift>
+                  ))}
 
-          <p></p>
-        </div>
+                  <p></p>
+                </div>
               </div>
             ))}
           </div>{" "}
