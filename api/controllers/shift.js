@@ -26,6 +26,7 @@ export const getAllShifts = (req, res) => {
   });
 };
 
+// assume this is the two weeks range for now
 export const getMyShifts = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
@@ -33,8 +34,8 @@ export const getMyShifts = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "SELECT * FROM shifts WHERE uid = ?";
-
+    const q = "SELECT * FROM shifts WHERE uid = ? AND startdatetime >= '2014-01-01' AND startdatetime <= '2024-04-01';";
+    
     db.query(q, employeeInfo.id, (err, data) => {
       if (err) return res.status(500).send(err);
 

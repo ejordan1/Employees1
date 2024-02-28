@@ -3,10 +3,13 @@ import axios from "axios";
 import SingleMyShift from "./SingleMyShift.js";
 import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
-import PickupShiftModal from "./PickupShiftModal.js"
+import PickupShiftModal from "./PickupShiftModal.js";
+import OrganizeByDay from "../Libraries/DataOperations.js";
 
 function MyShifts() {
   const [myShifts, setMyShifts] = useState([]);
+
+  const [shifts, setShifts] = useState({});
 
   const [availableShifts, setAvailableShifts] = useState([]);
 
@@ -35,11 +38,43 @@ function MyShifts() {
     }
   }
 
+  function createShiftsCatalog(shiftsFromDb)
+  {
+    let catalog = {};
+    shiftsFromDb.forEach((shift) => {
+      catalog[shift.id] = {
+        startdatetime: new Date(shift.startdatetime),
+        enddatetime: new Date (shift.enddatetime),
+        position: shift.position,
+        uid: shift.uid
+      }
+    })
+    return catalog;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/shifts/myshifts`);
+
+        // here have the method to create an object of {id: shift (with date instead of string)}
+        let catalog = createShiftsCatalog(res.data);
+
+        // add visible tag -> in other page.
+        // sort them by dates?
+        // create sorted by date catalog?
+        // method that takes in {id: {startdatetime: Date, enddatetime: Date, position: string, uid: number}}
+        // returns {'2024/10/16': {24: <shift data>, 33: <shift data>}} converting back to string for date, I think it works
+        // then I would map that with entries
+        // the method that does this doesnt need to know the times span,that is inherent in the data passed through, and the part that uses it also will know it.
+
+        // create new object of that key if it doesnt already exist, and then add objects to it
+
         setMyShifts(res.data);
+
+        // console.log("from date operations:" + OrganizeByDay);
+
+        console.log(catalog);
       } catch (err) {
         console.log(err);
       }
