@@ -5,16 +5,25 @@ import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
 import OrganizeByDay from "../Libraries/DataOperations.js";
-import { formatDistance, subDays, addDays, getDay, startOfWeek, lastDayOfWeek, endOfWeek, eachDayOfInterval, format } from "date-fns";
+import {
+  formatDistance,
+  subDays,
+  addDays,
+  getDay,
+  startOfWeek,
+  lastDayOfWeek,
+  endOfWeek,
+  eachDayOfInterval,
+  format,
+} from "date-fns";
 
 function MyShifts() {
-
-  const formatDateStringKey = 'yyyy-MM-dd';
+  const formatDateStringKey = "yyyy-MM-dd";
   const [myShifts, setMyShifts] = useState([]);
 
   const [shifts, setShifts] = useState({});
 
-  const[shiftsByDay, setShiftsByDay] = useState({});
+   const [shiftsByDay, setShiftsByDay] = useState({});
 
   const [thisWeekDays, setThisWeekdays] = useState([]);
 
@@ -45,76 +54,46 @@ function MyShifts() {
     }
   }
 
-  function getThisWeekDays()
-  {
+  function getThisWeekDays() {
     let s = startOfWeek(new Date());
     let e = endOfWeek(new Date());
     let datesOfThisWeek = eachDayOfInterval({
       start: s,
-      end: e
+      end: e,
     });
     return datesOfThisWeek;
   }
 
-  function createShiftsCatalog(shiftsFromDb)
-  {
-    let catalog = new Map();
-    shiftsFromDb.forEach((shift) => {
-      catalog.set(shift.id, {
-        startdatetime: new Date(shift.startdatetime),
-        enddatetime: new Date (shift.enddatetime),
-        position: shift.position,
-        uid: shift.uid
-      })
-    })
-    return catalog;
-  }
-
-           {/* {shiftsByDay.get(date) ? 
-         shiftsByDay.map((shiftId)) => (
-          <div></div>
-         )
-         <p>no shifts</p>}
-          </div> */}
-
   // creates map of dates, and the id's of the shifts that start on that date
+  // was created based on the key value pairs
   function createShiftsByDay(shifts)
   {
-    let shiftsByDay = new Map();
+    let shiftsByDay = {};
 
-    for (let [key,value] of shifts) {
-      let thisDay = format(value.startdatetime, formatDateStringKey);
-      if (!shiftsByDay.has(thisDay))
+    shifts.forEach((shift) => {
+      let thisDay = format(shift.startdatetime, formatDateStringKey);
+      if (!shiftsByDay.hasOwnProperty(thisDay))
       {
-        shiftsByDay.set(thisDay, []);
+        shiftsByDay[thisDay] = [];
       }
 
-      shiftsByDay.get(thisDay).push(key); // just the id, and should be sorted 
-    }
+      shiftsByDay[thisDay].push(shift); // just the id, and should be sorted
+    })
     return shiftsByDay;
   }
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
 
-        //console.log(asdf);
-        //setThisWeekdays(asdf); // move this somewhere else
-
         const res = await axios.get(`/shifts/myshifts`);
         const weekDays = getThisWeekDays();
 
-        for (let i = 0; i < weekDays.length; i++)
-        {
+        for (let i = 0; i < weekDays.length; i++) {
           weekDays[i] = format(weekDays[i], formatDateStringKey);
         }
         setThisWeekdays(weekDays);
-        //console.log(thisWeekDays);
-        // here have the method to create an object of {id: shift (with date instead of string)}
-        let catalog = createShiftsCatalog(res.data);
-        let a = createShiftsByDay(catalog);
-        setShiftsByDay(a);
+        setShiftsByDay(createShiftsByDay(res.data));
         // console.log(thisWeekDays);
         // add visible tag -> in other page.
         // sort them by dates?
@@ -125,7 +104,7 @@ function MyShifts() {
         // the method that does this doesnt need to know the times span,that is inherent in the data passed through, and the part that uses it also will know it.
 
         // create new object of that key if it doesnt already exist, and then add objects to it
-
+        console.log(shiftsByDay);
         setMyShifts(res.data);
 
         // console.log("from date operations:" + OrganizeByDay);
@@ -178,7 +157,7 @@ function MyShifts() {
         id: shiftById.id,
         starttime: shiftById.starttime,
         endtime: shiftById.endtime,
-        position: shiftById.position
+        position: shiftById.position,
       };
       setModalPickupShift(values);
       setPickupModalVisible(true);
@@ -203,9 +182,14 @@ function MyShifts() {
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
         {thisWeekDays.map((date) => (
-          <div><div>{date}</div></div>
-
-          
+          <div>
+            <div>{date}</div>
+            {shiftsByDay[date] ? (
+              shiftsByDay[date].map((shift) => <p>{shift.id}</p>)
+            ) : (
+              <p>no shifts</p>
+            )}
+          </div>
         ))}
       </div>
 

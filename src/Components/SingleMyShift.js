@@ -8,9 +8,9 @@ function SingleMyShift(props) {
     <div className={styles.container}>
       <p>{props.position}</p>
       <div className={styles.times}>
-        <p>{props.starttime}</p>
+        {/* <p>{props.starttime}</p>
         <p>-</p>
-        <p>{props.endtime}</p>
+        <p>{props.endtime}</p> */}
       </div>
 
       <button id={props.id} onClick={props.drop}>
@@ -23,8 +23,8 @@ function SingleMyShift(props) {
 SingleMyShift.propTypes = {
   id: PropTypes.number.isRequired,
   position: PropTypes.string.isRequired,
-  starttime: PropTypes.number.isRequired,
-  endtime: PropTypes.number.isRequired,
+  starttime: PropTypes.any.isRequired,
+  endtime: PropTypes.any.isRequired,
   drop: PropTypes.func.isRequired,
 };
 
