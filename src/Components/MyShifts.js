@@ -23,7 +23,7 @@ function MyShifts() {
 
   const [shifts, setShifts] = useState({});
 
-   const [shiftsByDay, setShiftsByDay] = useState({});
+  const [shiftsByDay, setShiftsByDay] = useState({});
 
   const [thisWeekDays, setThisWeekdays] = useState([]);
 
@@ -66,26 +66,23 @@ function MyShifts() {
 
   // creates map of dates, and the id's of the shifts that start on that date
   // was created based on the key value pairs
-  function createShiftsByDay(shifts)
-  {
+  function createShiftsByDay(shifts) {
     let shiftsByDay = {};
 
     shifts.forEach((shift) => {
       let thisDay = format(shift.startdatetime, formatDateStringKey);
-      if (!shiftsByDay.hasOwnProperty(thisDay))
-      {
+      if (!shiftsByDay.hasOwnProperty(thisDay)) {
         shiftsByDay[thisDay] = [];
       }
 
       shiftsByDay[thisDay].push(shift); // just the id, and should be sorted
-    })
+    });
     return shiftsByDay;
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const res = await axios.get(`/shifts/myshifts`);
         const weekDays = getThisWeekDays();
 
@@ -94,16 +91,7 @@ function MyShifts() {
         }
         setThisWeekdays(weekDays);
         setShiftsByDay(createShiftsByDay(res.data));
-        // console.log(thisWeekDays);
-        // add visible tag -> in other page.
-        // sort them by dates?
-        // create sorted by date catalog?
-        // method that takes in {id: {startdatetime: Date, enddatetime: Date, position: string, uid: number}}
-        // returns {'2024/10/16': {24: <shift data>, 33: <shift data>}} converting back to string for date, I think it works
-        // then I would map that with entries
-        // the method that does this doesnt need to know the times span,that is inherent in the data passed through, and the part that uses it also will know it.
 
-        // create new object of that key if it doesnt already exist, and then add objects to it
         console.log(shiftsByDay);
         setMyShifts(res.data);
 
@@ -185,322 +173,17 @@ function MyShifts() {
           <div>
             <div>{date}</div>
             {shiftsByDay[date] ? (
-              shiftsByDay[date].map((shift) => <p>{shift.id}</p>)
+              shiftsByDay[date].map((shift) => (
+                <div>
+                  <p>{shift.id}</p>
+                  <SingleMyShift id={shift.id} position={shift.position} starttime={shift.startdatetime} endtime={shift.enddatetime} drop={handleDropSubmit}></SingleMyShift>
+                </div>
+              ))
             ) : (
               <p>no shifts</p>
             )}
           </div>
         ))}
-      </div>
-
-      <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
-      <div className={styles.shiftsContainer}>
-        <div>
-          <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Monday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-                <div className="AvailableShifts">
-                  {availableShifts.map((availableShift) => (
-                    <SingleAvailableShift
-                      id={availableShift.id}
-                      position={availableShift.position}
-                      starttime={availableShift.starttime}
-                      endtime={availableShift.endtime}
-                      pickup={handlePickupSubmit}
-                    >
-                      <button
-                        id={availableShift.id}
-                        onClick={handlePickupSubmit}
-                      >
-                        Pick Up
-                      </button>
-                      <p>{availableShift.starttime}</p>
-                      <p>{availableShift.endtime}</p>
-                    </SingleAvailableShift>
-                  ))}
-
-                  <p></p>
-                </div>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Tuesday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Wednesday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Thursday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Friday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Saturday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <p></p>
-      </div>
-      <div className={styles.shiftsContainer}>
-        <div>
-          <h1 className={styles.weekday}>Sunday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Monday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Tuesday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Wednesday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Thursday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Friday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <div>
-          <h1 className={styles.weekday}>Saturday</h1>{" "}
-          <div>
-            {" "}
-            {myShifts.map((shift) => (
-              <div>
-                <SingleMyShift
-                  id={shift.id}
-                  position={shift.position}
-                  starttime={shift.starttime}
-                  endtime={shift.endtime}
-                  drop={handleDropSubmit}
-                >
-                  asdf
-                </SingleMyShift>
-              </div>
-            ))}
-          </div>{" "}
-        </div>
-
-        <p></p>
       </div>
     </div>
   );

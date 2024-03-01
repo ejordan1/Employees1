@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./SingleMyShift.module.scss";
+import {
+  format
+} from "date-fns";
 
 function SingleMyShift(props) {
 
@@ -8,9 +11,9 @@ function SingleMyShift(props) {
     <div className={styles.container}>
       <p>{props.position}</p>
       <div className={styles.times}>
-        {/* <p>{props.starttime}</p>
+        <p>{format(props.starttime,'HHmm')}</p>
         <p>-</p>
-        <p>{props.endtime}</p> */}
+        <p>{format(props.endtime,'HHmm')}</p>
       </div>
 
       <button id={props.id} onClick={props.drop}>
