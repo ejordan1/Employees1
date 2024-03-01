@@ -5,6 +5,7 @@ import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
 import OrganizeByDay from "../Libraries/DataOperations.js";
+import createShiftsByDay from "../Libraries/DataOperations.js";
 import {
   formatDistance,
   subDays,
@@ -66,19 +67,19 @@ function MyShifts() {
 
   // creates map of dates, and the id's of the shifts that start on that date
   // was created based on the key value pairs
-  function createShiftsByDay(shifts) {
-    let shiftsByDay = {};
+  // function createShiftsByDay(shifts) {
+  //   let shiftsByDay = {};
 
-    shifts.forEach((shift) => {
-      let thisDay = format(shift.startdatetime, formatDateStringKey);
-      if (!shiftsByDay.hasOwnProperty(thisDay)) {
-        shiftsByDay[thisDay] = [];
-      }
+  //   shifts.forEach((shift) => {
+  //     let thisDay = format(shift.startdatetime, formatDateStringKey);
+  //     if (!shiftsByDay.hasOwnProperty(thisDay)) {
+  //       shiftsByDay[thisDay] = [];
+  //     }
 
-      shiftsByDay[thisDay].push(shift); // just the id, and should be sorted
-    });
-    return shiftsByDay;
-  }
+  //     shiftsByDay[thisDay].push(shift); // just the id, and should be sorted
+  //   });
+  //   return shiftsByDay;
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
