@@ -7,6 +7,23 @@ import {
 
 function SingleMyShift(props) {
 
+    function handleDropClick()
+    {
+      
+      let shiftValues = {
+        id: props.id,
+        position: props.position,
+        startdatetime: props.startdatetime, // maybe should be undefined
+        enddatetime: props.enddatetime,
+      }
+
+      props.setModalValues({
+        shiftValues
+      })
+
+      props.openDropModal()
+    }
+
   return (
     <div className={styles.container}>
       <p>{props.position}</p>
@@ -16,7 +33,7 @@ function SingleMyShift(props) {
         <p>{format(props.enddatetime,'HHmm')}</p>
       </div>
 
-      <button id={props.id} onClick={props.drop}>
+      <button id={props.id} onClick={handleDropClick}>
         Drop
       </button>
     </div>

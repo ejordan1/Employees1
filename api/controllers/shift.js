@@ -190,7 +190,8 @@ export const dropShift = (req, res) => {
     const q =
       "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
 
-    const values = [req.body.id, req.body.uid];
+      // changed from req.body.uid to employeeInfo.id, verify still works
+    const values = [req.body.id, employeeInfo.id];
     db.query(q, values, (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");

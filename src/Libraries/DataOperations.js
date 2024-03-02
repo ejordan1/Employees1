@@ -27,7 +27,8 @@ function createShiftsByDay(shifts) {
       if (!shiftsByDay.hasOwnProperty(thisDay)) {
         shiftsByDay[thisDay] = [];
       }
-
+      shift.startdatetime = new Date (shift.startdatetime);
+      shift.enddatetime = new Date (shift.enddatetime);
       shiftsByDay[thisDay].push(shift); // just the id, and should be sorted
     });
     return shiftsByDay;

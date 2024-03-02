@@ -4,6 +4,7 @@ import SingleMyShift from "./SingleMyShift.js";
 import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
+import DropShiftModal from "./DropShiftModal.js"
 import OrganizeByDay from "../Libraries/DataOperations.js";
 import createShiftsByDay from "../Libraries/DataOperations.js";
 import {
@@ -32,7 +33,16 @@ function MyShifts() {
 
   const [pickupModalVisible, setPickupModalVisible] = useState(false);
 
+  const [dropModalVisible, setDropModalVisible] = useState(false);
+
   const [modalPickupShift, setModalPickupShift] = useState({
+    id: null,
+    position: "",
+    startdatetime: new Date(), // maybe should be undefined
+    enddatetime: new Date(),
+  });
+
+  const [modalDropShift, setModalDropShift] = useState({
     id: null,
     position: "",
     startdatetime: new Date(), // maybe should be undefined
@@ -116,17 +126,22 @@ function MyShifts() {
     fetchData();
   }, []);
 
-  const closeModal = () => {
+  const closePickupModal = () => {
     setPickupModalVisible(false);
+  };
+
+  const closeDropModal = () => {
+    setDropModalVisible(false);
   };
 
   const dropModalOpen = () => {
     // havent made drop modal yet
-  }
+    setDropModalVisible(true);
+  };
 
   const setDropModalValues = () => {
     // havent made it yet
-  }
+  };
 
   // const handleDropSubmit = async (e) => {
   //   e.preventDefault();
@@ -168,12 +183,21 @@ function MyShifts() {
     <div>
       <PickupShiftModal
         isVisible={pickupModalVisible}
-        closeModal={closeModal}
+        closeModal={closePickupModal}
         id={modalPickupShift.id}
         position={modalPickupShift.position}
         startdatetime={modalPickupShift.startdatetime}
         enddatetime={modalPickupShift.enddatetime}
       ></PickupShiftModal>
+
+      <DropShiftModal
+        isVisible={dropModalVisible}
+        closeModal={closeDropModal}
+        id={modalDropShift.id}
+        position={modalDropShift.position}
+        startdatetime={modalDropShift.startdatetime}
+        enddatetime={modalDropShift.enddatetime}
+      ></DropShiftModal>
       <div>
         <h1 className={styles.pageTitle}>Your Active Shifts</h1>
       </div>
@@ -186,7 +210,14 @@ function MyShifts() {
               shiftsByDay[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>
-                  <SingleMyShift id={shift.id} position={shift.position} startdatetime={shift.startdatetime} enddatetime={shift.enddatetime} openDropModal={dropModalOpen} setModalValues={setDropModalValues}></SingleMyShift>
+                  <SingleMyShift
+                    id={shift.id}
+                    position={shift.position}
+                    startdatetime={shift.startdatetime}
+                    enddatetime={shift.enddatetime}
+                    openDropModal={dropModalOpen}
+                    setModalValues={setDropModalValues}
+                  ></SingleMyShift>
                 </div>
               ))
             ) : (
