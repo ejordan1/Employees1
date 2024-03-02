@@ -10,30 +10,28 @@ function SingleMyShift(props) {
     function handleDropClick()
     {
       
-      let shiftValues = {
-        id: props.id,
-        position: props.position,
-        startdatetime: props.startdatetime, // maybe should be undefined
-        enddatetime: props.enddatetime,
-      }
+      // let shiftValues = {
+      //   id: props.id,
+      //   position: props.position,
+      //   startdatetime: props.startdatetime, // maybe should be undefined
+      //   enddatetime: props.enddatetime,
+      // }
 
-      props.setModalValues({
-        shiftValues
-      })
+      props.setModalValues(props.shift)
 
       props.openDropModal()
     }
 
   return (
     <div className={styles.container}>
-      <p>{props.position}</p>
+      <p>{props.shift.position}</p>
       <div className={styles.times}>
-        <p>{format(props.startdatetime,'HHmm')}</p>
+        <p>{format(props.shift.startdatetime,'HHmm')}</p>
         <p>-</p>
-        <p>{format(props.enddatetime,'HHmm')}</p>
+        <p>{format(props.shift.enddatetime,'HHmm')}</p>
       </div>
 
-      <button id={props.id} onClick={handleDropClick}>
+      <button id={props.shift.id} onClick={handleDropClick}>
         Drop
       </button>
     </div>
@@ -41,10 +39,11 @@ function SingleMyShift(props) {
 }
 
 SingleMyShift.propTypes = {
-  id: PropTypes.number.isRequired,
-  position: PropTypes.string.isRequired,
-  startdatetime: PropTypes.any.isRequired,
-  enddatetime: PropTypes.any.isRequired,
+  shift: PropTypes.object.isRequired,
+  // id: PropTypes.number.isRequired,
+  // position: PropTypes.string.isRequired,
+  // startdatetime: PropTypes.any.isRequired,
+  // enddatetime: PropTypes.any.isRequired,
   openDropModal: PropTypes.func.isRequired,
   setModalValues: PropTypes.func.isRequired
 };

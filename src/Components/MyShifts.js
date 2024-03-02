@@ -42,12 +42,13 @@ function MyShifts() {
     enddatetime: new Date(),
   });
 
-  const [modalDropShift, setModalDropShift] = useState({
-    id: null,
-    position: "",
-    startdatetime: new Date(), // maybe should be undefined
-    enddatetime: new Date(),
-  });
+  const [modalDropShift, setModalDropShift] = useState(
+    null
+    // id: null,
+    // position: "",
+    // startdatetime: new Date(), // maybe should be undefined
+    // enddatetime: new Date(),
+  );
 
   // function getMyShiftById(id) {
   //   for (let i = 0; i < myShifts.length; i++) {
@@ -139,10 +140,6 @@ function MyShifts() {
     setDropModalVisible(true);
   };
 
-  const setDropModalValues = () => {
-    // havent made it yet
-  };
-
   // const handleDropSubmit = async (e) => {
   //   e.preventDefault();
   //   try {
@@ -193,10 +190,7 @@ function MyShifts() {
       <DropShiftModal
         isVisible={dropModalVisible}
         closeModal={closeDropModal}
-        id={modalDropShift.id}
-        position={modalDropShift.position}
-        startdatetime={modalDropShift.startdatetime}
-        enddatetime={modalDropShift.enddatetime}
+        shift={modalDropShift}
       ></DropShiftModal>
       <div>
         <h1 className={styles.pageTitle}>Your Active Shifts</h1>
@@ -211,12 +205,13 @@ function MyShifts() {
                 <div>
                   <p>{shift.id}</p>
                   <SingleMyShift
-                    id={shift.id}
-                    position={shift.position}
-                    startdatetime={shift.startdatetime}
-                    enddatetime={shift.enddatetime}
+                    shift = {shift}
+                    // id={shift.id}
+                    // position={shift.position}
+                    // startdatetime={shift.startdatetime}
+                    // enddatetime={shift.enddatetime}
                     openDropModal={dropModalOpen}
-                    setModalValues={setDropModalValues}
+                    setModalValues={setModalDropShift}
                   ></SingleMyShift>
                 </div>
               ))
