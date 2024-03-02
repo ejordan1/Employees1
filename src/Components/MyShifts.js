@@ -35,25 +35,25 @@ function MyShifts() {
   const [modalPickupShift, setModalPickupShift] = useState({
     id: null,
     position: "",
-    starttime: 0,
-    endtime: 0,
+    startdatetime: new Date(), // maybe should be undefined
+    enddatetime: new Date(),
   });
 
-  function getMyShiftById(id) {
-    for (let i = 0; i < myShifts.length; i++) {
-      if (myShifts[i].id == id) {
-        return myShifts[i];
-      }
-    }
-  }
+  // function getMyShiftById(id) {
+  //   for (let i = 0; i < myShifts.length; i++) {
+  //     if (myShifts[i].id == id) {
+  //       return myShifts[i];
+  //     }
+  //   }
+  // }
 
-  function getAvailableShiftById(id) {
-    for (let i = 0; i < availableShifts.length; i++) {
-      if (availableShifts[i].id == id) {
-        return availableShifts[i];
-      }
-    }
-  }
+  // function getAvailableShiftById(id) {
+  //   for (let i = 0; i < availableShifts.length; i++) {
+  //     if (availableShifts[i].id == id) {
+  //       return availableShifts[i];
+  //     }
+  //   }
+  // }
 
   function getThisWeekDays() {
     let s = startOfWeek(new Date());
@@ -120,40 +120,49 @@ function MyShifts() {
     setPickupModalVisible(false);
   };
 
-  const handleDropSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let shiftById = getMyShiftById(e.target.id);
-      const bodyvalues = {
-        id: shiftById.id,
-        starttime: shiftById.starttime,
-        endtime: shiftById.endtime,
-        uid: shiftById.uid,
-      };
-      console.log(shiftById);
-      const res = await axios.put(`/shifts/drop`, bodyvalues);
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const dropModalOpen = () => {
+    // havent made drop modal yet
+  }
 
-  const handlePickupSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      let shiftById = getAvailableShiftById(e.target.id);
-      const values = {
-        id: shiftById.id,
-        starttime: shiftById.starttime,
-        endtime: shiftById.endtime,
-        position: shiftById.position,
-      };
-      setModalPickupShift(values);
-      setPickupModalVisible(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const setDropModalValues = () => {
+    // havent made it yet
+  }
+
+  // const handleDropSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let shiftById = getMyShiftById(e.target.id);
+  //     const bodyvalues = {
+  //       id: shiftById.id,
+  //       // startdatetime: shiftById.starttime,
+  //       // enddatetime: shiftById.endtime,
+  //       uid: shiftById.uid,
+  //     };
+  //     console.log(shiftById);
+  //     const res = await axios.put(`/shifts/drop`, bodyvalues);
+  //     window.location.reload();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  // now located in modal
+  // const handlePickupSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let shiftById = getAvailableShiftById(e.target.id);
+  //     const values = {
+  //       id: shiftById.id,
+  //       // starttime: shiftById.starttime,
+  //       // endtime: shiftById.endtime,
+  //       position: shiftById.position,
+  //     };
+  //     setModalPickupShift(values);
+  //     setPickupModalVisible(true);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <div>
@@ -162,8 +171,8 @@ function MyShifts() {
         closeModal={closeModal}
         id={modalPickupShift.id}
         position={modalPickupShift.position}
-        starttime={modalPickupShift.starttime}
-        endtime={modalPickupShift.endtime}
+        startdatetime={modalPickupShift.startdatetime}
+        enddatetime={modalPickupShift.enddatetime}
       ></PickupShiftModal>
       <div>
         <h1 className={styles.pageTitle}>Your Active Shifts</h1>
@@ -177,7 +186,7 @@ function MyShifts() {
               shiftsByDay[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>
-                  <SingleMyShift id={shift.id} position={shift.position} starttime={shift.startdatetime} endtime={shift.enddatetime} drop={handleDropSubmit}></SingleMyShift>
+                  <SingleMyShift id={shift.id} position={shift.position} startdatetime={shift.startdatetime} enddatetime={shift.enddatetime} openDropModal={dropModalOpen} setModalValues={setDropModalValues}></SingleMyShift>
                 </div>
               ))
             ) : (

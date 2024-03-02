@@ -11,9 +11,9 @@ function SingleMyShift(props) {
     <div className={styles.container}>
       <p>{props.position}</p>
       <div className={styles.times}>
-        <p>{format(props.starttime,'HHmm')}</p>
+        <p>{format(props.startdatetime,'HHmm')}</p>
         <p>-</p>
-        <p>{format(props.endtime,'HHmm')}</p>
+        <p>{format(props.enddatetime,'HHmm')}</p>
       </div>
 
       <button id={props.id} onClick={props.drop}>
@@ -26,9 +26,13 @@ function SingleMyShift(props) {
 SingleMyShift.propTypes = {
   id: PropTypes.number.isRequired,
   position: PropTypes.string.isRequired,
-  starttime: PropTypes.any.isRequired,
-  endtime: PropTypes.any.isRequired,
-  drop: PropTypes.func.isRequired,
+  startdatetime: PropTypes.any.isRequired,
+  enddatetime: PropTypes.any.isRequired,
+  openDropModal: PropTypes.func.isRequired,
+  setModalValues: PropTypes.func.isRequired
 };
 
 export default SingleMyShift;
+
+
+// so the button click is registered in this class, which then calls the functios passed in

@@ -162,9 +162,9 @@ export const pickupShift = (req, res) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
-      if (
-        data[0].starttime == req.body.starttime &&
-        data[0].endtime == req.body.endtime
+      if ( true
+        // data[0].starttime == req.body.starttime &&
+        // data[0].endtime == req.body.endtime
       ) {
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = ? WHERE (`id` = '?')";
@@ -195,9 +195,9 @@ export const dropShift = (req, res) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
-      if (
-        data[0].starttime == req.body.starttime &&
-        data[0].endtime == req.body.endtime
+      if ( true
+        // data[0].starttime == req.body.starttime &&
+        // data[0].endtime == req.body.endtime
       ) {
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = NULL WHERE (`id` = '?')";

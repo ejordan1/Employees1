@@ -16,8 +16,8 @@ export default function PickupShiftModal(props) {
     try {
       const bodyvalues = {
         id: props.id,
-        starttime: props.starttime,
-        endtime: props.endtime,
+        starttime: props.startdatetime,
+        endtime: props.enddatetime,
         position: props.position
       }
        const res = await axios.put(`/shifts/pickup`, bodyvalues);
@@ -53,7 +53,7 @@ PickupShiftModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     position: PropTypes.string.isRequired,
-    starttime: PropTypes.number.isRequired,
-    endtime: PropTypes.number.isRequired,
+    starttime: PropTypes.any.isRequired,
+    endtime: PropTypes.any.isRequired,
   };
   
