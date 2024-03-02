@@ -15,10 +15,10 @@ export default function PickupShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        id: props.id,
-        starttime: props.startdatetime,
-        endtime: props.enddatetime,
-        position: props.position
+        id: props.shift.id,
+        starttime: props.shift.startdatetime,
+        endtime: props.shift.enddatetime,
+        position: props.shift.position
       }
        const res = await axios.put(`/shifts/pickup`, bodyvalues);
        window.location.reload();
@@ -51,9 +51,6 @@ export default function PickupShiftModal(props) {
 PickupShiftModal.propTypes = {
     isVisible: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    id: PropTypes.number.isRequired,
-    position: PropTypes.string.isRequired,
-    starttime: PropTypes.any.isRequired,
-    endtime: PropTypes.any.isRequired,
+    shift: PropTypes.object.isRequired
   };
   

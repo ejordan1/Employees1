@@ -1,19 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./SingleAvailableShift.module.scss";
+import {
+  format
+} from "date-fns";
 
 function SingleAvailableShift(props) {
 
+  function handlePickupClick()
+  {
+    props.setPickupModalValues(props.shift)
+
+    props.openPickupModal()
+  }
+
   return (
     <div className={styles.container}>
-      <p>{props.position}</p>
+      <p>{props.shift.position}</p>
       <div className={styles.times}>
-        <p>{props.starttime}</p>
+      <p>{format(props.shift.startdatetime,'HHmm')}</p>
         <p>-</p>
-        <p>{props.endtime}</p>
+        <p>{format(props.shift.enddatetime,'HHmm')}</p>
       </div>
 
-      <button id={props.id} onClick={props.pickup}>
+      <button id={props.shift.id} onClick={handlePickupClick}>
         pickup
       </button>
     </div>
@@ -21,11 +31,9 @@ function SingleAvailableShift(props) {
 }
 
 SingleAvailableShift.propTypes = {
-  id: PropTypes.number.isRequired,
-  position: PropTypes.string.isRequired,
-  starttime: PropTypes.number.isRequired,
-  endtime: PropTypes.number.isRequired,
-  pickup: PropTypes.func.isRequired,
+  shift: PropTypes.object.isRequired,
+  openPickupModal: PropTypes.func.isRequired,
+  setPickupModalValues: PropTypes.func.isRequired
 };
 
 export default SingleAvailableShift;

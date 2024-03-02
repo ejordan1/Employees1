@@ -4,7 +4,7 @@ import SingleMyShift from "./SingleMyShift.js";
 import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
-import DropShiftModal from "./DropShiftModal.js"
+import DropShiftModal from "./DropShiftModal.js";
 import OrganizeByDay from "../Libraries/DataOperations.js";
 import createShiftsByDay from "../Libraries/DataOperations.js";
 import {
@@ -25,30 +25,19 @@ function MyShifts() {
 
   const [shifts, setShifts] = useState({});
 
-  const [shiftsByDay, setShiftsByDay] = useState({});
+  const [myShiftsByDay, setMyShiftsByDay] = useState({});
 
   const [thisWeekDays, setThisWeekdays] = useState([]);
 
-  const [availableShifts, setAvailableShifts] = useState([]);
+  const [availableShifts, setAvailableShiftsByDay] = useState([]);
 
   const [pickupModalVisible, setPickupModalVisible] = useState(false);
 
   const [dropModalVisible, setDropModalVisible] = useState(false);
 
-  const [modalPickupShift, setModalPickupShift] = useState({
-    id: null,
-    position: "",
-    startdatetime: new Date(), // maybe should be undefined
-    enddatetime: new Date(),
-  });
+  const [modalPickupShift, setModalPickupShift] = useState(null);
 
-  const [modalDropShift, setModalDropShift] = useState(
-    null
-    // id: null,
-    // position: "",
-    // startdatetime: new Date(), // maybe should be undefined
-    // enddatetime: new Date(),
-  );
+  const [modalDropShift, setModalDropShift] = useState(null);
 
   // function getMyShiftById(id) {
   //   for (let i = 0; i < myShifts.length; i++) {
@@ -102,9 +91,9 @@ function MyShifts() {
           weekDays[i] = format(weekDays[i], formatDateStringKey);
         }
         setThisWeekdays(weekDays);
-        setShiftsByDay(createShiftsByDay(res.data));
+        setMyShiftsByDay(createShiftsByDay(res.data));
 
-        console.log(shiftsByDay);
+        console.log(myShiftsByDay);
         setMyShifts(res.data);
 
         // console.log("from date operations:" + OrganizeByDay);
@@ -119,7 +108,7 @@ function MyShifts() {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/shifts/available`);
-        setAvailableShifts(res.data);
+        setAvailableShiftsByDay(createShiftsByDay(res.data));
       } catch (err) {
         console.log(err);
       }
@@ -138,6 +127,11 @@ function MyShifts() {
   const dropModalOpen = () => {
     // havent made drop modal yet
     setDropModalVisible(true);
+  };
+
+  const pickupModalOpen = () => {
+    // havent made drop modal yet
+    setPickupModalVisible(true);
   };
 
   // const handleDropSubmit = async (e) => {
@@ -181,10 +175,11 @@ function MyShifts() {
       <PickupShiftModal
         isVisible={pickupModalVisible}
         closeModal={closePickupModal}
-        id={modalPickupShift.id}
-        position={modalPickupShift.position}
-        startdatetime={modalPickupShift.startdatetime}
-        enddatetime={modalPickupShift.enddatetime}
+        shift={modalPickupShift}
+        // id={modalPickupShift.id}
+        // position={modalPickupShift.position}
+        // startdatetime={modalPickupShift.startdatetime}
+        // enddatetime={modalPickupShift.enddatetime}
       ></PickupShiftModal>
 
       <DropShiftModal
@@ -200,12 +195,12 @@ function MyShifts() {
         {thisWeekDays.map((date) => (
           <div>
             <div>{date}</div>
-            {shiftsByDay[date] ? (
-              shiftsByDay[date].map((shift) => (
+            {myShiftsByDay[date] ? (
+              myShiftsByDay[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>
                   <SingleMyShift
-                    shift = {shift}
+                    shift={shift}
                     // id={shift.id}
                     // position={shift.position}
                     // startdatetime={shift.startdatetime}
@@ -217,6 +212,20 @@ function MyShifts() {
               ))
             ) : (
               <p>no shifts</p>
+            )}
+            {availableShifts[date] ? (
+              availableShifts[date].map((shift) => (
+                <div>
+                  <p>{shift.id}</p>
+                  <SingleAvailableShift
+                    shift={shift}
+                    openPickupModal={pickupModalOpen}
+                    setPickupModalValues={setModalPickupShift}
+                  ></SingleAvailableShift>
+                </div>
+              ))
+            ) : (
+              <p>no avaiable shifts</p>
             )}
           </div>
         ))}
