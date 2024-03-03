@@ -102,7 +102,7 @@ function AllShifts() {
       {thisWeekDays.map((date) => (
                     // <div><p>hello test</p> date: {date}</div>
                     <div>
-                      <p>hello test</p>
+                      <p>{date}</p>
                     {allShiftsByDay[date] ? (
                       allShiftsByDay[date].map((shift) => (
                         <div>

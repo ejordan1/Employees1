@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./SingleAllShift.module.scss";
+import {
+  format
+} from "date-fns";
 
 function SingleAllShift(props) {
 
@@ -9,7 +12,7 @@ function SingleAllShift(props) {
     props.setModalValues(props.shift)
 
     // implement this
-    //props.openDropModal()
+    props.openEditModal()
   }
     const getBackgroundColor = props.uid ? styles.filled : styles.empty;
 
@@ -17,9 +20,9 @@ function SingleAllShift(props) {
     <div className={`${styles.container} ${getBackgroundColor}`}>
       <p>{props.shift.position}</p>
       <div className={styles.times}>
-        <p>{props.shift.starttime}</p>
+        <p>{format(props.shift.startdatetime,'HHmm')}</p>
         <p>-</p>
-        <p>{props.shift.endtime}</p>
+        <p>{format(props.shift.enddatetime,'HHmm')}</p>
       </div>
 
       <button onClick={handleEditClick}>
