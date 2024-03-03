@@ -111,7 +111,7 @@ function MyShifts() {
         {thisWeekDays.map((date) => (
           <div>
             <div>{date}</div>
-            {myShiftsByDay[date] ? (
+            {myShiftsByDay && myShiftsByDay[date] ? (
               myShiftsByDay[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>

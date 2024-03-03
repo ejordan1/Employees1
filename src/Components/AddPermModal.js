@@ -6,8 +6,8 @@ export default function AddPermModal() {
   const [modal, setModal] = useState(false);
 
   const [createPermInputs, setCreatePermInputs] = useState({
-    starttime: 0,
-    endtime: 0,
+    startdatetime: 0,
+    enddatetime: 0,
     position: "",
     slots: null,
   });
@@ -34,8 +34,8 @@ export default function AddPermModal() {
     try {
       const bodyvalues = {
         // doing this later
-        starttime: createPermInputs.starttime,
-        endtime: createPermInputs.endtime,
+        startdatetime: "2024-03-04 07:23:44",
+        enddatetime: "2024-03-04 07:23:44",
         position: createPermInputs.position,
         slots: createPermInputs.slots,
       };
@@ -63,15 +63,15 @@ export default function AddPermModal() {
           <input
             required
             type="number"
-            placeholder="starttime"
-            name="starttime"
+            placeholder="startdatetime"
+            name="startdatetime"
             onChange={handleCreatePermChange}
           />
           <input
             required
             type="number"
-            placeholder="endtime"
-            name="endtime"
+            placeholder="enddatetime"
+            name="enddatetime"
             onChange={handleCreatePermChange}
           />
           <input

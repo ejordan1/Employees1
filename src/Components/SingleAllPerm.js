@@ -23,6 +23,24 @@ function SingleAllPerm(props) {
         <p>et: {format(props.perm.enddatetime,'HHmm')}</p>
         <p>slots: {props.perm.slots}</p>
       </div>
+
+      {Object.entries(
+                      props.perm.permUsers
+                    ).map((keyvalue) => (
+                      <div>
+                        <p>
+                          {"perm_userid: " +
+                            keyvalue[0] +
+                            ", uid: " +
+                            keyvalue[1].uid +
+                            ", " +
+                            keyvalue[1].firstname +
+                            ", " +
+                            keyvalue[1].lastname}
+                        </p>
+                      </div>
+                    ))}
+
       <button id={props.perm.id} onClick={handleEditClick}>
         Edit Perm
       </button>
