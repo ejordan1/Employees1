@@ -19,8 +19,8 @@ export const getPerms = (req, res) => {
         const getAllPermsQuery = `
         SELECT 
         employees1.perms.id, 
-        employees1.perms.starttime, 
-        employees1.perms.endtime, 
+        employees1.perms.startdatetime, 
+        employees1.perms.enddatetime, 
         employees1.perms.position,
         employees1.perms_users.perm_userid,
         employees1.perms_users.permid,
@@ -50,8 +50,8 @@ export const getPermsByUserId = (req, res) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const getPermsByIdQuery = `
-        SELECT employees1.perms.starttime, 
-        employees1.perms.endtime, 
+        SELECT employees1.perms.startdatetime, 
+        employees1.perms.enddatetime, 
         employees1.perms.position, 
         employees1.perms_users.permid,
         employees1.perms_users.uid,
@@ -92,8 +92,8 @@ export const getMyPerms = (req, res) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const getPermsByIdQuery = `
-        SELECT employees1.perms.starttime, 
-        employees1.perms.endtime, 
+        SELECT employees1.perms.startdatetime, 
+        employees1.perms.enddatetime, 
         employees1.perms.position, 
         employees1.perms_users.permid,
         employees1.perms_users.uid,
@@ -129,12 +129,12 @@ export const addPerm = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "INSERT INTO perms(`position`, `starttime`, `endtime`, `slots`) VALUES (?)";
+          "INSERT INTO perms(`position`, `startdatetime`, `enddatetime`, `slots`) VALUES (?)";
 
         const values = [
           req.body.position,
-          req.body.starttime,
-          req.body.endtime,
+          req.body.startdatetime,
+          req.body.enddatetime,
           req.body.slots,
         ];
 
@@ -164,11 +164,11 @@ export const editPerm = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "UPDATE employees1.perms SET `position`=?, `starttime`=?, `endtime`=?, `slots`=? WHERE `id`=?";
+          "UPDATE employees1.perms SET `position`=?, `startdatetime`=?, `enddatetime`=?, `slots`=? WHERE `id`=?";
         const values = [
           req.body.position,
-          req.body.starttime,
-          req.body.endtime,
+          req.body.startdatetime,
+          req.body.enddatetime,
           req.body.slots,
           req.body.id,
         ];
@@ -185,7 +185,7 @@ export const editPerm = (req, res) => {
   });
 };
 
-// still need to verify that the starttime and endtime match what the user client sent
+// still need to verify that the startdatetime and enddatetime match what the user client sent
 export const deletePerm = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");

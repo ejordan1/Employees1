@@ -23,8 +23,8 @@ function AllPerms() {
       // create perm objects if doesn't exist
       if (!permsDict.hasOwnProperty(dataRow.id)) {
         permsDict[dataRow.id] = {
-          starttime: dataRow.starttime,
-          endtime: dataRow.endtime,
+          startdatetime: new Date(dataRow.startdatetime),
+          enddatetime: new Date(dataRow.enddatetime),
           position: dataRow.position,
           slots: dataRow.slots,
           permUsers: {},
@@ -64,8 +64,8 @@ function AllPerms() {
   //     let permById = allPermsAndPermsUsers[e.target.id];
 
   //     setModalEditPerm({
-  //       starttime: permById.starttime,
-  //       endtime: permById.endtime,
+  //       startdatetime: permById.startdatetime,
+  //       enddatetime: permById.enddatetime,
   //       slots: permById.slots,
   //       id: e.target.id,
   //       position: permById.position,
@@ -96,8 +96,8 @@ function AllPerms() {
           perm={modalEditPerm}
           // id={modalEditPerm.perm.id}
           // position={modalEditPerm.perm.position}
-          // starttime={modalEditPerm.perm.starttime}
-          // endtime={modalEditPerm.perm.endtime}
+          // startdatetime={modalEditPerm.perm.startdatetime}
+          // enddatetime={modalEditPerm.perm.enddatetime}
           // slots={modalEditPerm.perm.slots}
           // permUsers={modalEditPerm.perm.permUsers}
         ></EditPermModal>
@@ -111,8 +111,8 @@ function AllPerms() {
                   <SingleAllPerm
                     // id={permKey}
                     // position={allPermsAndPermsUsers[permKey].position}
-                    // starttime={allPermsAndPermsUsers[permKey].starttime}
-                    // endtime={allPermsAndPermsUsers[permKey].endtime}
+                    // startdatetime={allPermsAndPermsUsers[permKey].startdatetime}
+                    // enddatetime={allPermsAndPermsUsers[permKey].enddatetime}
                     // slots={allPermsAndPermsUsers[permKey].slots}
                     openEditModal={editModalOpen}
                     perm={allPermsAndPermsUsers[permKey]}

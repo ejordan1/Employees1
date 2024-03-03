@@ -3,6 +3,9 @@ import styles from "./EditPermModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {
+  format
+} from "date-fns";
 
 export default function EditPermModal(props) {
   //const [modal, setModal] = useState(false);
@@ -10,8 +13,8 @@ export default function EditPermModal(props) {
   const navigate = useNavigate();
 
   const editPermDefaultValues = {
-    starttime: 0,
-    endtime: 0,
+    startdatetime: 0,
+    enddatetime: 0,
     slots: 0,
     position: "",
     permUsers: {},
@@ -25,8 +28,8 @@ export default function EditPermModal(props) {
       setEditPermInputs({
         id: props.perm.id,
         position: props.perm.position,
-        starttime: props.perm.starttime,
-        endtime: props.perm.endtime,
+        startdatetime: props.perm.startdatetime,
+        enddatetime: props.perm.enddatetime,
         slots: props.perm.slots,
         permUsers: props.perm.permUsers,
       });
@@ -55,7 +58,7 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        permid: props.id,
+        permid: props.perm.id,
         uid: createUserPermInputs.uid,
       };
       const res = await axios.post(`/perms_users/add`, bodyvalues);
@@ -84,8 +87,8 @@ export default function EditPermModal(props) {
     try {
       const bodyvalues = {
         id: props.perm.id,
-        starttime: editPermInputs.starttime,
-        endtime: editPermInputs.endtime,
+        startdatetime: "2024-01-04 13:23:44", // editPermInputs.startdatetime,
+        enddatetime: "2024-01-04 13:24:44", // editPermInputs.enddatetime,
         position: editPermInputs.position,
         slots: editPermInputs.slots,
       };
@@ -103,8 +106,8 @@ export default function EditPermModal(props) {
     try {
       const bodyvalues = {
         id: props.perm.id,
-        starttime: editPermInputs.starttime,
-        endtime: editPermInputs.endtime,
+        startdatetime: "2024-03-04 13:23:44", //editShiftInputs.startdatetime,
+        enddatetime: "2024-03-04 13:24:44", //editShiftInputs.enddatetime,
         position: editPermInputs.position,
         slots: editPermInputs.slots,
       };
@@ -133,8 +136,8 @@ export default function EditPermModal(props) {
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
                 <p>id: {props.perm.id} </p>
-                <p>starttime: {props.perm.starttime} </p>
-                <p>endtime: {props.perm.endtime} </p>
+                <p>startdatetime: {format(props.perm.startdatetime,'HHmm')} </p>
+                <p>enddatetime: {format(props.perm.enddatetime,'HHmm')} </p>
                 <p>position: {props.perm.position} </p>
                 <p>slots: {props.perm.slots} </p>
                 {editPermInputs.permUsers &&
@@ -182,28 +185,28 @@ export default function EditPermModal(props) {
                     <input
                       required
                       type="number"
-                      defaultValue={props.starttime}
-                      name="starttime"
+                      defaultValue={format(props.perm.startdatetime,'HHmm')}
+                      name="startdatetime"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="number"
-                      defaultValue={props.endtime}
-                      name="endtime"
+                      defaultValue={format(props.perm.enddatetime,'HHmm')}
+                      name="enddatetime"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="number"
-                      defaultValue={props.slots}
+                      defaultValue={props.perm.slots}
                       name="slots"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="text"
-                      defaultValue={props.position}
+                      defaultValue={props.perm.position}
                       name="position"
                       onChange={handleEditPermChange}
                     />
@@ -228,10 +231,4 @@ EditPermModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   perm: PropTypes.object.isRequired,
-  // id: PropTypes.number.isRequired,
-  // position: PropTypes.string.isRequired,
-  // starttime: PropTypes.number.isRequired,
-  // endtime: PropTypes.number.isRequired,
-  // slots: PropTypes.number.isRequired,
-  // permUsers: PropTypes.object.isRequired,
 };
