@@ -4,8 +4,7 @@ import styles from "./AllShifts.module.scss";
 import SingleAllShift from "./SingleAllShift";
 import EditShiftModal from "./EditShiftModal";
 import AddShiftModal from "./AddShiftModal";
-import createShiftsByDay from "../Libraries/DataOperations.js";
-import { getThisWeekDays } from "../Libraries/DataOperations.js";
+import { createShiftsByDay, getThisWeekDays } from "../Libraries/DataOperations.js";
 import {
   formatDistance,
   subDays,
@@ -100,23 +99,26 @@ function AllShifts() {
 
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
-      {thisWeekDays.map((date) => {
-                    <div>date: {date}</div>
-                    // {allShiftsByDay[date] ? (
-                    //   allShiftsByDay[date].map((shift) => (
-                    //     <div>
-                    //       <p>{shift.id}</p>
-                    //       <SingleAllShift
-                    //         shift={shift}
-                    //         openDropModal={dropModalOpen}
-                    //         setModalValues={setModalDropShift}
-                    //       ></SingleAllShift>
-                    //     </div>
-                    //   ))
-                    // ) : (
-                    //   <p>no shifts</p>
-                    // )}
-      })}
+      {thisWeekDays.map((date) => (
+                    // <div><p>hello test</p> date: {date}</div>
+                    <div>
+                      <p>hello test</p>
+                    {allShiftsByDay[date] ? (
+                      allShiftsByDay[date].map((shift) => (
+                        <div>
+                          <p>{shift.id}</p>
+                          <SingleAllShift
+                            shift={shift}
+                            openEditModal={openEditModal}
+                            setModalValues={setModalEditShift}
+                          ></SingleAllShift>
+                        </div>
+                      ))
+                    ) : (
+                      <p>no shifts</p>
+                    )}
+                    </div>
+      ))}
       </div>
       <AddShiftModal></AddShiftModal>
       <EditShiftModal

@@ -56,4 +56,4 @@ export function createShiftsByDay(shifts) {
   }
 
   // I had to put export default as something
-  export default formatDateStringKey;
+//   export default test;
