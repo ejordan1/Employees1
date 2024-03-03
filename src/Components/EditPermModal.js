@@ -23,12 +23,12 @@ export default function EditPermModal(props) {
   useEffect(() => {
     if (props.isVisible) {
       setEditPermInputs({
-        id: props.id,
-        position: props.position,
-        starttime: props.starttime,
-        endtime: props.endtime,
-        slots: props.slots,
-        permUsers: props.permUsers,
+        id: props.perm.id,
+        position: props.perm.position,
+        starttime: props.perm.starttime,
+        endtime: props.perm.endtime,
+        slots: props.perm.slots,
+        permUsers: props.perm.permUsers,
       });
     }
   }, [props.isVisible]);
@@ -83,7 +83,7 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        id: props.id,
+        id: props.perm.id,
         starttime: editPermInputs.starttime,
         endtime: editPermInputs.endtime,
         position: editPermInputs.position,
@@ -102,7 +102,7 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        id: props.id,
+        id: props.perm.id,
         starttime: editPermInputs.starttime,
         endtime: editPermInputs.endtime,
         position: editPermInputs.position,
@@ -132,11 +132,11 @@ export default function EditPermModal(props) {
             <div className={styles.modal}>
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
-                <p>id: {props.id} </p>
-                <p>starttime: {props.starttime} </p>
-                <p>endtime: {props.endtime} </p>
-                <p>position: {props.position} </p>
-                <p>slots: {props.position} </p>
+                <p>id: {props.perm.id} </p>
+                <p>starttime: {props.perm.starttime} </p>
+                <p>endtime: {props.perm.endtime} </p>
+                <p>position: {props.perm.position} </p>
+                <p>slots: {props.perm.slots} </p>
                 {editPermInputs.permUsers &&
                   Object.entries(editPermInputs.permUsers).map((keyvalue) => (
                     <div>
@@ -227,10 +227,11 @@ export default function EditPermModal(props) {
 EditPermModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  position: PropTypes.string.isRequired,
-  starttime: PropTypes.number.isRequired,
-  endtime: PropTypes.number.isRequired,
-  slots: PropTypes.number.isRequired,
-  permUsers: PropTypes.object.isRequired,
+  perm: PropTypes.object.isRequired,
+  // id: PropTypes.number.isRequired,
+  // position: PropTypes.string.isRequired,
+  // starttime: PropTypes.number.isRequired,
+  // endtime: PropTypes.number.isRequired,
+  // slots: PropTypes.number.isRequired,
+  // permUsers: PropTypes.object.isRequired,
 };

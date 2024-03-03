@@ -9,14 +9,8 @@ import AddPermModal from "./AddPermModal.js";
 function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
 
-  const [modalEditPerm, setModalEditPerm] = useState({
-    id: null,
-    position: "",
-    starttime: 0,
-    endtime: 0,
-    slots: 0,
-    permUsers: {},
-  });
+    // could change this to a single perm like I did in shifts
+  const [modalEditPerm, setModalEditPerm] = useState(null);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
 
@@ -34,6 +28,7 @@ function AllPerms() {
           position: dataRow.position,
           slots: dataRow.slots,
           permUsers: {},
+          id: dataRow.id // added id inside of it as well
         };
       }
 
@@ -63,29 +58,33 @@ function AllPerms() {
     fetchData();
   }, []);
 
-  const handleSubmitEdit = async (e) => {
-    e.preventDefault();
-    try {
-      let permById = allPermsAndPermsUsers[e.target.id];
+  // const handleSubmitEdit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let permById = allPermsAndPermsUsers[e.target.id];
 
-      setModalEditPerm({
-        starttime: permById.starttime,
-        endtime: permById.endtime,
-        slots: permById.slots,
-        id: e.target.id,
-        position: permById.position,
-        permUsers: permById.permUsers,
-      });
-      setEditModalVisible(true);
+  //     setModalEditPerm({
+  //       starttime: permById.starttime,
+  //       endtime: permById.endtime,
+  //       slots: permById.slots,
+  //       id: e.target.id,
+  //       position: permById.position,
+  //       permUsers: permById.permUsers,
+  //     });
+  //     setEditModalVisible(true);
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const closeModal = () => {
     setEditModalVisible(false);
   };
+
+  const editModalOpen = () => {
+    setEditModalVisible(true);
+  }
 
   return (
     <div>
@@ -94,12 +93,13 @@ function AllPerms() {
         <EditPermModal
           isVisible={editModalVisible}
           closeModal={closeModal}
-          id={modalEditPerm.id}
-          position={modalEditPerm.position}
-          starttime={modalEditPerm.starttime}
-          endtime={modalEditPerm.endtime}
-          slots={modalEditPerm.slots}
-          permUsers={modalEditPerm.permUsers}
+          perm={modalEditPerm}
+          // id={modalEditPerm.perm.id}
+          // position={modalEditPerm.perm.position}
+          // starttime={modalEditPerm.perm.starttime}
+          // endtime={modalEditPerm.perm.endtime}
+          // slots={modalEditPerm.perm.slots}
+          // permUsers={modalEditPerm.perm.permUsers}
         ></EditPermModal>
         <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
         <div className={styles.shiftsContainer}>
@@ -109,16 +109,15 @@ function AllPerms() {
               {Object.keys(allPermsAndPermsUsers).map((permKey) => (
                 <div>
                   <SingleAllPerm
-                    id={permKey}
-                    position={allPermsAndPermsUsers[permKey].position}
-                    starttime={allPermsAndPermsUsers[permKey].starttime}
-                    endtime={allPermsAndPermsUsers[permKey].endtime}
-                    slots={allPermsAndPermsUsers[permKey].slots}
+                    // id={permKey}
+                    // position={allPermsAndPermsUsers[permKey].position}
+                    // starttime={allPermsAndPermsUsers[permKey].starttime}
+                    // endtime={allPermsAndPermsUsers[permKey].endtime}
+                    // slots={allPermsAndPermsUsers[permKey].slots}
+                    openEditModal={editModalOpen}
+                    perm={allPermsAndPermsUsers[permKey]}
+                  setModalValues={setModalEditPerm}
                   ></SingleAllPerm>
-                  <button id={permKey} onClick={handleSubmitEdit}>
-                    {/* shouldn't use same id for two buttons */}
-                    Edit Perm
-                  </button>
 
                   <div>
 
