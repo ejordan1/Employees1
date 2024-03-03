@@ -45,13 +45,33 @@ export function createShiftsByDay(shifts) {
     return shiftsByDay;
   }
 
-  export function getThisWeekDays() {
+  // takes in an object with keys of perm id, and values of perms, ignores the keys...
+  // could also delete this method and simply pass in the object.values, and have it as a generic method to sort anything by date
+  export function createPermsByDay(perms) {
+    let permsByDay = {};
+
+    Object.values(perms).forEach((perm) => {
+      let thisDay = format(perm.startdatetime, formatDateStringKey);
+      if (!permsByDay.hasOwnProperty(thisDay)) {
+        permsByDay[thisDay] = [];
+      }
+      perm.startdatetime = new Date (perm.startdatetime);
+      perm.enddatetime = new Date (perm.enddatetime);
+      permsByDay[thisDay].push(perm); // just the id, and should be sorted
+    });
+    return permsByDay;
+  }
+
+  export function getThisWeekDates() {
     let s = startOfWeek(new Date());
     let e = endOfWeek(new Date());
     let datesOfThisWeek = eachDayOfInterval({
       start: s,
       end: e,
     });
+    for (let i = 0; i < datesOfThisWeek.length; i++) {
+      datesOfThisWeek[i] = format(datesOfThisWeek[i], "yyyy-MM-dd");
+    }
     return datesOfThisWeek;
   }
 

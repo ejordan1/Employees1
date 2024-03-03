@@ -5,6 +5,7 @@ import SingleAllperm from "./SingleAllPerm.js";
 import SingleAllPerm from "./SingleAllPerm.js";
 import EditPermModal from "./EditPermModal.js";
 import AddPermModal from "./AddPermModal.js";
+import { createPermsByDay, getThisWeekDates } from "../Libraries/DataOperations.js";
 
 function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
@@ -13,6 +14,10 @@ function AllPerms() {
   const [modalEditPerm, setModalEditPerm] = useState(null);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
+
+  const [permsByDay, setPermsByDay] = useState(null);
+
+  const [thisWeekDays, setThisWeekdays] = useState([]);
 
   function createPermDictFromData(userPermsData) {
     let permsDict = {};
@@ -28,7 +33,7 @@ function AllPerms() {
           position: dataRow.position,
           slots: dataRow.slots,
           permUsers: {},
-          id: dataRow.id // added id inside of it as well
+          id: dataRow.id // this is both the key, and this data field
         };
       }
 
@@ -48,8 +53,16 @@ function AllPerms() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        // probably shouldn't go here
+        setThisWeekdays(getThisWeekDates());
+
         const res = await axios.get(`/perms`);
-        setAllPermsAndPermsUsers(createPermDictFromData(res.data));
+        let permDict = createPermDictFromData(res.data);
+        setAllPermsAndPermsUsers(permDict);
+        let permsByDayTest = createPermsByDay(permDict)
+        setPermsByDay(permsByDayTest);
+
         console.log("hello");
       } catch (err) {
         console.log(err);
@@ -104,7 +117,48 @@ function AllPerms() {
         <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
         <div className={styles.shiftsContainer}>
           <div>
-            <h1 className={styles.weekday}>Sunday 2/9</h1>{" "}
+            {/* <h1 className={styles.weekday}>Sunday 2/9</h1>{" "} */}
+
+
+          {/* I had to include PermsByDay && below, not sure why it reaches there , becaues in myshifts it doesnt */}
+            {thisWeekDays.map((date) => (
+              <div>
+              <div>{date}</div>
+              {permsByDay && permsByDay[date] ? (
+                permsByDay[date].map((perm) => (
+                  <div>
+                  <SingleAllPerm
+                    openEditModal={editModalOpen}
+                    perm={perm}
+                  setModalValues={setModalEditPerm}
+                  ></SingleAllPerm>
+
+                  <div>
+
+                    {Object.entries(
+                      perm.permUsers
+                    ).map((keyvalue) => (
+                      <div>
+                        <p>
+                          {"perm_userid: " +
+                            keyvalue[0] +
+                            ", uid: " +
+                            keyvalue[1].uid +
+                            ", " +
+                            keyvalue[1].firstname +
+                            ", " +
+                            keyvalue[1].lastname}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                ))
+              ) : <p>no perms</p>}
+              </div>
+            ))}
+            
+            
             <div>
               {Object.keys(allPermsAndPermsUsers).map((permKey) => (
                 <div>
@@ -141,6 +195,9 @@ function AllPerms() {
                 </div>
               ))}
             </div>{" "}
+          
+          
+          
           </div>
         </div>
       </div>

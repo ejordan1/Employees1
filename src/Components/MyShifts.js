@@ -6,7 +6,7 @@ import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
 import DropShiftModal from "./DropShiftModal.js";
 import OrganizeByDay from "../Libraries/DataOperations.js";
-import {createShiftsByDay, getThisWeekDays} from "../Libraries/DataOperations.js";
+import {createShiftsByDay, getThisWeekDates} from "../Libraries/DataOperations.js";
 import {
   formatDistance,
   subDays,
@@ -45,7 +45,7 @@ function MyShifts() {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/shifts/myshifts`);
-        const weekDays = getThisWeekDays();
+        const weekDays = getThisWeekDates();
 
         for (let i = 0; i < weekDays.length; i++) {
           weekDays[i] = format(weekDays[i], formatDateStringKey);

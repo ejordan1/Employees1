@@ -4,7 +4,7 @@ import styles from "./AllShifts.module.scss";
 import SingleAllShift from "./SingleAllShift";
 import EditShiftModal from "./EditShiftModal";
 import AddShiftModal from "./AddShiftModal";
-import { createShiftsByDay, getThisWeekDays } from "../Libraries/DataOperations.js";
+import { createShiftsByDay, getThisWeekDates } from "../Libraries/DataOperations.js";
 import {
   formatDistance,
   subDays,
@@ -33,23 +33,22 @@ function AllShifts() {
   //     }
   //   }
   // }
-  function setWeekDays()
-  {
-    const weekDays = getThisWeekDays();
+  // function setWeekDays()
+  // {
+  //   const weekDays = getThisWeekDays();
 
-    for (let i = 0; i < weekDays.length; i++) {
-      weekDays[i] = format(weekDays[i], "yyyy-MM-dd");
-    }
-    setThisWeekdays(weekDays);
-  }
+  //   for (let i = 0; i < weekDays.length; i++) {
+  //     weekDays[i] = format(weekDays[i], "yyyy-MM-dd");
+  //   }
+  //   setThisWeekdays(weekDays);
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
 
         // need to call this at the beginning once
-        setWeekDays();
-
+        setThisWeekdays(getThisWeekDates())
         const res = await axios.get(`/shifts/admin/all`);
         setAllShiftsByDay(createShiftsByDay(res.data));
       } catch (err) {
