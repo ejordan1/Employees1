@@ -76,9 +76,9 @@ export const addShift = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "INSERT INTO shifts(`starttime`, `endtime`, `position`, `uid`) VALUES (?)";
+          "INSERT INTO shifts(`startdatetime`, `enddatetime`, `position`, `uid`) VALUES (?)";
 
-        const values = [req.body.starttime, req.body.endtime, req.body.position, req.body.uid];
+        const values = [req.body.startdatetime, req.body.enddatetime, req.body.position, req.body.uid];
 
         db.query(q, [values], (err, data) => {
           if (err) return res.status(500).json(err);
@@ -157,14 +157,14 @@ export const pickupShift = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("token is not valid!");
     const q =
-      "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id = ?"; //
+      "SELECT `startdatetime`, `enddatetime` FROM employees1.shifts s WHERE s.id = ?"; //
     db.query(q, [req.body.id], (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
       if ( true
         // data[0].starttime == req.body.starttime &&
-        // data[0].endtime == req.body.endtime
+        // data[0].enddatetime == req.body.enddatetime
       ) {
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = ? WHERE (`id` = '?')";
@@ -188,7 +188,7 @@ export const dropShift = (req, res) => {
     if (err) return res.status(403).json("token is not valid!");
 
     const q =
-      "SELECT `starttime`, `endtime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
+      "SELECT `startdatetime`, `enddatetime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
 
       // changed from req.body.uid to employeeInfo.id, verify still works
     const values = [req.body.id, employeeInfo.id];
@@ -198,7 +198,7 @@ export const dropShift = (req, res) => {
 
       if ( true
         // data[0].starttime == req.body.starttime &&
-        // data[0].endtime == req.body.endtime
+        // data[0].enddatetime == req.body.enddatetime
       ) {
         const q =
           "UPDATE `employees1`.`shifts` SET `uid` = NULL WHERE (`id` = '?')";

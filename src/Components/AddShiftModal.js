@@ -7,8 +7,8 @@ export default function AddShiftModal() {
   const [modal, setModal] = useState(false);
 
   const [createShiftInputs, setCreateShiftInputs] = useState({
-    starttime: 0,
-    endtime: 0,
+    startdatetime: 0,
+    enddatetime: 0,
     position: "",
     uid: null,
   });
@@ -35,8 +35,8 @@ export default function AddShiftModal() {
     try {
       const bodyvalues = {
         // doing this later
-        starttime: createShiftInputs.starttime,
-        endtime: createShiftInputs.endtime,
+        startdatetime: "2024-03-04 07:23:44",
+        enddatetime: "2024-03-04 15:23:44",
         position: createShiftInputs.position,
         uid: createShiftInputs.uid,
       };
@@ -64,15 +64,15 @@ export default function AddShiftModal() {
           <input
             required
             type="number"
-            placeholder="starttime"
-            name="starttime"
+            placeholder="startdatetime, values will not be used"
+            name="startdatetime"
             onChange={handleCreateShiftChange}
           />
           <input
             required
             type="number"
-            placeholder="endtime"
-            name="endtime"
+            placeholder="enddatetime, values will not be used"
+            name="enddatetime"
             onChange={handleCreateShiftChange}
           />
           <input
