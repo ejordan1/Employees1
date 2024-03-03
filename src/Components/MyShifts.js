@@ -6,20 +6,13 @@ import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
 import DropShiftModal from "./DropShiftModal.js";
 import {
-  createShiftsByDay,
-  getThisWeekDates,
-  formatDateStringKey,
+  mapObjectsToDate,
+  thisWeekDates,
 } from "../Libraries/DataOperations.js";
-import {
-  format
-} from "date-fns";
 
 function MyShifts() {
-  const [myShifts, setMyShifts] = useState([]);
 
   const [myShiftsByDay, setMyShiftsByDay] = useState({});
-
-  const [thisWeekDays, setThisWeekdays] = useState([]);
 
   const [availableShifts, setAvailableShiftsByDay] = useState([]);
 
@@ -36,11 +29,9 @@ function MyShifts() {
       try {
         const res = await axios.get(`/shifts/myshifts`);
 
-        setThisWeekdays(getThisWeekDates());
-        setMyShiftsByDay(createShiftsByDay(res.data));
+        setMyShiftsByDay(mapObjectsToDate(res.data));
 
         console.log(myShiftsByDay);
-        setMyShifts(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -52,7 +43,7 @@ function MyShifts() {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/shifts/available`);
-        setAvailableShiftsByDay(createShiftsByDay(res.data));
+        setAvailableShiftsByDay(mapObjectsToDate(res.data));
       } catch (err) {
         console.log(err);
       }
@@ -94,7 +85,7 @@ function MyShifts() {
       </div>
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
-        {thisWeekDays.map((date) => (
+        {thisWeekDates.map((date) => (
           <div>
             <div>{date}</div>
             {myShiftsByDay && myShiftsByDay[date] ? (

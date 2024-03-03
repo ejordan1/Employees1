@@ -5,10 +5,9 @@ import SingleAllShift from "./SingleAllShift";
 import EditShiftModal from "./EditShiftModal";
 import AddShiftModal from "./AddShiftModal";
 import {
-  createShiftsByDay,
-  getThisWeekDates,
+  mapObjectsToDate,
+  thisWeekDates,
 } from "../Libraries/DataOperations.js";
-import { format } from "date-fns";
 
 function AllShifts() {
   const [allShiftsByDay, setAllShiftsByDay] = useState([]);
@@ -17,15 +16,11 @@ function AllShifts() {
 
   const [modalEditShift, setModalEditShift] = useState(null);
 
-  const [thisWeekDays, setThisWeekdays] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // need to call this at the beginning once
-        setThisWeekdays(getThisWeekDates());
         const res = await axios.get(`/shifts/admin/all`);
-        setAllShiftsByDay(createShiftsByDay(res.data));
+        setAllShiftsByDay(mapObjectsToDate(res.data));
       } catch (err) {
         console.log(err);
       }
@@ -50,7 +45,7 @@ function AllShifts() {
 
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
-        {thisWeekDays.map((date) => (
+        {thisWeekDates.map((date) => (
           <div>
             <p>{date}</p>
             {allShiftsByDay[date] ? (

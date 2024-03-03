@@ -5,24 +5,23 @@ import SingleAllPerm from "./SingleAllPerm.js";
 import EditPermModal from "./EditPermModal.js";
 import AddPermModal from "./AddPermModal.js";
 import {
-  createPermsByDay,
-  getFirstWeekDates,
+  firstWeekDates,
+  mapObjectsToDate,
 } from "../Libraries/DataOperations.js";
 
 // things to look at: where to call the "getThisWeeksDates? maybe could have that
 // as a constant in date operations?"
 
 function AllPerms() {
+
+  // object of perms with key as perm id. May be useful later
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
 
-  // could change this to a single perm like I did in shifts
   const [modalEditPerm, setModalEditPerm] = useState(null);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
 
   const [permsByDay, setPermsByDay] = useState(null);
-
-  const [firstWeekDays, setFirstWeekdays] = useState([]);
 
   function createPermDictFromData(userPermsData) {
     let permsDict = {};
@@ -58,16 +57,12 @@ function AllPerms() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // probably shouldn't go here
-        setFirstWeekdays(getFirstWeekDates());
-
         const res = await axios.get(`/perms`);
         let permDict = createPermDictFromData(res.data);
         setAllPermsAndPermsUsers(permDict);
-        let permsByDayTest = createPermsByDay(permDict);
+        
+        let permsByDayTest = mapObjectsToDate(Object.values(permDict));
         setPermsByDay(permsByDayTest);
-
-        console.log("hello");
       } catch (err) {
         console.log(err);
       }
@@ -95,7 +90,7 @@ function AllPerms() {
         <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
         <div className={styles.shiftsContainer}>
           {/* I had to include PermsByDay && below, not sure why it reaches there , becaues in myshifts it doesnt */}
-          {firstWeekDays.map((date) => (
+          {firstWeekDates.map((date) => (
             <div>
               <div>{date}</div>
               {permsByDay && permsByDay[date] ? (

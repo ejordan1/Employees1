@@ -16,53 +16,28 @@ function test ()
     return (format(new Date(2014, 1, 11), "MM/dd/yyyy"));
 }
 
-// takes in an object with key values of the id of the shift as the key, and shift data as the data.
-// method that takes in {id: {startdatetime: Date, enddatetime: Date, position: string, uid: number}}
-// returns {'2024/10/16': {24: <shift data>, 33: <shift data>}} converting back to string for date, I think it works
-// function OrganizeByDay(shifts)
-// {
-//     for (const [key, value] of Object.entries(shifts``)) {
-//         console.log(`${key}: ${value}`);
-//       }
-// }
+export const firstWeekDates = getFirstWeekDates();
 
-// export default OrganizeByDay;
+export const thisWeekDates = getThisWeekDates();
 
 export const formatDateStringKey = "yyyy-MM-dd";
 
-export function createShiftsByDay(shifts) {
-    let shiftsByDay = {};
+export function mapObjectsToDate(shift) {
+    let shiftByDay = {};
 
-    shifts.forEach((shift) => {
+    shift.forEach((shift) => {
       let thisDay = format(shift.startdatetime, formatDateStringKey);
-      if (!shiftsByDay.hasOwnProperty(thisDay)) {
-        shiftsByDay[thisDay] = [];
+      if (!shiftByDay.hasOwnProperty(thisDay)) {
+        shiftByDay[thisDay] = [];
       }
       shift.startdatetime = new Date (shift.startdatetime);
       shift.enddatetime = new Date (shift.enddatetime);
-      shiftsByDay[thisDay].push(shift); // just the id, and should be sorted
+      shiftByDay[thisDay].push(shift); // just the id, and should be sorted
     });
-    return shiftsByDay;
+    return shiftByDay;
   }
 
-  // takes in an object with keys of perm id, and values of perms, ignores the keys...
-  // could also delete this method and simply pass in the object.values, and have it as a generic method to sort anything by date
-  export function createPermsByDay(perms) {
-    let permsByDay = {};
-
-    Object.values(perms).forEach((perm) => {
-      let thisDay = format(perm.startdatetime, formatDateStringKey);
-      if (!permsByDay.hasOwnProperty(thisDay)) {
-        permsByDay[thisDay] = [];
-      }
-      perm.startdatetime = new Date (perm.startdatetime);
-      perm.enddatetime = new Date (perm.enddatetime);
-      permsByDay[thisDay].push(perm); // just the id, and should be sorted
-    });
-    return permsByDay;
-  }
-
-  export function getThisWeekDates() {
+  function getThisWeekDates() {
     let s = startOfWeek(new Date());
     let e = endOfWeek(new Date());
     let datesOfThisWeek = eachDayOfInterval({

@@ -1,4 +1,4 @@
- import createShiftsByDay from "./DataOperations";
+ import { mapObjectsToDate } from "./DataOperations.js";
 
 let sampleshifts = [
     {
@@ -52,8 +52,8 @@ const resultingObj = '{"2024-03-02":[{"enddatetime":"2024-03-03T04:00:00.000Z","
 
 
 
-test("createShiftsByDay", () => {
-  let shiftsByDay = createShiftsByDay(sampleshifts);
+test("mapObjectsToDate", () => {
+  let shiftsByDay = mapObjectsToDate(sampleshifts);
   let stringOfObject = JSON.stringify(shiftsByDay);
   expect(stringOfObject).toBe(resultingObj);
 });
