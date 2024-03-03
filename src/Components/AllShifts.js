@@ -7,7 +7,7 @@ import AddShiftModal from "./AddShiftModal";
 import {
   mapObjectsToDate,
   thisWeekDates,
-} from "../Libraries/DataOperations.js";
+} from "../Libraries/DateOperations.js";
 
 function AllShifts() {
   const [allShiftsByDay, setAllShiftsByDay] = useState([]);

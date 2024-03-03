@@ -4,10 +4,11 @@ import styles from "./AllPerms.module.scss";
 import SingleAllPerm from "./SingleAllPerm.js";
 import EditPermModal from "./EditPermModal.js";
 import AddPermModal from "./AddPermModal.js";
+import { createPermDictFromData } from "../Libraries/PermOperations.js";
 import {
   firstWeekDates,
   mapObjectsToDate,
-} from "../Libraries/DataOperations.js";
+} from "../Libraries/DateOperations.js";
 
 // things to look at: where to call the "getThisWeeksDates? maybe could have that
 // as a constant in date operations?"
@@ -23,36 +24,36 @@ function AllPerms() {
 
   const [permsByDay, setPermsByDay] = useState(null);
 
-  function createPermDictFromData(userPermsData) {
-    let permsDict = {};
+  // function createPermDictFromData(userPermsData) {
+  //   let permsDict = {};
 
-    Object.keys(userPermsData).forEach((key) => {
-      let dataRow = userPermsData[key];
+  //   Object.keys(userPermsData).forEach((key) => {
+  //     let dataRow = userPermsData[key];
 
-      // create perm objects if doesn't exist
-      if (!permsDict.hasOwnProperty(dataRow.id)) {
-        permsDict[dataRow.id] = {
-          startdatetime: new Date(dataRow.startdatetime),
-          enddatetime: new Date(dataRow.enddatetime),
-          position: dataRow.position,
-          slots: dataRow.slots,
-          permUsers: {},
-          id: dataRow.id, // this is both the key, and this data field
-        };
-      }
+  //     // create perm objects if doesn't exist
+  //     if (!permsDict.hasOwnProperty(dataRow.id)) {
+  //       permsDict[dataRow.id] = {
+  //         startdatetime: new Date(dataRow.startdatetime),
+  //         enddatetime: new Date(dataRow.enddatetime),
+  //         position: dataRow.position,
+  //         slots: dataRow.slots,
+  //         permUsers: {},
+  //         id: dataRow.id, // this is both the key, and this data field
+  //       };
+  //     }
 
-      // if it has the user info, add a new entry to the perm.permUsers
-      if (dataRow.firstname && dataRow.lastname && dataRow.uid) {
-        permsDict[dataRow.id].permUsers[dataRow.perm_userid] = {
-          // naming it by the permUser id.
-          firstname: dataRow.firstname,
-          lastname: dataRow.lastname,
-          uid: dataRow.uid,
-        };
-      }
-    });
-    return permsDict;
-  }
+  //     // if it has the user info, add a new entry to the perm.permUsers
+  //     if (dataRow.firstname && dataRow.lastname && dataRow.uid) {
+  //       permsDict[dataRow.id].permUsers[dataRow.perm_userid] = {
+  //         // naming it by the permUser id.
+  //         firstname: dataRow.firstname,
+  //         lastname: dataRow.lastname,
+  //         uid: dataRow.uid,
+  //       };
+  //     }
+  //   });
+  //   return permsDict;
+  // }
 
   useEffect(() => {
     const fetchData = async () => {

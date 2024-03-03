@@ -1,4 +1,4 @@
- import { mapObjectsToDate } from "./DataOperations.js";
+ import { mapObjectsToDate } from "./DateOperations.js";
 
 let sampleshifts = [
     {

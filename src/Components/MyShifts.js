@@ -8,7 +8,7 @@ import DropShiftModal from "./DropShiftModal.js";
 import {
   mapObjectsToDate,
   thisWeekDates,
-} from "../Libraries/DataOperations.js";
+} from "../Libraries/DateOperations.js";
 
 function MyShifts() {
 

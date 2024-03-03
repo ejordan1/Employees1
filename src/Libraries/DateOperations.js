@@ -50,7 +50,7 @@ export function mapObjectsToDate(shift) {
     return datesOfThisWeek;
   }
 
-  export function getFirstWeekDates()
+  function getFirstWeekDates()
   {
     let firstDay = new Date('Janurary 1, 0997 00:00:00');
     let s = startOfWeek(firstDay);
