@@ -1,4 +1,15 @@
-import { format, compareAsc } from "date-fns";
+import {
+    formatDistance,
+    subDays,
+    addDays,
+    getDay,
+    startOfWeek,
+    lastDayOfWeek,
+    endOfWeek,
+    eachDayOfInterval,
+    format,
+    compareAsc,
+  } from "date-fns";
 
 function test ()
 {
@@ -19,7 +30,7 @@ function test ()
 
 const formatDateStringKey = "yyyy-MM-dd";
 
-function createShiftsByDay(shifts) {
+export function createShiftsByDay(shifts) {
     let shiftsByDay = {};
 
     shifts.forEach((shift) => {
@@ -34,4 +45,15 @@ function createShiftsByDay(shifts) {
     return shiftsByDay;
   }
 
-  export default createShiftsByDay;
+  export function getThisWeekDays() {
+    let s = startOfWeek(new Date());
+    let e = endOfWeek(new Date());
+    let datesOfThisWeek = eachDayOfInterval({
+      start: s,
+      end: e,
+    });
+    return datesOfThisWeek;
+  }
+
+  // I had to put export default as something
+  export default formatDateStringKey;

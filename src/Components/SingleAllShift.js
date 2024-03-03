@@ -4,19 +4,25 @@ import styles from "./SingleAllShift.module.scss";
 
 function SingleAllShift(props) {
 
+  function handleEditClick()
+  {
+    props.setModalValues(props.shift)
 
+    // implement this
+    //props.openDropModal()
+  }
     const getBackgroundColor = props.uid ? styles.filled : styles.empty;
 
   return (
     <div className={`${styles.container} ${getBackgroundColor}`}>
-      <p>{props.position}</p>
+      <p>{props.shift.position}</p>
       <div className={styles.times}>
-        <p>{props.starttime}</p>
+        <p>{props.shift.starttime}</p>
         <p>-</p>
-        <p>{props.endtime}</p>
+        <p>{props.shift.endtime}</p>
       </div>
 
-      <button id={props.id} onClick={props.drop}>
+      <button onClick={handleEditClick}>
         Edit
       </button>
     </div>
@@ -24,11 +30,14 @@ function SingleAllShift(props) {
 }
 
 SingleAllShift.propTypes = {
-  id: PropTypes.number.isRequired,
-  position: PropTypes.string.isRequired,
-  starttime: PropTypes.number.isRequired,
-  endtime: PropTypes.number.isRequired,
-  uid: PropTypes.number,
+  shift: PropTypes.object.isRequired,
+  openEditModal: PropTypes.func.isRequired,
+  setModalValues: PropTypes.func.isRequired
+  // id: PropTypes.number.isRequired,
+  // position: PropTypes.string.isRequired,
+  // starttime: PropTypes.number.isRequired,
+  // endtime: PropTypes.number.isRequired,
+  // uid: PropTypes.number,
   //drop: PropTypes.func.isRequired,
 };
 

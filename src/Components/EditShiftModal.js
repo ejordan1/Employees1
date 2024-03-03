@@ -15,11 +15,12 @@ export default function EditShiftModal(props) {
   });
 
   useEffect(() => {
+    // this is just for now, until I figure out how the real input is going to work
     setEditShiftInputs({
-      starttime: props.starttime,
-      endtime: props.endtime,
-      position: props.position,
-      uid: props.uid,
+      starttime: props.shift && props.shift.startdatetime,
+      endtime: props.shift && props.shift.enddatetime,
+      position: props.shift && props.shift.position,
+      uid: props.shift && props.shift.uid,
     });
   }, [props.isVisible]);
 
@@ -37,7 +38,7 @@ export default function EditShiftModal(props) {
         starttime: editShiftInputs.starttime,
         endtime: editShiftInputs.endtime,
         uid: editShiftInputs.uid,
-        id: props.id,
+        id: props.shift.id,
         position: editShiftInputs.position,
       };
 
@@ -61,7 +62,7 @@ export default function EditShiftModal(props) {
         starttime: editShiftInputs.starttime,
         endtime: editShiftInputs.endtime,
         uid: editShiftInputs.uid,
-        id: props.id,
+        id: props.shift.id,
       };
       const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
       toggleModal();
@@ -90,39 +91,39 @@ export default function EditShiftModal(props) {
             <div className={styles.modal}>
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
-                <p>id: {props.id} </p>
-                <p>starttime: {props.starttime} </p>
-                <p>endtime: {props.endtime} </p>
-                <p>uid: {props.uid} </p>
-                <p>position: {props.position} </p>
+                <p>id: {props.shift.id} </p>
+                <p>starttime: {props.shift.starttime} </p>
+                <p>endtime: {props.shift.endtime} </p>
+                <p>uid: {props.shift.uid} </p>
+                <p>position: {props.shift.position} </p>
                 <div className="editShiftForm">
                   <h1>Edit Shift</h1>
                   <form>
                     <input
                       required
                       type="number"
-                      defaultValue={props.starttime}
+                      defaultValue={props.shift.starttime}
                       name="starttime"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="number"
-                      defaultValue={props.endtime}
+                      defaultValue={props.shift.endtime}
                       name="endtime"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="number"
-                      defaultValue={props.uid}
+                      defaultValue={props.shift.uid}
                       name="uid"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="text"
-                      defaultValue={props.position}
+                      defaultValue={props.shift.position}
                       name="position"
                       onChange={handleEditShiftChange}
                     />
@@ -146,9 +147,10 @@ export default function EditShiftModal(props) {
 EditShiftModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  position: PropTypes.string.isRequired,
-  starttime: PropTypes.number.isRequired,
-  endtime: PropTypes.number.isRequired,
-  uid: PropTypes.number,
+  // id: PropTypes.number.isRequired,
+  // position: PropTypes.string.isRequired,
+  // starttime: PropTypes.number.isRequired,
+  // endtime: PropTypes.number.isRequired,
+  // uid: PropTypes.number,
+  shift: PropTypes.object.isRequired
 };

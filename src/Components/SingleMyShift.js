@@ -37,6 +37,3 @@ SingleMyShift.propTypes = {
 };
 
 export default SingleMyShift;
-
-
-// so the button click is registered in this class, which then calls the functios passed in
