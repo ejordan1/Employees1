@@ -4,18 +4,11 @@ import styles from "./AllShifts.module.scss";
 import SingleAllShift from "./SingleAllShift";
 import EditShiftModal from "./EditShiftModal";
 import AddShiftModal from "./AddShiftModal";
-import { createShiftsByDay, getThisWeekDates } from "../Libraries/DataOperations.js";
 import {
-  formatDistance,
-  subDays,
-  addDays,
-  getDay,
-  startOfWeek,
-  lastDayOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  format,
-} from "date-fns";
+  createShiftsByDay,
+  getThisWeekDates,
+} from "../Libraries/DataOperations.js";
+import { format } from "date-fns";
 
 function AllShifts() {
   const [allShiftsByDay, setAllShiftsByDay] = useState([]);
@@ -26,29 +19,11 @@ function AllShifts() {
 
   const [thisWeekDays, setThisWeekdays] = useState([]);
 
-  // function getShiftById(id) {
-  //   for (let i = 0; i < allShifts.length; i++) {
-  //     if (allShifts[i].id == id) {
-  //       return allShifts[i];
-  //     }
-  //   }
-  // }
-  // function setWeekDays()
-  // {
-  //   const weekDays = getThisWeekDays();
-
-  //   for (let i = 0; i < weekDays.length; i++) {
-  //     weekDays[i] = format(weekDays[i], "yyyy-MM-dd");
-  //   }
-  //   setThisWeekdays(weekDays);
-  // }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         // need to call this at the beginning once
-        setThisWeekdays(getThisWeekDates())
+        setThisWeekdays(getThisWeekDates());
         const res = await axios.get(`/shifts/admin/all`);
         setAllShiftsByDay(createShiftsByDay(res.data));
       } catch (err) {
@@ -58,27 +33,6 @@ function AllShifts() {
     fetchData();
   }, []);
 
-  // might be a bad way to do this but works:
-  // button id is set to the shift id, and is grabbed with e.target.id
-  // const handleEdit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     // let shiftById = getShiftById(e.target.id);
-
-  //     setModalEditShift({
-  //       starttime: shiftById.starttime,
-  //       endtime: shiftById.endtime,
-  //       uid: shiftById.uid,
-  //       id: shiftById.id,
-  //       position: shiftById.position,
-  //     });
-
-  //     setEditModalVisible(true);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   function openEditModal() {
     setEditModalVisible(true);
   }
@@ -87,8 +41,6 @@ function AllShifts() {
     setEditModalVisible(false);
   };
 
-
-  // can add styles weekday to weekdays
   return (
     <div className="AllShifts">
       <div>
@@ -98,26 +50,25 @@ function AllShifts() {
 
       <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
       <div className={styles.shiftsContainer}>
-      {thisWeekDays.map((date) => (
-                    // <div><p>hello test</p> date: {date}</div>
-                    <div>
-                      <p>{date}</p>
-                    {allShiftsByDay[date] ? (
-                      allShiftsByDay[date].map((shift) => (
-                        <div>
-                          <p>{shift.id}</p>
-                          <SingleAllShift
-                            shift={shift}
-                            openEditModal={openEditModal}
-                            setModalValues={setModalEditShift}
-                          ></SingleAllShift>
-                        </div>
-                      ))
-                    ) : (
-                      <p>no shifts</p>
-                    )}
-                    </div>
-      ))}
+        {thisWeekDays.map((date) => (
+          <div>
+            <p>{date}</p>
+            {allShiftsByDay[date] ? (
+              allShiftsByDay[date].map((shift) => (
+                <div>
+                  <p>{shift.id}</p>
+                  <SingleAllShift
+                    shift={shift}
+                    openEditModal={openEditModal}
+                    setModalValues={setModalEditShift}
+                  ></SingleAllShift>
+                </div>
+              ))
+            ) : (
+              <p>no shifts</p>
+            )}
+          </div>
+        ))}
       </div>
       <AddShiftModal></AddShiftModal>
       <EditShiftModal

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./AllPerms.module.scss";
-import SingleAllperm from "./SingleAllPerm.js";
 import SingleAllPerm from "./SingleAllPerm.js";
 import EditPermModal from "./EditPermModal.js";
 import AddPermModal from "./AddPermModal.js";
 import {
   createPermsByDay,
-  getThisWeekDates,
+  getFirstWeekDates,
 } from "../Libraries/DataOperations.js";
 
 // things to look at: where to call the "getThisWeeksDates? maybe could have that
@@ -23,7 +22,7 @@ function AllPerms() {
 
   const [permsByDay, setPermsByDay] = useState(null);
 
-  const [thisWeekDays, setThisWeekdays] = useState([]);
+  const [firstWeekDays, setFirstWeekdays] = useState([]);
 
   function createPermDictFromData(userPermsData) {
     let permsDict = {};
@@ -60,7 +59,7 @@ function AllPerms() {
     const fetchData = async () => {
       try {
         // probably shouldn't go here
-        setThisWeekdays(getThisWeekDates());
+        setFirstWeekdays(getFirstWeekDates());
 
         const res = await axios.get(`/perms`);
         let permDict = createPermDictFromData(res.data);
@@ -95,27 +94,27 @@ function AllPerms() {
         ></EditPermModal>
         <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
         <div className={styles.shiftsContainer}>
-            {/* I had to include PermsByDay && below, not sure why it reaches there , becaues in myshifts it doesnt */}
-            {thisWeekDays.map((date) => (
-              <div>
-                <div>{date}</div>
-                {permsByDay && permsByDay[date] ? (
-                  permsByDay[date].map((perm) => (
-                    <div>
-                      <SingleAllPerm
-                        openEditModal={editModalOpen}
-                        perm={perm}
-                        setModalValues={setModalEditPerm}
-                      ></SingleAllPerm>
+          {/* I had to include PermsByDay && below, not sure why it reaches there , becaues in myshifts it doesnt */}
+          {firstWeekDays.map((date) => (
+            <div>
+              <div>{date}</div>
+              {permsByDay && permsByDay[date] ? (
+                permsByDay[date].map((perm) => (
+                  <div>
+                    <SingleAllPerm
+                      openEditModal={editModalOpen}
+                      perm={perm}
+                      setModalValues={setModalEditPerm}
+                    ></SingleAllPerm>
 
-                      <div></div>
-                    </div>
-                  ))
-                ) : (
-                  <p>no perms</p>
-                )}
-              </div>
-            ))}
+                    <div></div>
+                  </div>
+                ))
+              ) : (
+                <p>no perms</p>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

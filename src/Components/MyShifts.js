@@ -5,25 +5,17 @@ import SingleAvailableShift from "./SingleAvailableShift.js";
 import styles from "./MyShifts.module.scss";
 import PickupShiftModal from "./PickupShiftModal.js";
 import DropShiftModal from "./DropShiftModal.js";
-import OrganizeByDay from "../Libraries/DataOperations.js";
-import {createShiftsByDay, getThisWeekDates} from "../Libraries/DataOperations.js";
 import {
-  formatDistance,
-  subDays,
-  addDays,
-  getDay,
-  startOfWeek,
-  lastDayOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  format,
+  createShiftsByDay,
+  getThisWeekDates,
+  formatDateStringKey,
+} from "../Libraries/DataOperations.js";
+import {
+  format
 } from "date-fns";
 
 function MyShifts() {
-  const formatDateStringKey = "yyyy-MM-dd";
   const [myShifts, setMyShifts] = useState([]);
-
-  const [shifts, setShifts] = useState({});
 
   const [myShiftsByDay, setMyShiftsByDay] = useState({});
 
@@ -39,18 +31,12 @@ function MyShifts() {
 
   const [modalDropShift, setModalDropShift] = useState(null);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/shifts/myshifts`);
-        const weekDays = getThisWeekDates();
 
-        for (let i = 0; i < weekDays.length; i++) {
-          weekDays[i] = format(weekDays[i], formatDateStringKey);
-        }
-        setThisWeekdays(weekDays);
+        setThisWeekdays(getThisWeekDates());
         setMyShiftsByDay(createShiftsByDay(res.data));
 
         console.log(myShiftsByDay);

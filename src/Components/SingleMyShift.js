@@ -1,26 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./SingleMyShift.module.scss";
-import {
-  format
-} from "date-fns";
+import { format } from "date-fns";
 
 function SingleMyShift(props) {
+  function handleDropClick() {
+    props.setModalValues(props.shift);
 
-    function handleDropClick()
-    {
-      props.setModalValues(props.shift)
-
-      props.openDropModal()
-    }
+    props.openDropModal();
+  }
 
   return (
     <div className={styles.container}>
       <p>{props.shift.position}</p>
       <div className={styles.times}>
-        <p>{format(props.shift.startdatetime,'HHmm')}</p>
+        <p>{format(props.shift.startdatetime, "HHmm")}</p>
         <p>-</p>
-        <p>{format(props.shift.enddatetime,'HHmm')}</p>
+        <p>{format(props.shift.enddatetime, "HHmm")}</p>
       </div>
 
       <button id={props.shift.id} onClick={handleDropClick}>
@@ -33,7 +29,7 @@ function SingleMyShift(props) {
 SingleMyShift.propTypes = {
   shift: PropTypes.object.isRequired,
   openDropModal: PropTypes.func.isRequired,
-  setModalValues: PropTypes.func.isRequired
+  setModalValues: PropTypes.func.isRequired,
 };
 
 export default SingleMyShift;

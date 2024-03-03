@@ -1,7 +1,6 @@
 import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
-
 export const getPerms = (req, res) => {
   const token = req.cookies.access_token;
   if (!token) return res.status(401).json("Not authenticated");
@@ -64,14 +63,13 @@ export const getPermsByUserId = (req, res) => {
     const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
     db.query(getRoleQuery, [employeeInfo.id], (err, data) => {
       if (err || data[0].role != "admin") {
-          db.query(getPermsByIdQuery, [employeeInfo.id], (err, data) => {
-            if (err) return res.status(500).send(err);
+        db.query(getPermsByIdQuery, [employeeInfo.id], (err, data) => {
+          if (err) return res.status(500).send(err);
 
-            return res.status(200).json(data);
-          });
+          return res.status(200).json(data);
+        });
       } else {
-        if (!req.body.id)
-        {
+        if (!req.body.id) {
           res.status(500).send(err);
         }
         db.query(getPermsByIdQuery, [req.body.id], (err, data) => {
@@ -105,12 +103,11 @@ export const getMyPerms = (req, res) => {
 
     const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
 
-        db.query(getPermsByIdQuery, [employeeInfo.id], (err, data) => {
-          if (err) return res.status(500).send(err);
+    db.query(getPermsByIdQuery, [employeeInfo.id], (err, data) => {
+      if (err) return res.status(500).send(err);
 
-          return res.status(200).json(data);
-        });
-
+      return res.status(200).json(data);
+    });
   });
 };
 
@@ -177,7 +174,9 @@ export const editPerm = (req, res) => {
         db.query(q, values, (err, data) => {
           if (err) return res.status(500).send(err);
           if (data.affectedRows === 0)
-            return res.status(404).json("Did not affect any row, id probably didn't match");
+            return res
+              .status(404)
+              .json("Did not affect any row, id probably didn't match");
           return res.status(200).json("perm has been edited by admin");
         });
       }

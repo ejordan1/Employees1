@@ -8,7 +8,7 @@ function MyPerms() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const body = {}
+        const body = {};
         const res = await axios.get(`/perms/myperms`);
         setMyPerms(res.data);
       } catch (err) {
@@ -26,7 +26,6 @@ function MyPerms() {
           <p>starttime: {perm.starttime}</p>
           <p>endtime: {perm.endtime}</p>
           <p>position: {perm.position}</p>
-          
         </div>
       ))}
     </div>

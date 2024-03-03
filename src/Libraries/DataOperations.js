@@ -28,7 +28,7 @@ function test ()
 
 // export default OrganizeByDay;
 
-const formatDateStringKey = "yyyy-MM-dd";
+export const formatDateStringKey = "yyyy-MM-dd";
 
 export function createShiftsByDay(shifts) {
     let shiftsByDay = {};
@@ -65,6 +65,21 @@ export function createShiftsByDay(shifts) {
   export function getThisWeekDates() {
     let s = startOfWeek(new Date());
     let e = endOfWeek(new Date());
+    let datesOfThisWeek = eachDayOfInterval({
+      start: s,
+      end: e,
+    });
+    for (let i = 0; i < datesOfThisWeek.length; i++) {
+      datesOfThisWeek[i] = format(datesOfThisWeek[i], "yyyy-MM-dd");
+    }
+    return datesOfThisWeek;
+  }
+
+  export function getFirstWeekDates()
+  {
+    let firstDay = new Date('Janurary 1, 0997 00:00:00');
+    let s = startOfWeek(firstDay);
+    let e = endOfWeek(firstDay);
     let datesOfThisWeek = eachDayOfInterval({
       start: s,
       end: e,

@@ -34,8 +34,9 @@ export const getMyShifts = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "SELECT * FROM shifts WHERE uid = ? AND startdatetime >= '2014-01-01' AND startdatetime <= '2024-04-01';";
-    
+    const q =
+      "SELECT * FROM shifts WHERE uid = ? AND startdatetime >= '2014-01-01' AND startdatetime <= '2024-04-01';";
+
     db.query(q, employeeInfo.id, (err, data) => {
       if (err) return res.status(500).send(err);
 
@@ -78,7 +79,12 @@ export const addShift = (req, res) => {
         const q =
           "INSERT INTO shifts(`startdatetime`, `enddatetime`, `position`, `uid`) VALUES (?)";
 
-        const values = [req.body.startdatetime, req.body.enddatetime, req.body.position, req.body.uid];
+        const values = [
+          req.body.startdatetime,
+          req.body.enddatetime,
+          req.body.position,
+          req.body.uid,
+        ];
 
         db.query(q, [values], (err, data) => {
           if (err) return res.status(500).json(err);
@@ -162,7 +168,8 @@ export const pickupShift = (req, res) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
-      if ( true
+      if (
+        true
         // data[0].starttime == req.body.starttime &&
         // data[0].enddatetime == req.body.enddatetime
       ) {
@@ -190,13 +197,14 @@ export const dropShift = (req, res) => {
     const q =
       "SELECT `startdatetime`, `enddatetime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
 
-      // changed from req.body.uid to employeeInfo.id, verify still works
+    // changed from req.body.uid to employeeInfo.id, verify still works
     const values = [req.body.id, employeeInfo.id];
     db.query(q, values, (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
-      if ( true
+      if (
+        true
         // data[0].starttime == req.body.starttime &&
         // data[0].enddatetime == req.body.enddatetime
       ) {

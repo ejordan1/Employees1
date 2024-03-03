@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./PickupShiftModal.module.scss"
+import styles from "./PickupShiftModal.module.scss";
 import PropTypes from "prop-types";
 
 export default function PickupShiftModal(props) {
-
-  if(props.isVisible) {
-    document.body.classList.add('active-modal')
+  if (props.isVisible) {
+    document.body.classList.add("active-modal");
   } else {
-    document.body.classList.remove('active-modal')
+    document.body.classList.remove("active-modal");
   }
 
   const handlePickupSubmit = async (e) => {
@@ -18,10 +17,10 @@ export default function PickupShiftModal(props) {
         id: props.shift.id,
         starttime: props.shift.startdatetime,
         endtime: props.shift.enddatetime,
-        position: props.shift.position
-      }
-       const res = await axios.put(`/shifts/pickup`, bodyvalues);
-       window.location.reload();
+        position: props.shift.position,
+      };
+      const res = await axios.put(`/shifts/pickup`, bodyvalues);
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -29,12 +28,10 @@ export default function PickupShiftModal(props) {
 
   return (
     <>
-
       {props.isVisible && (
         <div className={styles.modal}>
           <div onClick={props.closeModal} className={styles.overlay}></div>
           <div className={styles.modalContent}>
-            
             <button onClick={handlePickupSubmit}>Pickup Shift</button>
 
             <button className="close-modal" onClick={props.closeModal}>
@@ -43,14 +40,12 @@ export default function PickupShiftModal(props) {
           </div>
         </div>
       )}
-      
     </>
   );
 }
 
 PickupShiftModal.propTypes = {
-    isVisible: PropTypes.bool.isRequired,
-    closeModal: PropTypes.func.isRequired,
-    shift: PropTypes.object.isRequired
-  };
-  
+  isVisible: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  shift: PropTypes.object.isRequired,
+};

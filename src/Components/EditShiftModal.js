@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./EditShiftModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
-import {
-  format
-} from "date-fns";
+import { format } from "date-fns";
 
 export default function EditShiftModal(props) {
   const editShiftDefaultValues = {
@@ -20,8 +18,8 @@ export default function EditShiftModal(props) {
   useEffect(() => {
     // this is just for now, until I figure out how the real input is going to work
     setEditShiftInputs({
-      startdatetime: props.shift && format(props.shift.startdatetime,'HHmm'),
-      enddatetime: props.shift && format(props.shift.enddatetime,'HHmm'),
+      startdatetime: props.shift && format(props.shift.startdatetime, "HHmm"),
+      enddatetime: props.shift && format(props.shift.enddatetime, "HHmm"),
       position: props.shift && props.shift.position,
       uid: props.shift && props.shift.uid,
     });
@@ -95,8 +93,8 @@ export default function EditShiftModal(props) {
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
                 <p>id: {props.shift.id} </p>
-                <p>starttime: {format(props.shift.startdatetime,'HHmm')} </p>
-                <p>endtime: {format(props.shift.enddatetime,'HHmm')} </p>
+                <p>starttime: {format(props.shift.startdatetime, "HHmm")} </p>
+                <p>endtime: {format(props.shift.enddatetime, "HHmm")} </p>
                 <p>uid: {props.shift.uid} </p>
                 <p>position: {props.shift.position} </p>
                 <div className="editShiftForm">
@@ -105,14 +103,14 @@ export default function EditShiftModal(props) {
                     <input
                       required
                       type="number"
-                      defaultValue={format(props.shift.startdatetime,'HHmm')}
+                      defaultValue={format(props.shift.startdatetime, "HHmm")}
                       name="starttime"
                       onChange={handleEditShiftChange}
                     />
                     <input
                       required
                       type="number"
-                      defaultValue={format(props.shift.enddatetime,'HHmm')}
+                      defaultValue={format(props.shift.enddatetime, "HHmm")}
                       name="endtime"
                       onChange={handleEditShiftChange}
                     />
@@ -150,10 +148,5 @@ export default function EditShiftModal(props) {
 EditShiftModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
-  // id: PropTypes.number.isRequired,
-  // position: PropTypes.string.isRequired,
-  // starttime: PropTypes.number.isRequired,
-  // endtime: PropTypes.number.isRequired,
-  // uid: PropTypes.number,
-  shift: PropTypes.object.isRequired
+  shift: PropTypes.object.isRequired,
 };

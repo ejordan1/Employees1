@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./AddShiftModal.module.scss";
 import axios from "axios";
-import styles from "./AddShiftModal.module.scss"
+import styles from "./AddShiftModal.module.scss";
 
 export default function AddShiftModal() {
   const [modal, setModal] = useState(false);
@@ -24,10 +24,10 @@ export default function AddShiftModal() {
     setModal(!modal);
   };
 
-  if(modal) {
-    document.body.classList.add('active-modal')
+  if (modal) {
+    document.body.classList.add("active-modal");
   } else {
-    document.body.classList.remove('active-modal')
+    document.body.classList.remove("active-modal");
   }
 
   const handleSubmitCreate = async (e) => {
@@ -49,7 +49,7 @@ export default function AddShiftModal() {
 
   return (
     <>
-      <button onClick={toggleModal} className={styles.btn-modal}>
+      <button onClick={toggleModal} className={styles.btn - modal}>
         Open add
       </button>
 
@@ -57,41 +57,40 @@ export default function AddShiftModal() {
         <div className={styles.modal}>
           <div onClick={toggleModal} className={styles.overlay}></div>
           <div className={styles.modalContent}>
-            
-          <div className="createShiftForm">
-        <h1>Add Shift</h1>
-        <form>
-          <input
-            required
-            type="number"
-            placeholder="startdatetime, values will not be used"
-            name="startdatetime"
-            onChange={handleCreateShiftChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="enddatetime, values will not be used"
-            name="enddatetime"
-            onChange={handleCreateShiftChange}
-          />
-          <input
-            required
-            type="number"
-            placeholder="uid (optional)"
-            name="uid"
-            onChange={handleCreateShiftChange}
-          />
-          <input
-            required
-            type="text"
-            placeholder="position"
-            name="position"
-            onChange={handleCreateShiftChange}
-          />
-          <button onClick={handleSubmitCreate}>Create Shift</button>
-        </form>
-      </div>
+            <div className="createShiftForm">
+              <h1>Add Shift</h1>
+              <form>
+                <input
+                  required
+                  type="number"
+                  placeholder="startdatetime, values will not be used"
+                  name="startdatetime"
+                  onChange={handleCreateShiftChange}
+                />
+                <input
+                  required
+                  type="number"
+                  placeholder="enddatetime, values will not be used"
+                  name="enddatetime"
+                  onChange={handleCreateShiftChange}
+                />
+                <input
+                  required
+                  type="number"
+                  placeholder="uid (optional)"
+                  name="uid"
+                  onChange={handleCreateShiftChange}
+                />
+                <input
+                  required
+                  type="text"
+                  placeholder="position"
+                  name="position"
+                  onChange={handleCreateShiftChange}
+                />
+                <button onClick={handleSubmitCreate}>Create Shift</button>
+              </form>
+            </div>
 
             <button className="close-modal" onClick={toggleModal}>
               CLOSE add
@@ -99,7 +98,6 @@ export default function AddShiftModal() {
           </div>
         </div>
       )}
-      
     </>
   );
 }

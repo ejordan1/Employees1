@@ -1,16 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./SingleAllPerm.module.scss";
-import {
-  format
-} from "date-fns";
+import { format } from "date-fns";
 
 function SingleAllPerm(props) {
-
   function handleEditClick() {
-    props.setModalValues(props.perm)
+    props.setModalValues(props.perm);
 
-    props.openEditModal()
+    props.openEditModal();
   }
 
   return (
@@ -18,28 +15,26 @@ function SingleAllPerm(props) {
       <p>id: {props.perm.id}</p>
       <p>position: {props.perm.position}</p>
       <div className={styles.times}>
-        <p>st: {format(props.perm.startdatetime,'HHmm')}</p>
+        <p>st: {format(props.perm.startdatetime, "HHmm")}</p>
         <p>-</p>
-        <p>et: {format(props.perm.enddatetime,'HHmm')}</p>
+        <p>et: {format(props.perm.enddatetime, "HHmm")}</p>
         <p>slots: {props.perm.slots}</p>
       </div>
 
-      {Object.entries(
-                      props.perm.permUsers
-                    ).map((keyvalue) => (
-                      <div>
-                        <p>
-                          {"perm_userid: " +
-                            keyvalue[0] +
-                            ", uid: " +
-                            keyvalue[1].uid +
-                            ", " +
-                            keyvalue[1].firstname +
-                            ", " +
-                            keyvalue[1].lastname}
-                        </p>
-                      </div>
-                    ))}
+      {Object.entries(props.perm.permUsers).map((keyvalue) => (
+        <div>
+          <p>
+            {"perm_userid: " +
+              keyvalue[0] +
+              ", uid: " +
+              keyvalue[1].uid +
+              ", " +
+              keyvalue[1].firstname +
+              ", " +
+              keyvalue[1].lastname}
+          </p>
+        </div>
+      ))}
 
       <button id={props.perm.id} onClick={handleEditClick}>
         Edit Perm
@@ -50,17 +45,8 @@ function SingleAllPerm(props) {
 
 SingleAllPerm.propTypes = {
   perm: PropTypes.object.isRequired,
-  //create openEditModal
   openEditModal: PropTypes.func.isRequired,
-  setModalValues: PropTypes.func.isRequired
-  //create setModalValues
-
-
-  // id: PropTypes.number.isRequired,
-  // position: PropTypes.string.isRequired,
-  // startdatetime: PropTypes.number.isRequired,
-  // endtime: PropTypes.number.isRequired,
-  // slots: PropTypes.number.isRequired,
+  setModalValues: PropTypes.func.isRequired,
 };
 
 export default SingleAllPerm;
