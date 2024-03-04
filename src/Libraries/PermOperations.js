@@ -1,6 +1,5 @@
 export function createPermDictFromData(userPermsData) {
     let permsDict = {};
-    let a = JSON.stringify(userPermsData);
     Object.keys(userPermsData).forEach((key) => {
       let dataRow = userPermsData[key];
 
