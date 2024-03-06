@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styles from "./LoginPage.module.scss";
-
+import { UserContext } from "../Contexts/UserContext";
 
 function LoginPage() {
 
-
+  const {username, setUserName} = useContext(UserContext);
 
     const [id, setId] = useState([]);
     const [password, setPassword] = useState([]);
@@ -40,7 +40,7 @@ function LoginPage() {
       
       return (
         <div className = {styles.container}>
-          <p>Login</p>
+          <p>Login, current User: {username}</p> 
 
             <form onSubmit={handleSubmit}>
             <span className="formTitle">Login</span>

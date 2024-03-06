@@ -1,5 +1,7 @@
 import { createPermDictFromData } from "./PermOperations.js";
 
+// three chucks of "PermUser" data (where you can extract with perm, and permUser)
+// followed by one that is just the perm
 let samplePermsPermUsersData = [
   {
     enddatetime: "0997-01-04T15:16:42.000Z",
