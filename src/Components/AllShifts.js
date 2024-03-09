@@ -8,25 +8,46 @@ import {
   mapObjectsToDate,
   thisWeekDates,
 } from "../Libraries/DateOperations.js";
+import {
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 function AllShifts() {
-  const [allShiftsByDay, setAllShiftsByDay] = useState([]);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
 
   const [modalEditShift, setModalEditShift] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`/shifts/admin/all`);
-        setAllShiftsByDay(mapObjectsToDate(res.data));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, []);
+  const queryClient = useQueryClient(); // gets the queryclient
+
+  const fetchAllShifts = async () => {
+    const res = await axios.get(`/shifts/admin/all`);
+    return mapObjectsToDate(res.data);
+  };
+
+  const {
+    data: allShiftsData,
+    error: allShiftsError, // not tested
+    isLoading: allShiftsIsLoading, // not tested
+  } = useQuery({
+    queryKey: ["allshifts"],
+    queryFn: fetchAllShifts,
+    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)}. Also an option, but doing it here wont affect the cache.
+     // refetchInterval: 50000
+  });
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axios.get(`/shifts/admin/all`);
+  //       setAllShiftsByDay(mapObjectsToDate(res.data));
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   function openEditModal() {
     setEditModalVisible(true);
@@ -48,8 +69,8 @@ function AllShifts() {
         {thisWeekDates.map((date) => (
           <div>
             <p>{date}</p>
-            {allShiftsByDay[date] ? (
-              allShiftsByDay[date].map((shift) => (
+            {allShiftsData && allShiftsData[date] ? (
+              allShiftsData[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>
                   <SingleAllShift

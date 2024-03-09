@@ -3,6 +3,10 @@ import styles from "./EditShiftModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { format } from "date-fns";
+import {
+
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export default function EditShiftModal(props) {
   const editShiftDefaultValues = {
@@ -14,6 +18,8 @@ export default function EditShiftModal(props) {
   const [editShiftInputs, setEditShiftInputs] = useState({
     editShiftDefaultValues,
   });
+
+  const queryClient = useQueryClient(); // gets the queryclient
 
   useEffect(() => {
     // this is just for now, until I figure out how the real input is going to work
@@ -45,7 +51,8 @@ export default function EditShiftModal(props) {
 
       const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
       toggleModal();
-      window.location.reload();
+      queryClient.invalidateQueries();
+      props.closeModal();
     } catch (err) {
       console.log(err);
     }

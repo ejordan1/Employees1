@@ -40,7 +40,7 @@ function MyShifts() {
   const {
     data: myShiftsData,
     error: myShiftsError, // not tested
-    isLoading: myShiftsIsLoadingError, // not tested
+    isLoading: myShiftsIsLoading, // not tested
   } = useQuery({
     queryKey: ["myshifts"],
     queryFn: fetchMyShifts,

@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import "./AddShiftModal.module.scss";
 import axios from "axios";
 import styles from "./AddShiftModal.module.scss";
+import {
+
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export default function AddShiftModal() {
   const [modal, setModal] = useState(false);
+
+  const queryClient = useQueryClient(); // gets the queryclient
 
   const [createShiftInputs, setCreateShiftInputs] = useState({
     startdatetime: 0,
@@ -41,7 +47,8 @@ export default function AddShiftModal() {
         uid: createShiftInputs.uid,
       };
       const res = await axios.post(`/shifts/admin/add`, bodyvalues);
-      window.location.reload();
+      queryClient.invalidateQueries();
+      toggleModal();
     } catch (err) {
       console.log(err);
     }
