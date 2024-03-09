@@ -9,7 +9,7 @@ import AllShifts from "./Components/AllShifts";
 import AllPerms from "./Components/AllPerms";
 import MyPerms from "./Components/MyPerms";
 import { UserContext } from "./Contexts/UserContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   useQuery,
@@ -24,8 +24,21 @@ function App() {
   const [username, setUserName] = useState("john");
   const queryClient = useQueryClient(); // gets the queryclient
   // also can use axios to fetch
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["todo"],
+  // const { data, error, isLoading } = useQuery({
+  //   queryKey: ["todo"],
+  //   queryFn: () =>
+  //     fetch("https://jsonplaceholder.typicode.com/todos").then((res) =>
+  //       res.json()
+  //     ),
+  //     // staleTime: 4000, // 4 seconds. if there is no change in the query, will refetch every 4 seconds,
+  //     // under certain conditions: you switch tabs, the component is re-mounted, etc.
+  //     // can setup default staletime:
+      
+  //     refetchInterval: 50000 //will refetch data every 4 seconds
+  // }); // querykey refers one key in query so it knows which it is tied to
+
+  const { data: data2, error, isLoading } = useQuery({
+    queryKey: ["todo2"],
     queryFn: () =>
       fetch("https://jsonplaceholder.typicode.com/todos").then((res) =>
         res.json()
@@ -34,8 +47,9 @@ function App() {
       // under certain conditions: you switch tabs, the component is re-mounted, etc.
       // can setup default staletime:
       
-      refetchInterval: 4000 //will refetch data every 4 seconds
-  }); // querykey refers one key in query so it knows which it is tied to
+      refetchInterval: 50000 //will refetch data every 4 seconds
+  });
+
 
 
   const { mutate, isPending, isError, isSuccess } = useMutation({
@@ -76,10 +90,11 @@ function App() {
           <Route exact path="/allperms" element={<AllPerms />} />
         </Routes>
         <div className="App">
+
           <p>data query test</p>
           {isPending && <p>data is being added</p>}
-          {data &&
-            data.map((todo) => (
+          {data2 &&
+            data2.map((todo) => (
               <div>
                 todod id: {todo.id}, title: {todo.title}
                 <button
