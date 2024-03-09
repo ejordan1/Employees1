@@ -19,7 +19,7 @@ import {
 function MyShifts() {
   //const [myShiftsByDay, setMyShiftsByDay] = useState({});
 
-  const [availableShifts, setAvailableShiftsByDay] = useState([]);
+  // const [availableShifts, setAvailableShiftsByDay] = useState([]);
 
   const [pickupModalVisible, setPickupModalVisible] = useState(false);
 
@@ -29,88 +29,53 @@ function MyShifts() {
 
   const [modalDropShift, setModalDropShift] = useState(null);
 
-  const [username, setUserName] = useState("john");
+  // const [username, setUserName] = useState("john");
   const queryClient = useQueryClient(); // gets the queryclient
 
-  const fetchShifts = async () => {
+  const fetchMyShifts = async () => {
     const res = await axios.get(`/shifts/myshifts`);
-    //const res =  fetch("https://jsonplaceholder.typicode.com/todos");
     return mapObjectsToDate(res.data);
-    // let resSorted = mapObjectsToDate(res.data)
-    // return resSorted.json();
   };
-  // also can use axios to fetch
+
   const {
-    data: shiftsData,
-    error,
-    isLoading,
+    data: myShiftsData,
+    error: myShiftsError, // not tested
+    isLoading: myShiftsIsLoadingError, // not tested
   } = useQuery({
     queryKey: ["myshifts"],
-    queryFn: fetchShifts,
-    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)},
-    // staleTime: 4000, // 4 seconds. if there is no change in the query, will refetch every 4 seconds,
-    // under certain conditions: you switch tabs, the component is re-mounted, etc.
-    // can setup default staletime:
-
-    // refetchInterval: 50000
+    queryFn: fetchMyShifts,
+    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)}. Also an option, but doing it here wont affect the cache.
+     // refetchInterval: 50000
   });
 
-  const { data: data2 } = useQuery({
-    queryKey: ["todo2"],
-    queryFn: () =>
-      fetch("https://jsonplaceholder.typicode.com/todos").then((res) =>
-        res.json()
-      ),
-    // staleTime: 4000, // 4 seconds. if there is no change in the query, will refetch every 4 seconds,
-    // under certain conditions: you switch tabs, the component is re-mounted, etc.
-    // can setup default staletime:
+  const fetchAvailableShifts = async () => {
+    const res = await axios.get(`/shifts/available`);
+    return mapObjectsToDate(res.data);
+  };
 
-    refetchInterval: 50000, //will refetch data every 4 seconds
+  const {
+    data: availableShiftsData,
+    error: availableShiftsError, // not tested
+    isLoading: availableShiftsIsLoadingError, // not tested
+  } = useQuery({
+    queryKey: ["availableshifts"],
+    queryFn: fetchAvailableShifts,
+    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)}. Also an option, but doing it here wont affect the cache.
+     // refetchInterval: 50000
   });
-
-  // try select with what they ewre doing to the object, see if i can get it working
-
-  // const ShiftsQuery = () => {
-
-  //   const { data, error, isLoading } = useQuery({
-  //     queryKey: ["myshifts"],
-  //     fetchShifts,
-  //       // staleTime: 4000, // 4 seconds. if there is no change in the query, will refetch every 4 seconds,
-  //       // under certain conditions: you switch tabs, the component is re-mounted, etc.
-  //       // can setup default staletime:
-
-  //       refetchInterval: 1000 //will refetch data every 4 seconds
-  //   });
-
-  // }
-  // ShiftsQuery();
+  
 
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
-  //       const res = await axios.get(`/shifts/myshifts`);
-
-  //       setMyShiftsByDay(mapObjectsToDate(res.data));
-
-  //       console.log(myShiftsByDay);
+  //       const res = await axios.get(`/shifts/available`);
+  //       setAvailableShiftsByDay(mapObjectsToDate(res.data));
   //     } catch (err) {
   //       console.log(err);
   //     }
   //   };
   //   fetchData();
   // }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`/shifts/available`);
-        setAvailableShiftsByDay(mapObjectsToDate(res.data));
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, []);
 
   const closePickupModal = () => {
     setPickupModalVisible(false);
@@ -136,14 +101,6 @@ function MyShifts() {
         shift={modalPickupShift}
       ></PickupShiftModal>
 
-    {/* <p>DATA 2:</p>
-      {data2 &&
-        data2.map((todo) => (
-          <div>
-            todod id: {todo.id}, title: {todo.title}
-          </div>
-        ))} */}
-
       <DropShiftModal
         isVisible={dropModalVisible}
         closeModal={closeDropModal}
@@ -157,8 +114,8 @@ function MyShifts() {
         {thisWeekDates.map((date) => (
           <div>
             <div>{date}</div>
-            {shiftsData && shiftsData[date] ? (
-              shiftsData[date].map((shift) => (
+            {myShiftsData && myShiftsData[date] ? (
+              myShiftsData[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>
                   <SingleMyShift
@@ -171,8 +128,8 @@ function MyShifts() {
             ) : (
               <p>no shifts</p>
             )}
-            {availableShifts[date] ? (
-              availableShifts[date].map((shift) => (
+            {availableShiftsData && availableShiftsData[date] ? (
+              availableShiftsData[date].map((shift) => (
                 <div>
                   <p>{shift.id}</p>
                   <SingleAvailableShift

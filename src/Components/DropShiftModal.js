@@ -3,6 +3,10 @@ import axios from "axios";
 import styles from "./PickupShiftModal.module.scss";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
+import {
+
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export default function PickupShiftModal(props) {
   if (props.isVisible) {
@@ -11,6 +15,8 @@ export default function PickupShiftModal(props) {
     document.body.classList.remove("active-modal");
   }
 
+  const queryClient = useQueryClient(); // gets the queryclient
+
   const handleDropSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -18,7 +24,8 @@ export default function PickupShiftModal(props) {
         id: props.shift.id,
       };
       const res = await axios.put(`/shifts/drop`, bodyvalues);
-      window.location.reload();
+      queryClient.invalidateQueries();
+      props.closeModal();
     } catch (err) {
       console.log(err);
     }

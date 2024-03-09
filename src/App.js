@@ -47,7 +47,7 @@ function App() {
       // under certain conditions: you switch tabs, the component is re-mounted, etc.
       // can setup default staletime:
       
-      refetchInterval: 50000 //will refetch data every 4 seconds
+      // refetchInterval: 50000 //will refetch data every 4 seconds
   });
 
 

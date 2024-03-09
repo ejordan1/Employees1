@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./PickupShiftModal.module.scss";
 import PropTypes from "prop-types";
+import {
+
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export default function PickupShiftModal(props) {
   if (props.isVisible) {
@@ -9,6 +13,8 @@ export default function PickupShiftModal(props) {
   } else {
     document.body.classList.remove("active-modal");
   }
+
+  const queryClient = useQueryClient(); // gets the queryclient
 
   const handlePickupSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +26,11 @@ export default function PickupShiftModal(props) {
         position: props.shift.position,
       };
       const res = await axios.put(`/shifts/pickup`, bodyvalues);
-      window.location.reload();
+      queryClient.invalidateQueries();
+      props.closeModal();
+      
+      // here I could also create that notification popup coming down from the 
+      // list of notifications. 
     } catch (err) {
       console.log(err);
     }
