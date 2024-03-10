@@ -4,9 +4,15 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export default function EditPermModal(props) {
   const navigate = useNavigate();
+
+  const addPermUserMutation = useMutation(addPermUser);
 
   const editPermDefaultValues = {
     startdatetime: 0,
@@ -50,6 +56,12 @@ export default function EditPermModal(props) {
     uid: 0,
   });
 
+  const addPermUser = async (bodyValues) => {
+    const res = await axios.post('/users', bodyValues);
+    return res.data;
+  };
+  
+
   const handleSubmitCreateUserPerm = async (e) => {
     e.preventDefault();
     try {
@@ -57,8 +69,9 @@ export default function EditPermModal(props) {
         permid: props.perm.id,
         uid: createUserPermInputs.uid,
       };
-      const res = await axios.post(`/perms_users/add`, bodyvalues);
-      window.location.reload();
+      // const res = await axios.post(`/perms_users/add`, bodyvalues);
+      await addPermUserMutation.mutateAsync(bodyvalues);
+      // window.location.reload();
     } catch (err) {
       console.log(err);
     }

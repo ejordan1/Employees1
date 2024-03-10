@@ -1,5 +1,6 @@
 import { db } from "../db.js";
 import jwt from "jsonwebtoken";
+import { createPermDictFromData } from "../Libraries/PermOperations.js";
 
 export const getPerms = (req, res) => {
   const token = req.cookies.access_token;
@@ -32,8 +33,8 @@ export const getPerms = (req, res) => {
 
         db.query(getAllPermsQuery, (err, data) => {
           if (err) return res.status(500).send(err);
-
-          return res.status(200).json(data);
+          let PermsOrganizedById = createPermDictFromData(data);
+          return res.status(200).json(PermsOrganizedById);
         });
       }
     });
