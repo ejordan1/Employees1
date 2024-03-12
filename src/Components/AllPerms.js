@@ -29,9 +29,17 @@ function AllPerms() {
 
   const fetchAllPermsUsers = async () => {
     const res = await axios.get(`/perms`);
+    refreshModalPerm(res.data); // not the right place to do this
     return res.data;
     //return mapObjectsToDate(res.data);
   };
+
+  const refreshModalPerm = (permsById) => {
+    if (modalEditPerm) // verify that it goes to null in between
+    {
+      setModalEditPerm(permsById[modalEditPerm.id])
+    }
+  }
 
   const {
     data: allPermsData,
@@ -40,11 +48,14 @@ function AllPerms() {
   } = useQuery({
     queryKey: ["allPermsUsers"],
     queryFn: fetchAllPermsUsers,
-    select: (data)=> mapObjectsToDate(Object.values(data)) // does not affect cache (according to docs)
-     // refetchInterval: 50000
+    select: (data)=> mapObjectsToDate(Object.values(data)), // does not affect cache (according to docs)
+     
+    
+    // refetchInterval: 50000
   });
 
   const closeModal = () => {
+    // here possibly erase perm data
     setEditModalVisible(false);
   };
 

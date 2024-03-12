@@ -12,7 +12,15 @@ import {
 export default function EditPermModal(props) {
   const navigate = useNavigate();
 
-  const addPermUserMutation = useMutation(addPermUser);
+  const queryClient = useQueryClient();
+
+  const {mutate, isPending, isError, isSuccess} = useMutation({
+    mutationFn: (bodyValues) => addPermUser(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
+  });
 
   const editPermDefaultValues = {
     startdatetime: 0,
@@ -21,6 +29,12 @@ export default function EditPermModal(props) {
     position: "",
     permUsers: {},
   };
+
+  const addPermUser = async (bodyValues) => {
+    const res = await axios.post(`/perms_users/add`, bodyValues);
+    return res.data;
+  };
+
   const [editPermInputs, setEditPermInputs] = useState({
     editPermDefaultValues,
   });
@@ -56,10 +70,7 @@ export default function EditPermModal(props) {
     uid: 0,
   });
 
-  const addPermUser = async (bodyValues) => {
-    const res = await axios.post('/users', bodyValues);
-    return res.data;
-  };
+
   
 
   const handleSubmitCreateUserPerm = async (e) => {
@@ -70,7 +81,8 @@ export default function EditPermModal(props) {
         uid: createUserPermInputs.uid,
       };
       // const res = await axios.post(`/perms_users/add`, bodyvalues);
-      await addPermUserMutation.mutateAsync(bodyvalues);
+      mutate(bodyvalues);
+      // await addPermUserMutation.mutateAsync(bodyvalues);
       // window.location.reload();
     } catch (err) {
       console.log(err);

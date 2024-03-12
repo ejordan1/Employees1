@@ -47,9 +47,18 @@ export const addPerm_User = (req, res) => {
 
         db.query(q, [values], (err, data) => {
           if (err) return res.status(500).send(err);
-          if (data.affectedrows === 0)
+          if (data.affectedrows === 0){ // suggested affectedRows?
             return res.status(404).json("Did not affect any rows");
-          return res.status(200).json("perm_user has been added");
+          }
+
+          let nameQ = "SELECT firstname, lastname FROM employees1.users WHERE id = 5;"
+          db.query(nameQ, req.body.id, (err, dataName) => {
+            if (err) return res.status(500).send(err);
+            if (dataName.length === 0) {
+              return res.status(404).json("User not found");
+            }
+            return res.status(200).json(dataName);
+          })
         });
       }
     });
