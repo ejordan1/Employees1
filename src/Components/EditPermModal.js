@@ -14,11 +14,15 @@ export default function EditPermModal(props) {
 
   const queryClient = useQueryClient();
 
+  const [rerender, setRerender] = useState(0);
+
   const {mutate, isPending, isError, isSuccess} = useMutation({
     mutationFn: (bodyValues) => addPermUser(bodyValues),
     onSuccess: () => 
     {
       queryClient.invalidateQueries();
+
+      setRerender(prev => prev + 1);
     }
   });
 
@@ -239,7 +243,7 @@ export default function EditPermModal(props) {
                 </div>
 
                 <button className="close-modal" onClick={toggleModal}>
-                  CLOSE
+                  CLOSE, rerender: {props.rerender} {rerender}
                 </button>
               </div>
             </div>
@@ -254,4 +258,5 @@ EditPermModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   perm: PropTypes.object.isRequired,
+  rerender: PropTypes.number.isRequired,
 };
