@@ -167,8 +167,8 @@ export default function EditPermModal(props) {
                 <p>enddatetime: {format(props.perm.enddatetime, "HHmm")} </p>
                 <p>position: {props.perm.position} </p>
                 <p>slots: {props.perm.slots} </p>
-                {props.permUsers &&
-                  Object.entries(props.permUsers).map((keyvalue) => (
+                {props.perm.permUsers &&
+                  Object.entries(props.perm.permUsers).map((keyvalue) => (
                     <div>
                       <p>
                         {"perm_userid: " +
@@ -243,7 +243,7 @@ export default function EditPermModal(props) {
                 </div>
 
                 <button className="close-modal" onClick={toggleModal}>
-                  CLOSE, rerender: {props.rerender} {rerender}
+                  {/* CLOSE, rerender: {props.rerender} {rerender} */}
                 </button>
               </div>
             </div>
@@ -258,6 +258,5 @@ EditPermModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   perm: PropTypes.object.isRequired,
-  rerender: PropTypes.number.isRequired,
-  permUsers: PropTypes.object,
+  //rerender: PropTypes.number.isRequired,
 };
