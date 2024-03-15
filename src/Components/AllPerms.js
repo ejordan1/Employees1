@@ -22,6 +22,7 @@ function AllPerms() {
   const [allPermsAndPermsUsers, setAllPermsAndPermsUsers] = useState([]);
 
   const [modalEditPerm, setModalEditPerm] = useState(null);
+  const [modalPermUsers, setModalPermUsers] = useState(null);
 
   const [editModalVisible, setEditModalVisible] = useState(false);
 
@@ -40,6 +41,7 @@ function AllPerms() {
     if (editModalVisible) // verify that it goes to null in between
     {
       setModalEditPerm({ ... permsById[modalEditPerm.id]})
+      setModalPermUsers(permsById[modalEditPerm.id].permUsers)
       setRerender(rerender + 1);
     }
   }
@@ -84,6 +86,7 @@ function AllPerms() {
           closeModal={closeModal}
           perm={modalEditPerm}
           rerender={rerender}
+          permUsers={modalPermUsers}
         ></EditPermModal>
         <h1 className={styles.weekOfTitle}>Feburary 9 - Feburary 23</h1>
         <div className={styles.shiftsContainer}>

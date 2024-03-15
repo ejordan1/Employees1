@@ -167,8 +167,8 @@ export default function EditPermModal(props) {
                 <p>enddatetime: {format(props.perm.enddatetime, "HHmm")} </p>
                 <p>position: {props.perm.position} </p>
                 <p>slots: {props.perm.slots} </p>
-                {editPermInputs.permUsers &&
-                  Object.entries(editPermInputs.permUsers).map((keyvalue) => (
+                {props.permUsers &&
+                  Object.entries(props.permUsers).map((keyvalue) => (
                     <div>
                       <p>
                         {"perm_userid: " +
@@ -259,4 +259,5 @@ EditPermModal.propTypes = {
   closeModal: PropTypes.func.isRequired,
   perm: PropTypes.object.isRequired,
   rerender: PropTypes.number.isRequired,
+  permUsers: PropTypes.object,
 };
