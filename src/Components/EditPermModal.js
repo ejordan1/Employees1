@@ -14,15 +14,19 @@ export default function EditPermModal(props) {
 
   const queryClient = useQueryClient();
 
-  const [rerender, setRerender] = useState(0);
-
   const {mutate, isPending, isError, isSuccess} = useMutation({
     mutationFn: (bodyValues) => addPermUser(bodyValues),
     onSuccess: () => 
     {
       queryClient.invalidateQueries();
+    }
+  });
 
-      setRerender(prev => prev + 1);
+  const {mutate: mutateDeletePU, deletePUIsPending, deletePUisError, deletePUisSuccess} = useMutation({
+    mutationFn: (bodyValues) => deletePermUser(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
     }
   });
 
@@ -36,6 +40,11 @@ export default function EditPermModal(props) {
 
   const addPermUser = async (bodyValues) => {
     const res = await axios.post(`/perms_users/add`, bodyValues);
+    return res.data;
+  };
+
+  const deletePermUser = async (bodyValues) => {
+    const res = await axios.put(`/perms_users/delete`, bodyValues);
     return res.data;
   };
 
@@ -97,9 +106,10 @@ export default function EditPermModal(props) {
       const bodyvalues = {
         perm_userid: e.target.id,
       };
-      const res = await axios.put(`/perms_users/delete`, bodyvalues);
-      toggleModal();
-      window.location.reload();
+      mutateDeletePU(bodyvalues);
+      // const res = await axios.put(`/perms_users/delete`, bodyvalues);
+      // toggleModal();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
