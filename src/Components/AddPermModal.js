@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styles from "./AddPermModal.module.scss";
+import {
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 export default function AddPermModal() {
   const [modal, setModal] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const [createPermInputs, setCreatePermInputs] = useState({
     startdatetime: 0,
@@ -11,6 +17,20 @@ export default function AddPermModal() {
     position: "",
     slots: null,
   });
+
+  const {mutate, isPending, isError, isSuccess} = useMutation({
+    mutationFn: (bodyValues) => addPerm(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+      toggleModal();
+    }
+  });
+
+  const addPerm = async (bodyValues) => {
+    const res = await axios.post(`/perms`, bodyValues);
+    return res.data;
+  };
 
   const handleCreatePermChange = (e) => {
     setCreatePermInputs((prev) => ({
@@ -32,15 +52,16 @@ export default function AddPermModal() {
   const handleSubmitCreate = async (e) => {
     e.preventDefault();
     try {
-      const bodyvalues = {
+      const bodyValues = {
         // doing this later
-        startdatetime: "0997-01-04 07:23:44",
-        enddatetime: "0997-01-04 07:23:44",
+        startdatetime: "0997-01-02 07:23:44",
+        enddatetime: "0997-01-02 07:23:44",
         position: createPermInputs.position,
         slots: createPermInputs.slots,
       };
-      const res = await axios.post(`/perms`, bodyvalues);
-      window.location.reload();
+      //const res = await axios.post(`/perms`, bodyvalues);
+      // window.location.reload();
+      mutate(bodyValues);
     } catch (err) {
       console.log(err);
     }
