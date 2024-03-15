@@ -84,10 +84,8 @@ export default function EditPermModal(props) {
         permid: props.perm.id,
         uid: createUserPermInputs.uid,
       };
-      // const res = await axios.post(`/perms_users/add`, bodyvalues);
       mutate(bodyvalues);
       // await addPermUserMutation.mutateAsync(bodyvalues);
-      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -243,7 +241,7 @@ export default function EditPermModal(props) {
                 </div>
 
                 <button className="close-modal" onClick={toggleModal}>
-                  {/* CLOSE, rerender: {props.rerender} {rerender} */}
+                  CLOSE
                 </button>
               </div>
             </div>
@@ -258,5 +256,4 @@ EditPermModal.propTypes = {
   isVisible: PropTypes.bool.isRequired,
   closeModal: PropTypes.func.isRequired,
   perm: PropTypes.object.isRequired,
-  //rerender: PropTypes.number.isRequired,
 };
