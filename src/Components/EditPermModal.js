@@ -22,6 +22,14 @@ export default function EditPermModal(props) {
     }
   });
 
+  const {mutate: mutateDeletePerm, deletePermIsPending, deletePermIsError, deletePermIsSuccess} = useMutation({
+    mutationFn: (bodyValues) => deletePerm(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
+  });
+
   const {mutate: mutateDeletePU, deletePUIsPending, deletePUisError, deletePUisSuccess} = useMutation({
     mutationFn: (bodyValues) => deletePermUser(bodyValues),
     onSuccess: () => 
@@ -45,6 +53,11 @@ export default function EditPermModal(props) {
 
   const deletePermUser = async (bodyValues) => {
     const res = await axios.put(`/perms_users/delete`, bodyValues);
+    return res.data;
+  };
+
+  const deletePerm = async (bodyValues) => {
+    const res = await axios.put(`/perms/delete`, bodyValues);
     return res.data;
   };
 
@@ -144,9 +157,12 @@ export default function EditPermModal(props) {
         position: editPermInputs.position,
         slots: editPermInputs.slots,
       };
-      const res = await axios.put(`/perms/delete`, bodyvalues);
+      mutateDeletePerm(bodyvalues);
+      queryClient.invalidateQueries();
       toggleModal();
-      window.location.reload();
+      // const res = await axios.put(`/perms/delete`, bodyvalues);
+      // toggleModal();
+      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
