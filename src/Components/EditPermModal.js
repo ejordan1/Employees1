@@ -10,11 +10,63 @@ import {
 } from "@tanstack/react-query";
 
 export default function EditPermModal(props) {
-  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
+  
 
-  const {mutate, isPending, isError, isSuccess} = useMutation({
+  const editPermDefaultValues = {
+    startdatetime: 0,
+    enddatetime: 0,
+    slots: 0,
+    position: "",
+    permUsers: {},
+  };
+
+  const [editPermInputs, setEditPermInputs] = useState({
+    editPermDefaultValues,
+  });
+
+  const [createUserPermInputs, setCreateUserPermInputs] = useState({
+    uid: 0,
+  });
+
+
+  const handleEditPermChange = (e) => {
+    setEditPermInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleCreateUserPermChange = (e) => {
+    setCreateUserPermInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+
+  const addPermUser = async (bodyValues) => {
+    const res = await axios.post(`/perms_users/add`, bodyValues);
+    return res.data;
+  };
+
+  const deletePermUser = async (bodyValues) => {
+    const res = await axios.put(`/perms_users/delete`, bodyValues);
+    return res.data;
+  };
+
+  const deletePerm = async (bodyValues) => {
+    const res = await axios.put(`/perms/delete`, bodyValues);
+    return res.data;
+  };
+
+  const editPerm = async (bodyValues) => {
+    const res = await axios.put(`/perms/edit`, bodyValues);
+    return res.data;
+  };
+
+  const {mutate: mutateAddPU, addPUIsPending, addPIIsError, addPUIsSuccess} = useMutation({
     mutationFn: (bodyValues) => addPermUser(bodyValues),
     onSuccess: () => 
     {
@@ -38,31 +90,12 @@ export default function EditPermModal(props) {
     }
   });
 
-  const editPermDefaultValues = {
-    startdatetime: 0,
-    enddatetime: 0,
-    slots: 0,
-    position: "",
-    permUsers: {},
-  };
-
-  const addPermUser = async (bodyValues) => {
-    const res = await axios.post(`/perms_users/add`, bodyValues);
-    return res.data;
-  };
-
-  const deletePermUser = async (bodyValues) => {
-    const res = await axios.put(`/perms_users/delete`, bodyValues);
-    return res.data;
-  };
-
-  const deletePerm = async (bodyValues) => {
-    const res = await axios.put(`/perms/delete`, bodyValues);
-    return res.data;
-  };
-
-  const [editPermInputs, setEditPermInputs] = useState({
-    editPermDefaultValues,
+  const {mutate: mutateEditPerm, editPermIsPending, editPermIsError, editPermIsSuccess} = useMutation({
+    mutationFn: (bodyValues) => editPerm(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
   });
 
   useEffect(() => {
@@ -78,26 +111,6 @@ export default function EditPermModal(props) {
     }
   }, [props.isVisible]);
 
-  const handleEditPermChange = (e) => {
-    setEditPermInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleCreateUserPermChange = (e) => {
-    setCreateUserPermInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const [createUserPermInputs, setCreateUserPermInputs] = useState({
-    uid: 0,
-  });
-
-
-  
 
   const handleSubmitCreateUserPerm = async (e) => {
     e.preventDefault();
@@ -106,8 +119,7 @@ export default function EditPermModal(props) {
         permid: props.perm.id,
         uid: createUserPermInputs.uid,
       };
-      mutate(bodyvalues);
-      // await addPermUserMutation.mutateAsync(bodyvalues);
+      mutateAddPU(bodyvalues);
     } catch (err) {
       console.log(err);
     }
@@ -120,9 +132,6 @@ export default function EditPermModal(props) {
         perm_userid: e.target.id,
       };
       mutateDeletePU(bodyvalues);
-      // const res = await axios.put(`/perms_users/delete`, bodyvalues);
-      // toggleModal();
-      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -139,9 +148,9 @@ export default function EditPermModal(props) {
         slots: editPermInputs.slots,
       };
 
-      const res = await axios.put(`/perms/edit`, bodyvalues);
-      toggleModal();
-      window.location.reload();
+      mutateEditPerm(bodyvalues);
+      queryClient.invalidateQueries();
+      // toggleModal();
     } catch (err) {
       console.log(err);
     }
@@ -160,9 +169,6 @@ export default function EditPermModal(props) {
       mutateDeletePerm(bodyvalues);
       queryClient.invalidateQueries();
       toggleModal();
-      // const res = await axios.put(`/perms/delete`, bodyvalues);
-      // toggleModal();
-      // window.location.reload();
     } catch (err) {
       console.log(err);
     }
