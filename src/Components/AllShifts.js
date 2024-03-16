@@ -33,21 +33,7 @@ function AllShifts() {
   } = useQuery({
     queryKey: ["allshifts"],
     queryFn: fetchAllShifts,
-    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)}. Also an option, but doing it here wont affect the cache.
-     // refetchInterval: 50000
   });
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axios.get(`/shifts/admin/all`);
-  //       setAllShiftsByDay(mapObjectsToDate(res.data));
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
   function openEditModal() {
     setEditModalVisible(true);

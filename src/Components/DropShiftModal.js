@@ -4,8 +4,8 @@ import styles from "./PickupShiftModal.module.scss";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 import {
-
   useQueryClient,
+  useMutation
 } from "@tanstack/react-query";
 
 export default function PickupShiftModal(props) {
@@ -17,13 +17,26 @@ export default function PickupShiftModal(props) {
 
   const queryClient = useQueryClient(); // gets the queryclient
 
+  const dropShift = async (bodyValues) => {
+    const res = await axios.put(`/shifts/drop`, bodyValues);
+    return res.data;
+  };
+
+  const {mutate: mutateDropShift, dropShiftIsPending, dropShiftIsError, dropShiftIsSuccess} = useMutation({
+    mutationFn: (bodyValues) => dropShift(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
+  });
+
   const handleDropSubmit = async (e) => {
     e.preventDefault();
     try {
       const bodyvalues = {
         id: props.shift.id,
       };
-      const res = await axios.put(`/shifts/drop`, bodyvalues);
+      mutateDropShift(bodyvalues);
       queryClient.invalidateQueries();
       props.closeModal();
     } catch (err) {

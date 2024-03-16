@@ -62,9 +62,6 @@ export default function AddShiftModal() {
       mutateAddShift(bodyvalues);
       queryClient.invalidateQueries();
       toggleModal();
-      // const res = await axios.post(`/shifts/admin/add`, bodyvalues);
-      // queryClient.invalidateQueries();
-      // toggleModal();
     } catch (err) {
       console.log(err);
     }

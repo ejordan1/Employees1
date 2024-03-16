@@ -17,9 +17,6 @@ import {
 } from "@tanstack/react-query";
 
 function MyShifts() {
-  //const [myShiftsByDay, setMyShiftsByDay] = useState({});
-
-  // const [availableShifts, setAvailableShiftsByDay] = useState([]);
 
   const [pickupModalVisible, setPickupModalVisible] = useState(false);
 
@@ -29,8 +26,7 @@ function MyShifts() {
 
   const [modalDropShift, setModalDropShift] = useState(null);
 
-  // const [username, setUserName] = useState("john");
-  const queryClient = useQueryClient(); // gets the queryclient
+  const queryClient = useQueryClient();
 
   const fetchMyShifts = async () => {
     const res = await axios.get(`/shifts/myshifts`);
@@ -44,8 +40,6 @@ function MyShifts() {
   } = useQuery({
     queryKey: ["myshifts"],
     queryFn: fetchMyShifts,
-    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)}. Also an option, but doing it here wont affect the cache.
-     // refetchInterval: 50000
   });
 
   const fetchAvailableShifts = async () => {
@@ -60,22 +54,8 @@ function MyShifts() {
   } = useQuery({
     queryKey: ["availableshifts"],
     queryFn: fetchAvailableShifts,
-    // select: (shiftsData)=> {mapObjectsToDate(shiftsData)}. Also an option, but doing it here wont affect the cache.
      // refetchInterval: 50000
   });
-  
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axios.get(`/shifts/available`);
-  //       setAvailableShiftsByDay(mapObjectsToDate(res.data));
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
   const closePickupModal = () => {
     setPickupModalVisible(false);

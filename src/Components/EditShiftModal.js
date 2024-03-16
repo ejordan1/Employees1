@@ -77,7 +77,6 @@ export default function EditShiftModal(props) {
         position: editShiftInputs.position,
       };
       mutateEditShift(bodyvalues);
-      //const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
       toggleModal();
       queryClient.invalidateQueries();
       props.closeModal();
@@ -100,11 +99,9 @@ export default function EditShiftModal(props) {
         uid: editShiftInputs.uid,
         id: props.shift.id,
       };
-      // const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
       mutateDeleteShift(bodyvalues);
       queryClient.invalidateQueries();
       toggleModal();
-      //window.location.reload();
     } catch (err) {
       console.log(err);
     }

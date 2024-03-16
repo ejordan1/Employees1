@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./MyPerms.module.scss";
 
+// not using this for now
 function MyPerms() {
   const [myPerms, setMyPerms] = useState([]);
 
