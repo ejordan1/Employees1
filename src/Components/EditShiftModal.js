@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import {
 
   useQueryClient,
+  useMutation,
 } from "@tanstack/react-query";
 
 export default function EditShiftModal(props) {
@@ -20,6 +21,33 @@ export default function EditShiftModal(props) {
   });
 
   const queryClient = useQueryClient(); // gets the queryclient
+
+  const editShift = async (bodyValues) => {
+    const res = await axios.put(`/shifts/admin/edit`, bodyValues);
+    return res.data;
+  };
+
+  const {mutate: mutateEditShift, editShiftIsPending, editShiftIsError, editShiftIsSuccess} = useMutation({
+    mutationFn: (bodyValues) => editShift(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
+  });
+
+
+  const deleteShift = async (bodyValues) => {
+    const res = await axios.put(`/shifts/admin/delete`, bodyValues);
+    return res.data;
+  };
+
+  const {mutate: mutateDeleteShift, deleteShiftIsPending, deleteShiftIsError, deleteShiftIsSuccess} = useMutation({
+    mutationFn: (bodyValues) => deleteShift(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
+  });
 
   useEffect(() => {
     // this is just for now, until I figure out how the real input is going to work
@@ -42,14 +70,14 @@ export default function EditShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: "2024-03-04 13:23:44", //editShiftInputs.startdatetime,
-        enddatetime: "2024-03-04 13:24:44", //editShiftInputs.enddatetime,
+        startdatetime: "2024-03-12 13:23:44", //editShiftInputs.startdatetime,
+        enddatetime: "2024-03-12 13:24:44", //editShiftInputs.enddatetime,
         uid: editShiftInputs.uid,
         id: props.shift.id,
         position: editShiftInputs.position,
       };
-
-      const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
+      mutateEditShift(bodyvalues);
+      //const res = await axios.put(`/shifts/admin/edit`, bodyvalues);
       toggleModal();
       queryClient.invalidateQueries();
       props.closeModal();
@@ -72,9 +100,11 @@ export default function EditShiftModal(props) {
         uid: editShiftInputs.uid,
         id: props.shift.id,
       };
-      const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+      // const res = await axios.put(`/shifts/admin/delete`, bodyvalues);
+      mutateDeleteShift(bodyvalues);
+      queryClient.invalidateQueries();
       toggleModal();
-      window.location.reload();
+      //window.location.reload();
     } catch (err) {
       console.log(err);
     }

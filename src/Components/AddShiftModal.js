@@ -3,7 +3,7 @@ import "./AddShiftModal.module.scss";
 import axios from "axios";
 import styles from "./AddShiftModal.module.scss";
 import {
-
+  useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 
@@ -17,6 +17,19 @@ export default function AddShiftModal() {
     enddatetime: 0,
     position: "",
     uid: null,
+  });
+
+  const addShift = async (bodyValues) => {
+    const res = await axios.post(`/shifts/admin/add`, bodyValues);
+    return res.data;
+  };
+
+  const {mutate: mutateAddShift, addShiftIsPending, addShiftIsError, addShiftIsSuccess} = useMutation({
+    mutationFn: (bodyValues) => addShift(bodyValues),
+    onSuccess: () => 
+    {
+      queryClient.invalidateQueries();
+    }
   });
 
   const handleCreateShiftChange = (e) => {
@@ -41,14 +54,17 @@ export default function AddShiftModal() {
     try {
       const bodyvalues = {
         // doing this later
-        startdatetime: "2024-03-04 07:23:44",
-        enddatetime: "2024-03-04 15:23:44",
+        startdatetime: "2024-03-12 07:23:44",
+        enddatetime: "2024-03-12 15:23:44",
         position: createShiftInputs.position,
         uid: createShiftInputs.uid,
       };
-      const res = await axios.post(`/shifts/admin/add`, bodyvalues);
+      mutateAddShift(bodyvalues);
       queryClient.invalidateQueries();
       toggleModal();
+      // const res = await axios.post(`/shifts/admin/add`, bodyvalues);
+      // queryClient.invalidateQueries();
+      // toggleModal();
     } catch (err) {
       console.log(err);
     }
