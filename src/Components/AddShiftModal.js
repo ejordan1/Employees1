@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddShiftModal.module.scss";
 import axios from "axios";
 import styles from "./AddShiftModal.module.scss";
-import {
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
+import { addDays, isBefore } from "date-fns";
 
 export default function AddShiftModal() {
   const [modal, setModal] = useState(false);
 
   const queryClient = useQueryClient(); // gets the queryclient
+
+  const [startDateTime, setStartDateTime] = useState(new Date());
+  const [endDateTime, setEndDateTime] = useState(new Date());
 
   const [createShiftInputs, setCreateShiftInputs] = useState({
     startdatetime: 0,
@@ -24,12 +27,16 @@ export default function AddShiftModal() {
     return res.data;
   };
 
-  const {mutate: mutateAddShift, addShiftIsPending, addShiftIsError, addShiftIsSuccess} = useMutation({
+  const {
+    mutate: mutateAddShift,
+    addShiftIsPending,
+    addShiftIsError,
+    addShiftIsSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => addShift(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 
   const handleCreateShiftChange = (e) => {
@@ -49,13 +56,28 @@ export default function AddShiftModal() {
     document.body.classList.remove("active-modal");
   }
 
+  function adjustEndDate ()
+  {
+    let tempDate = new Date();
+    tempDate.setDate(startDateTime.getDate());
+    tempDate.setHours(endDateTime.getHours());
+    tempDate.setMinutes(endDateTime.getMinutes());
+    if (!isBefore(startDateTime, tempDate))
+    {
+      tempDate = addDays(tempDate, 1)
+    }
+    console.log(tempDate);
+    setEndDateTime(tempDate);
+  }
+
   const handleSubmitCreate = async (e) => {
     e.preventDefault();
     try {
+      adjustEndDate();
       const bodyvalues = {
         // doing this later
-        startdatetime: "2024-03-12 07:23:44",
-        enddatetime: "2024-03-12 15:23:44",
+        startdatetime: startDateTime.toString(),
+        enddatetime: endDateTime.toString(),
         position: createShiftInputs.position,
         uid: createShiftInputs.uid,
       };
@@ -111,6 +133,34 @@ export default function AddShiftModal() {
                 <button onClick={handleSubmitCreate}>Create Shift</button>
               </form>
             </div>
+
+
+            <p>Date</p>
+            <DatePicker
+              selected={startDateTime}
+              onChange={(date) => setStartDateTime(date)}
+              dateFormat="MMMM d, yyyy"
+            />
+<p>Start Time</p>
+            <DatePicker
+              selected={startDateTime}
+              onChange={(date) => setStartDateTime(date)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
+<p>End Time</p>
+            <DatePicker
+              selected={endDateTime}
+              onChange={(date) => setEndDateTime(date)}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
 
             <button className="close-modal" onClick={toggleModal}>
               CLOSE add
