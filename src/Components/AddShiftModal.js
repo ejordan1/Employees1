@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 import { format, addDays, isBefore } from "date-fns";
 import { Value } from "sass";
+import { getAdjustedEndDate } from "../Libraries/DateOperations";
 
 export default function AddShiftModal() {
   const [modal, setModal] = useState(false);
@@ -72,18 +73,18 @@ export default function AddShiftModal() {
     setEndDateTime(getAdjustedEndDate(startDateTime, date));
   }
 
-  function getAdjustedEndDate(startDate, endDate) {
-    let tempDate = new Date();
-    // need to look at month here
-    tempDate.setDate(startDate.getDate());
-    tempDate.setHours(endDate.getHours());
-    tempDate.setMinutes(endDate.getMinutes());
-    if (!isBefore(startDate, tempDate)) {
-      tempDate = addDays(tempDate, 1);
-    }
-    console.log("adjusted endate: " + tempDate);
-    return tempDate;
-  }
+  // function getAdjustedEndDate(startDate, endDate) {
+  //   let tempDate = new Date();
+  //   // need to look at month here
+  //   tempDate.setDate(startDate.getDate());
+  //   tempDate.setHours(endDate.getHours());
+  //   tempDate.setMinutes(endDate.getMinutes());
+  //   if (!isBefore(startDate, tempDate)) {
+  //     tempDate = addDays(tempDate, 1);
+  //   }
+  //   console.log("adjusted endate: " + tempDate);
+  //   return tempDate;
+  // }
 
   const handleSubmitCreate = async (e) => {
     e.preventDefault();

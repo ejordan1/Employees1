@@ -3,22 +3,28 @@ import styles from "./EditShiftModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { format } from "date-fns";
-import {
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { getAdjustedEndDate } from "../Libraries/DateOperations";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 
-  useQueryClient,
-  useMutation,
-} from "@tanstack/react-query";
+
 
 export default function EditShiftModal(props) {
-  const editShiftDefaultValues = {
-    startdatetime: 0,
-    enddatetime: 0,
-    position: "",
-    uid: null,
-  };
-  const [editShiftInputs, setEditShiftInputs] = useState({
-    editShiftDefaultValues,
-  });
+  // const editShiftDefaultValues = {
+  //   startdatetime: 0,
+  //   enddatetime: 0,
+  //   position: "",
+  //   uid: null,
+  // };
+  // const [editShiftInputs, setEditShiftInputs] = useState({
+  //   editShiftDefaultValues,
+  // });
+
+  const [startDateTime, setStartDateTime] = useState(new Date());
+const [endDateTime, setEndDateTime] = useState(new Date());
+const [position, setPosition] = useState("");
+const [uid, setUID] = useState(0);
 
   const queryClient = useQueryClient(); // gets the queryclient
 
@@ -27,54 +33,72 @@ export default function EditShiftModal(props) {
     return res.data;
   };
 
-  const {mutate: mutateEditShift, editShiftIsPending, editShiftIsError, editShiftIsSuccess} = useMutation({
+  const {
+    mutate: mutateEditShift,
+    editShiftIsPending,
+    editShiftIsError,
+    editShiftIsSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => editShift(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
-
 
   const deleteShift = async (bodyValues) => {
     const res = await axios.put(`/shifts/admin/delete`, bodyValues);
     return res.data;
   };
 
-  const {mutate: mutateDeleteShift, deleteShiftIsPending, deleteShiftIsError, deleteShiftIsSuccess} = useMutation({
+  const {
+    mutate: mutateDeleteShift,
+    deleteShiftIsPending,
+    deleteShiftIsError,
+    deleteShiftIsSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => deleteShift(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 
   useEffect(() => {
+    setStartDateTime(props.shift && props.shift.startdatetime);
+    setEndDateTime(props.shift && props.shift.enddatetime);
+    setPosition(props.shift && props.shift.position);
+    setUID(props.shift && props.shift.uid);
     // this is just for now, until I figure out how the real input is going to work
-    setEditShiftInputs({
-      startdatetime: props.shift && format(props.shift.startdatetime, "HHmm"),
-      enddatetime: props.shift && format(props.shift.enddatetime, "HHmm"),
-      position: props.shift && props.shift.position,
-      uid: props.shift && props.shift.uid,
-    });
+    // setEditShiftInputs({
+    //   startdatetime: props.shift && format(props.shift.startdatetime, "HHmm"),
+    //   enddatetime: props.shift && format(props.shift.enddatetime, "HHmm"),
+    //   position: props.shift && props.shift.position,
+    //   uid: props.shift && props.shift.uid,
+    // });
   }, [props.isVisible]);
 
-  const handleEditShiftChange = (e) => {
-    setEditShiftInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  // const handleEditShiftChange = (e) => {
+  //   setEditShiftInputs((prev) => ({
+  //     ...prev,
+  //     [e.target.name]: e.target.value,
+  //   }));
+  // };
+
+  function setInputsToDefault() {
+    setStartDateTime(new Date());
+    setEndDateTime(new Date());
+    setPosition(0);
+    setUID(0);
+  }
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: "2024-03-12 13:23:44", //editShiftInputs.startdatetime,
-        enddatetime: "2024-03-12 13:24:44", //editShiftInputs.enddatetime,
-        uid: editShiftInputs.uid,
+        startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
+        enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
+        uid: uid,
         id: props.shift.id,
-        position: editShiftInputs.position,
+        position: position,
       };
       mutateEditShift(bodyvalues);
       toggleModal();
@@ -86,17 +110,28 @@ export default function EditShiftModal(props) {
   };
 
   const toggleModal = () => {
-    setEditShiftInputs(editShiftDefaultValues);
+    setInputsToDefault();
     props.closeModal();
   };
+
+  function handleSetStart(date) {
+    setStartDateTime(date);
+    setEndDateTime(getAdjustedEndDate(date, endDateTime));
+  }
+
+  function handleSetEnd(date) {
+    setEndDateTime(getAdjustedEndDate(startDateTime, date));
+  }
+
 
   const handleSubmitDelete = async (e) => {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: "2024-03-04 13:23:44", //editShiftInputs.startdatetime,
-        enddatetime: "2024-03-04 13:24:44", //editShiftInputs.enddatetime,
-        uid: editShiftInputs.uid,
+        startdatetime: startDateTime,
+        enddatetime: endDateTime,
+        uid: uid,
+        position: position,
         id: props.shift.id,
       };
       mutateDeleteShift(bodyvalues);
@@ -137,31 +172,46 @@ export default function EditShiftModal(props) {
                     <input
                       required
                       type="number"
-                      defaultValue={format(props.shift.startdatetime, "HHmm")}
-                      name="starttime"
-                      onChange={handleEditShiftChange}
-                    />
-                    <input
-                      required
-                      type="number"
-                      defaultValue={format(props.shift.enddatetime, "HHmm")}
-                      name="endtime"
-                      onChange={handleEditShiftChange}
-                    />
-                    <input
-                      required
-                      type="number"
                       defaultValue={props.shift.uid}
                       name="uid"
-                      onChange={handleEditShiftChange}
+                      onChange={(e) => setUID(parseInt(e.target.value))}
                     />
                     <input
                       required
                       type="text"
                       defaultValue={props.shift.position}
                       name="position"
-                      onChange={handleEditShiftChange}
+                      onChange={(e) => setPosition(e.target.value)}
                     />
+
+                    <p>Date</p>
+                    
+                    <DatePicker
+                      selected={startDateTime}
+                      onChange={(date) => handleSetStart(date)}
+                      dateFormat="MMMM d, yyyy"
+                    />
+                    <p>Start Time</p>
+                    <DatePicker
+                      selected={startDateTime}
+                      onChange={(date) => handleSetStart(date)}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
+                    />
+                    <p>End Time</p>
+                    <DatePicker
+                      selected={endDateTime}
+                      onChange={(date) => handleSetEnd(date)}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
+                    />
+
                     <button onClick={handleSubmitEdit}>Edit Shift</button>
                     <button onClick={handleSubmitDelete}>Delete Shift</button>
                   </form>

@@ -9,6 +9,7 @@ import {
     eachDayOfInterval,
     format,
     compareAsc,
+    isBefore
   } from "date-fns";
 
 function test ()
@@ -63,6 +64,19 @@ export function mapObjectsToDate(shift) {
       datesOfThisWeek[i] = format(datesOfThisWeek[i], "yyyy-MM-dd");
     }
     return datesOfThisWeek;
+  }
+
+  export function getAdjustedEndDate(startDate, endDate) {
+    let tempDate = new Date();
+    // need to look at month here
+    tempDate.setDate(startDate.getDate());
+    tempDate.setHours(endDate.getHours());
+    tempDate.setMinutes(endDate.getMinutes());
+    if (!isBefore(startDate, tempDate)) {
+      tempDate = addDays(tempDate, 1);
+    }
+    console.log("adjusted endate: " + tempDate);
+    return tempDate;
   }
 
   // I had to put export default as something
