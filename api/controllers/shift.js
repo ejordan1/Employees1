@@ -76,6 +76,13 @@ export const addShift = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
+
+        // error handling here for body values
+        if (!req.body.startdatetime || !req.body.enddatetime || !req.body.uid)
+        {
+          if (err) return res.status(500).json("not all required body fields were included, requires st, et, uid");
+        }
+
         const q =
           "INSERT INTO shifts(`startdatetime`, `enddatetime`, `position`, `uid`) VALUES (?)";
 
