@@ -18,23 +18,10 @@ export default function AddShiftModal() {
   const [position, setPosition] = useState("");
   const [uid, setUID] = useState(0);
 
-  // const modalNullValues = {
-  //   startdatetime: 0,
-  //   enddatetime: 0,
-  //   position: "",
-  //   uid: null,
-  // }
-
-  // const [createShiftInputs, setCreateShiftInputs] = useState(modalNullValues);
-
   const addShift = async (bodyValues) => {
     const res = await axios.post(`/shifts/admin/add`, bodyValues);
     return res.data;
   };
-
-  // function setModalNullValues (){
-  //   setCreateShiftInputs(modalNullValues);
-  // };
 
   const {
     mutate: mutateAddShift,
@@ -48,14 +35,8 @@ export default function AddShiftModal() {
     },
   });
 
-  // const handleCreateShiftChange = (e) => {
-  //   setCreateShiftInputs((prev) => ({
-  //     ...prev,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
-
   const toggleModal = () => {
+    resetInputValues();
     setModal(!modal);
   };
 
@@ -65,27 +46,40 @@ export default function AddShiftModal() {
     document.body.classList.remove("active-modal");
   }
 
-  function handleSetStart(date)
-  {
+  function resetInputValues() {
+    let tomorrowStart = new Date();
+    tomorrowStart.setDate(tomorrowStart.getDate() + 1); 
+    tomorrowStart.setHours(7); 
+    tomorrowStart.setMinutes(0);
+    setStartDateTime(tomorrowStart);
+
+    let tomorrowEnd = new Date();
+    tomorrowEnd.setDate(tomorrowStart.getDate() + 1); 
+    tomorrowEnd.setHours(15); 
+    tomorrowEnd.setMinutes(0);
+    setEndDateTime(tomorrowEnd);
+
+    setPosition("");
+    setUID(0);
+  }
+
+  function handleSetStart(date) {
     setStartDateTime(date);
     setEndDateTime(getAdjustedEndDate(date, endDateTime));
   }
 
-  function handleSetEnd(date)
-  {
+  function handleSetEnd(date) {
     setEndDateTime(getAdjustedEndDate(startDateTime, date));
   }
 
-  function getAdjustedEndDate (startDate, endDate)
-  {
+  function getAdjustedEndDate(startDate, endDate) {
     let tempDate = new Date();
     // need to look at month here
     tempDate.setDate(startDate.getDate());
     tempDate.setHours(endDate.getHours());
     tempDate.setMinutes(endDate.getMinutes());
-    if (!isBefore(startDate, tempDate))
-    {
-      tempDate = addDays(tempDate, 1)
+    if (!isBefore(startDate, tempDate)) {
+      tempDate = addDays(tempDate, 1);
     }
     console.log("adjusted endate: " + tempDate);
     return tempDate;
@@ -95,11 +89,10 @@ export default function AddShiftModal() {
     e.preventDefault();
     try {
       const bodyvalues = {
-        // doing this later
-        startdatetime: format(startDateTime, 'yyyy-MM-dd HH:mm:ss'),
-        enddatetime: format(endDateTime, 'yyyy-MM-dd HH:mm:ss'),
+        startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
+        enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
         position: position,
-        uid: uid
+        uid: uid,
       };
       mutateAddShift(bodyvalues);
       queryClient.invalidateQueries();
@@ -140,14 +133,13 @@ export default function AddShiftModal() {
               </form>
             </div>
 
-
             <p>Date</p>
             <DatePicker
               selected={startDateTime}
               onChange={(date) => handleSetStart(date)}
               dateFormat="MMMM d, yyyy"
             />
-<p>Start Time</p>
+            <p>Start Time</p>
             <DatePicker
               selected={startDateTime}
               onChange={(date) => handleSetStart(date)}
@@ -157,7 +149,7 @@ export default function AddShiftModal() {
               timeCaption="Time"
               dateFormat="h:mm aa"
             />
-<p>End Time</p>
+            <p>End Time</p>
             <DatePicker
               selected={endDateTime}
               onChange={(date) => handleSetEnd(date)}

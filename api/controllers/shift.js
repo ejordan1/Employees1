@@ -78,9 +78,10 @@ export const addShift = (req, res) => {
       } else {
 
         // error handling here for body values
+        // This error is not reaching the console for some reason
         if (!req.body.startdatetime || !req.body.enddatetime || !req.body.uid)
         {
-          if (err) return res.status(500).json("not all required body fields were included, requires st, et, uid");
+          return res.status(500).json("not all required body fields were included, requires st, et, uid");
         }
 
         const q =
