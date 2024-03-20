@@ -81,5 +81,23 @@ export function mapObjectsToDate(shift) {
     return tempDate;
   }
 
+  export const permWeekdaysDays = new Map();
+  permWeekdaysDays.set("Sunday", new Date("Janurary 1, 0997"));
+  permWeekdaysDays.set("Monday", new Date("Janurary 2, 0997"));
+  permWeekdaysDays.set("Tuesday", new Date("Janurary 3, 0997"));
+  permWeekdaysDays.set("Wednesday", new Date("Janurary 4, 0997"));
+  permWeekdaysDays.set("Thursday", new Date("Janurary 5, 0997"));
+  permWeekdaysDays.set("Friday", new Date("Janurary 6, 0997"));
+  permWeekdaysDays.set("Saturday", new Date("Janurary 7, 0997"));
+
+
+  export function getFinalStartDate(dayOfWeek, startDate)
+  {
+    let tempDate = new Date(permWeekdaysDays.get(dayOfWeek));
+    tempDate.setHours(startDate.getHours());
+    tempDate.setMinutes(startDate.getMinutes());
+    return tempDate;
+  }
+
   // I had to put export default as something
 //   export default test;

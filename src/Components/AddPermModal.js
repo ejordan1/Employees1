@@ -6,6 +6,7 @@ import { getAdjustedEndDate } from "../Libraries/DateOperations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 import { format, addDays, isBefore } from "date-fns";
+import { permWeekdaysDays, getFinalStartDate } from "../Libraries/DateOperations";
 
 export default function AddPermModal() {
   const [modal, setModal] = useState(false);
@@ -19,14 +20,7 @@ export default function AddPermModal() {
 
   const [selectedWeekday, setSelectedWeekday] = useState("Sunday"); 
 
-  const weekDaysDates = new Map();
-  weekDaysDates.set("Sunday", new Date("Janurary 1, 0997"));
-  weekDaysDates.set("Monday", new Date("Janurary 2, 0997"));
-  weekDaysDates.set("Tuesday", new Date("Janurary 3, 0997"));
-  weekDaysDates.set("Wednesday", new Date("Janurary 4, 0997"));
-  weekDaysDates.set("Thursday", new Date("Janurary 5, 0997"));
-  weekDaysDates.set("Friday", new Date("Janurary 6, 0997"));
-  weekDaysDates.set("Saturday", new Date("Janurary 7, 0997"));
+
   // map of dates, each select option would point to a key, then when it creates the final date object it would
   // refer to the key, but set the hour and minute according to the inputs, and then put the adjust endtime part
 
@@ -94,13 +88,13 @@ export default function AddPermModal() {
     setModal(!modal);
   };
 
-  function getFinalStartDate()
-  {
-    let tempDate = new Date(weekDaysDates.get(selectedWeekday));
-    tempDate.setHours(startDateTime.getHours());
-    tempDate.setMinutes(startDateTime.getMinutes());
-    return tempDate;
-  }
+  // function getFinalStartDate()
+  // {
+  //   let tempDate = new Date(permWeekdaysDays.get(selectedWeekday));
+  //   tempDate.setHours(startDateTime.getHours());
+  //   tempDate.setMinutes(startDateTime.getMinutes());
+  //   return tempDate;
+  // }
 
   if (modal) {
     document.body.classList.add("active-modal");
@@ -111,7 +105,7 @@ export default function AddPermModal() {
   const handleSubmitCreate = async (e) => {
     e.preventDefault();
     try {
-      let finalStartDateTime = getFinalStartDate();
+      let finalStartDateTime = getFinalStartDate(selectedWeekday, startDateTime);
       let finalEndDateTime = getAdjustedEndDate(finalStartDateTime, endDateTime);
       const bodyValues = {
         // doing this later

@@ -4,19 +4,20 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
-import {
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
+import { getAdjustedEndDate, getFinalStartDate } from "../Libraries/DateOperations";
 
 export default function EditPermModal(props) {
-
   const queryClient = useQueryClient();
   
+  const [selectedWeekday, setSelectedWeekday] = useState(null); // start as null?
 
+  // this has these in an object with helper methods, in addPermModal they are separate useState hooks
   const editPermDefaultValues = {
-    startdatetime: 0,
-    enddatetime: 0,
+    startdatetime: null,
+    enddatetime: null,
     slots: 0,
     position: "",
     permUsers: {},
@@ -30,11 +31,24 @@ export default function EditPermModal(props) {
     uid: 0,
   });
 
-
   const handleEditPermChange = (e) => {
     setEditPermInputs((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSetStartTimePerm = (startTime) => {
+    setEditPermInputs((prev) => ({
+      ...prev,
+      startdatetime: startTime,
+    }));
+  };
+
+  const handleSetEndTimePerm = (endTime) => {
+    setEditPermInputs((prev) => ({
+      ...prev,
+      enddatetime: endTime,
     }));
   };
 
@@ -44,7 +58,6 @@ export default function EditPermModal(props) {
       [e.target.name]: e.target.value,
     }));
   };
-
 
   const addPermUser = async (bodyValues) => {
     const res = await axios.post(`/perms_users/add`, bodyValues);
@@ -66,36 +79,52 @@ export default function EditPermModal(props) {
     return res.data;
   };
 
-  const {mutate: mutateAddPU, addPUIsPending, addPIIsError, addPUIsSuccess} = useMutation({
+  const {
+    mutate: mutateAddPU,
+    addPUIsPending,
+    addPIIsError,
+    addPUIsSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => addPermUser(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 
-  const {mutate: mutateDeletePerm, deletePermIsPending, deletePermIsError, deletePermIsSuccess} = useMutation({
+  const {
+    mutate: mutateDeletePerm,
+    deletePermIsPending,
+    deletePermIsError,
+    deletePermIsSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => deletePerm(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 
-  const {mutate: mutateDeletePU, deletePUIsPending, deletePUisError, deletePUisSuccess} = useMutation({
+  const {
+    mutate: mutateDeletePU,
+    deletePUIsPending,
+    deletePUisError,
+    deletePUisSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => deletePermUser(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 
-  const {mutate: mutateEditPerm, editPermIsPending, editPermIsError, editPermIsSuccess} = useMutation({
+  const {
+    mutate: mutateEditPerm,
+    editPermIsPending,
+    editPermIsError,
+    editPermIsSuccess,
+  } = useMutation({
     mutationFn: (bodyValues) => editPerm(bodyValues),
-    onSuccess: () => 
-    {
+    onSuccess: () => {
       queryClient.invalidateQueries();
-    }
+    },
   });
 
   useEffect(() => {
@@ -108,9 +137,9 @@ export default function EditPermModal(props) {
         slots: props.perm.slots,
         permUsers: props.perm.permUsers,
       });
+      setSelectedWeekday(format(props.perm.startdatetime, "EEEE"));
     }
   }, [props.isVisible]);
-
 
   const handleSubmitCreateUserPerm = async (e) => {
     e.preventDefault();
@@ -140,10 +169,14 @@ export default function EditPermModal(props) {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
+      let finalStartDateTime = getFinalStartDate(selectedWeekday, editPermInputs.startdatetime);
+      let finalEndDateTime = getAdjustedEndDate(finalStartDateTime, editPermInputs.enddatetime);
+
+
       const bodyvalues = {
         id: props.perm.id,
-        startdatetime: "0997-01-04 07:23:44", // editPermInputs.startdatetime,
-        enddatetime: "0997-01-04 07:23:44", // editPermInputs.enddatetime,
+        startdatetime: format(finalStartDateTime, "yyyy-MM-dd HH:mm:ss"), // editPermInputs.startdatetime,
+        enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"), // editPermInputs.enddatetime,
         position: editPermInputs.position,
         slots: editPermInputs.slots,
       };
@@ -174,10 +207,23 @@ export default function EditPermModal(props) {
     }
   };
 
+  const handleSelectWeekday = (event) => {
+    setSelectedWeekday(event.target.value);
+    console.log("selected weekday: " + event.target.value);
+  };
+
   const toggleModal = () => {
     setEditPermInputs(editPermDefaultValues);
     props.closeModal();
   };
+
+  // function getFinalStartDate()
+  // {
+  //   let tempDate = new Date(permWeekdaysDays.get(selectedWeekday));
+  //   tempDate.setHours(startDateTime.getHours());
+  //   tempDate.setMinutes(startDateTime.getMinutes());
+  //   return tempDate;
+  // }
 
   return (
     <div>
@@ -239,7 +285,7 @@ export default function EditPermModal(props) {
                 <div className="editPermForm">
                   <h1>Edit Perm</h1>
                   <form>
-                    <input
+                    {/* <input
                       required
                       type="number"
                       defaultValue={format(props.perm.startdatetime, "HHmm")}
@@ -252,6 +298,25 @@ export default function EditPermModal(props) {
                       defaultValue={format(props.perm.enddatetime, "HHmm")}
                       name="enddatetime"
                       onChange={handleEditPermChange}
+                    /> */}
+                    <DatePicker
+                      selected={editPermInputs.startdatetime}
+                      onChange={(date) => handleSetStartTimePerm(date)}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
+                    />
+                    <p>End Time</p>
+                    <DatePicker
+                      selected={editPermInputs.enddatetime}
+                      onChange={(date) => handleSetEndTimePerm(date)}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="h:mm aa"
                     />
                     <input
                       required
@@ -267,6 +332,19 @@ export default function EditPermModal(props) {
                       name="position"
                       onChange={handleEditPermChange}
                     />
+                    <select
+                      value={selectedWeekday}
+                      onChange={handleSelectWeekday}
+                    >
+                      <option value="Sunday">Sunday</option>
+                      <option value="Monday">Monday</option>
+                      <option value="Tuesday">Tuesday</option>
+                      <option value="Wednesday">Wednesday</option>
+                      <option value="Thursday">Thursday</option>
+                      <option value="Friday">Friday</option>
+                      <option value="Saturday">Saturday</option>
+                    </select>
+
                     <button onClick={handleSubmitEdit}>Edit Perm</button>
                     <button onClick={handleSubmitDelete}>Delete Perm</button>
                   </form>
