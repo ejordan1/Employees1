@@ -69,6 +69,8 @@ export function mapObjectsToDate(shift) {
   export function getAdjustedEndDate(startDate, endDate) {
     let tempDate = new Date();
     // need to look at month here
+    tempDate.setFullYear(startDate.getFullYear());
+    tempDate.setMonth(startDate.getMonth())
     tempDate.setDate(startDate.getDate());
     tempDate.setHours(endDate.getHours());
     tempDate.setMinutes(endDate.getMinutes());

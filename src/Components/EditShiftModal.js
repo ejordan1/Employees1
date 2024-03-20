@@ -8,23 +8,11 @@ import { getAdjustedEndDate } from "../Libraries/DateOperations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 
-
-
 export default function EditShiftModal(props) {
-  // const editShiftDefaultValues = {
-  //   startdatetime: 0,
-  //   enddatetime: 0,
-  //   position: "",
-  //   uid: null,
-  // };
-  // const [editShiftInputs, setEditShiftInputs] = useState({
-  //   editShiftDefaultValues,
-  // });
-
   const [startDateTime, setStartDateTime] = useState(new Date());
-const [endDateTime, setEndDateTime] = useState(new Date());
-const [position, setPosition] = useState("");
-const [uid, setUID] = useState(0);
+  const [endDateTime, setEndDateTime] = useState(new Date());
+  const [position, setPosition] = useState("");
+  const [uid, setUID] = useState(0);
 
   const queryClient = useQueryClient(); // gets the queryclient
 
@@ -67,21 +55,7 @@ const [uid, setUID] = useState(0);
     setEndDateTime(props.shift && props.shift.enddatetime);
     setPosition(props.shift && props.shift.position);
     setUID(props.shift && props.shift.uid);
-    // this is just for now, until I figure out how the real input is going to work
-    // setEditShiftInputs({
-    //   startdatetime: props.shift && format(props.shift.startdatetime, "HHmm"),
-    //   enddatetime: props.shift && format(props.shift.enddatetime, "HHmm"),
-    //   position: props.shift && props.shift.position,
-    //   uid: props.shift && props.shift.uid,
-    // });
   }, [props.isVisible]);
-
-  // const handleEditShiftChange = (e) => {
-  //   setEditShiftInputs((prev) => ({
-  //     ...prev,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
 
   function setInputsToDefault() {
     setStartDateTime(new Date());
@@ -123,13 +97,12 @@ const [uid, setUID] = useState(0);
     setEndDateTime(getAdjustedEndDate(startDateTime, date));
   }
 
-
   const handleSubmitDelete = async (e) => {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: startDateTime,
-        enddatetime: endDateTime,
+        startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
+        enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
         uid: uid,
         position: position,
         id: props.shift.id,
@@ -185,7 +158,7 @@ const [uid, setUID] = useState(0);
                     />
 
                     <p>Date</p>
-                    
+
                     <DatePicker
                       selected={startDateTime}
                       onChange={(date) => handleSetStart(date)}
