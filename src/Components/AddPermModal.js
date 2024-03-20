@@ -56,16 +56,6 @@ export default function AddPermModal() {
     },
   });
 
-  // function handleSetStart(date) {
-  //   setStartDateTime(date);
-  //   setEndDateTime(getAdjustedEndDate(date, endDateTime));
-  // }
-
-  // // I'm thinking I leave this out and do it all when it is submitted
-  // function handleSetEnd(date) {
-  //   setEndDateTime(getAdjustedEndDate(startDateTime, date));
-  // }
-
   const addPerm = async (bodyValues) => {
     const res = await axios.post(`/perms`, bodyValues);
     return res.data;
@@ -88,14 +78,6 @@ export default function AddPermModal() {
     setModal(!modal);
   };
 
-  // function getFinalStartDate()
-  // {
-  //   let tempDate = new Date(permWeekdaysDays.get(selectedWeekday));
-  //   tempDate.setHours(startDateTime.getHours());
-  //   tempDate.setMinutes(startDateTime.getMinutes());
-  //   return tempDate;
-  // }
-
   if (modal) {
     document.body.classList.add("active-modal");
   } else {
@@ -108,14 +90,11 @@ export default function AddPermModal() {
       let finalStartDateTime = getFinalStartDate(selectedWeekday, startDateTime);
       let finalEndDateTime = getAdjustedEndDate(finalStartDateTime, endDateTime);
       const bodyValues = {
-        // doing this later
         startdatetime: format(finalStartDateTime, "yyyy-MM-dd HH:mm:ss"),
         enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"),
         position: position,
         slots: slots,
       };
-      //const res = await axios.post(`/perms`, bodyvalues);
-      // window.location.reload();
       mutate(bodyValues);
     } catch (err) {
       console.log(err);
