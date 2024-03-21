@@ -54,10 +54,10 @@ export default function EditShiftModal(props) {
   });
 
   useEffect(() => {
-    setStartDateTime(props.shift && props.shift.startdatetime);
-    setEndDateTime(props.shift && props.shift.enddatetime);
-    setPosition(props.shift && props.shift.position);
-    setUID(props.shift && props.shift.uid);
+    setStartDateTime(props.shift && props.shift.shifts_startdatetime);
+    setEndDateTime(props.shift && props.shift.shifts_enddatetime);
+    setPosition(props.shift && props.shift.shifts_position);
+    setUID(props.shift && props.shift.shifts_uid);
   }, [props.isVisible]);
 
   function setInputsToDefault() {
@@ -71,11 +71,11 @@ export default function EditShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
-        enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
-        uid: uid,
-        id: props.shift.id,
-        position: position,
+        shifts_startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
+        shifts_enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
+        shifts_uid: uid,
+        shifts_id: props.shift.shifts_id,
+        shifts_position: position,
       };
       mutateEditShift(bodyvalues);
       toggleModal();
@@ -109,11 +109,11 @@ export default function EditShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
-        enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
-        uid: uid,
-        position: position,
-        id: props.shift.id,
+        shifts_startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
+        shifts_enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
+        shifts_uid: uid,
+        shifts_position: position,
+        shifts_id: props.shift.shifts_id,
       };
       mutateDeleteShift(bodyvalues);
       queryClient.invalidateQueries();
@@ -142,11 +142,11 @@ export default function EditShiftModal(props) {
             <div className={styles.modal}>
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
-                <p>id: {props.shift.id} </p>
-                <p>starttime: {format(props.shift.startdatetime, "HHmm")} </p>
-                <p>endtime: {format(props.shift.enddatetime, "HHmm")} </p>
-                <p>uid: {props.shift.uid} </p>
-                <p>position: {props.shift.position} </p>
+                <p>id: {props.shift.shifts_id} </p>
+                <p>starttime: {format(props.shift.shifts_startdatetime, "HHmm")} </p>
+                <p>endtime: {format(props.shift.shifts_enddatetime, "HHmm")} </p>
+                <p>uid: {props.shift.shifts_uid} </p>
+                <p>position: {props.shift.shifts_position} </p>
                 <div className="editShiftForm">
                   <h1>Edit Shift</h1>
                   <p>

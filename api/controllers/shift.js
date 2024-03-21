@@ -15,16 +15,7 @@ export const getAllShifts = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const q = `SELECT 
-        employees1.shifts.id, 
-        employees1.shifts.position,
-        employees1.shifts.uid,
-        employees1.shifts.startdatetime, 
-        employees1.shifts.enddatetime, 
-        employees1.users.firstname,
-        employees1.users.lastname
-        
-        FROM employees1.shifts LEFT JOIN employees1.users    ON employees1.shifts.uid =  users.id`;
+        const q = `SELECT * FROM employees1.shifts LEFT JOIN employees1.users    ON employees1.shifts.shifts_uid =  users.id`;
 
         db.query(q, (err, data) => {
           if (err) return res.status(500).json(err);
@@ -44,7 +35,7 @@ export const getMyShifts = (req, res) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const q =
-      "SELECT * FROM shifts WHERE uid = ? AND startdatetime >= '2014-01-01' AND startdatetime <= '2024-04-01';";
+      "SELECT * FROM shifts WHERE shifts_uid = ? AND shifts_startdatetime >= '2014-01-01' AND shifts_startdatetime <= '2024-04-01';";
 
     db.query(q, employeeInfo.id, (err, data) => {
       if (err) return res.status(500).send(err);
@@ -61,7 +52,7 @@ export const getAvailableShifts = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q = "SELECT * FROM shifts WHERE uid IS NULL";
+    const q = "SELECT * FROM shifts WHERE shifts_uid IS NULL";
 
     db.query(q, employeeInfo.id, (err, data) => {
       if (err) return res.status(500).send(err);
@@ -88,19 +79,19 @@ export const addShift = (req, res) => {
 
         // error handling here for body values
         // This error is not reaching the console for some reason
-        if (!req.body.startdatetime || !req.body.enddatetime || !req.body.uid)
+        if (!req.body.shifts_startdatetime || !req.body.shifts_enddatetime) // had  || !req.body.shifts_uid
         {
           return res.status(500).json("not all required body fields were included, requires st, et, uid");
         }
 
         const q =
-          "INSERT INTO shifts(`startdatetime`, `enddatetime`, `position`, `uid`) VALUES (?)";
+          "INSERT INTO shifts(`shifts_startdatetime`, `shifts_enddatetime`, `shifts_position`, `shifts_uid`) VALUES (?)";
 
         const values = [
-          req.body.startdatetime,
-          req.body.enddatetime,
-          req.body.position,
-          req.body.uid,
+          req.body.shifts_startdatetime,
+          req.body.shifts_enddatetime,
+          req.body.shifts_position,
+          req.body.shifts_uid ? req.body.shifts_uid : null,
         ];
 
         db.query(q, [values], (err, data) => {
@@ -127,13 +118,13 @@ export const editShift = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "UPDATE shifts SET `startdatetime`=?, `enddatetime`=?, `position`=?, `uid`=? WHERE `id`=?";
+          "UPDATE shifts SET `shifts_startdatetime`=?, `shifts_enddatetime`=?, `shifts_position`=?, `shifts_uid`=? WHERE `shifts_id`=?";
         const values = [
-          req.body.startdatetime,
-          req.body.enddatetime,
-          req.body.position,
-          req.body.uid,
-          req.body.id,
+          req.body.shifts_startdatetime,
+          req.body.shifts_enddatetime,
+          req.body.shifts_position,
+          req.body.shifts_uid,
+          req.body.shifts_id,
         ];
 
         db.query(q, values, (err, data) => {
@@ -159,10 +150,10 @@ export const deleteShift = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const shiftId = req.body.id;
+        const shifts_shiftId = req.body.shifts_id;
         const q = "DELETE FROM shifts WHERE `id` = ?";
 
-        db.query(q, [shiftId, employeeInfo.id], (err, data) => {
+        db.query(q, [shifts_shiftId, employeeInfo.id], (err, data) => {
           if (err)
             return res.status(403).json("You can delete only your shifts");
 
@@ -180,8 +171,8 @@ export const pickupShift = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("token is not valid!");
     const q =
-      "SELECT `startdatetime`, `enddatetime` FROM employees1.shifts s WHERE s.id = ?"; //
-    db.query(q, [req.body.id], (err, data) => {
+      "SELECT `shifts_startdatetime`, `shifts_enddatetime` FROM employees1.shifts s WHERE s.shifts_id = ?"; //
+    db.query(q, [req.body.shifts_id], (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
 
@@ -191,9 +182,9 @@ export const pickupShift = (req, res) => {
         // data[0].enddatetime == req.body.enddatetime
       ) {
         const q =
-          "UPDATE `employees1`.`shifts` SET `uid` = ? WHERE (`id` = '?')";
+          "UPDATE `employees1`.`shifts` SET `shifts_uid` = ? WHERE (`shifts_id` = '?')";
 
-        db.query(q, [employeeInfo.id, req.body.id], (err, data) => {
+        db.query(q, [employeeInfo.id, req.body.shifts_id], (err, data) => {
           if (err) return res.status(500).json(err);
           return res.json("Shift has been picked up by: " + employeeInfo.id);
         });
@@ -215,7 +206,7 @@ export const dropShift = (req, res) => {
       "SELECT `startdatetime`, `enddatetime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
 
     // changed from req.body.uid to employeeInfo.id, verify still works
-    const values = [req.body.id, employeeInfo.id];
+    const values = [req.body.shifts_id, employeeInfo.id];
     db.query(q, values, (err, data) => {
       if (err) return res.status(500).json(err);
       if (data.length === 0) return res.status(500).json("no shift was found");
@@ -226,9 +217,9 @@ export const dropShift = (req, res) => {
         // data[0].enddatetime == req.body.enddatetime
       ) {
         const q =
-          "UPDATE `employees1`.`shifts` SET `uid` = NULL WHERE (`id` = '?')";
+          "UPDATE `employees1`.`shifts` SET `shifts_uid` = NULL WHERE (`shifts_id` = '?')";
 
-        db.query(q, [req.body.id], (err, data) => {
+        db.query(q, [req.body.shifts_id], (err, data) => {
           if (err) return res.status(500).json(err);
           return res.json("Shift has been dropped");
         });

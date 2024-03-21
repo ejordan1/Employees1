@@ -8,15 +8,15 @@ function SingleAllShift(props) {
     props.setModalValues(props.shift);
     props.openEditModal();
   }
-  const getBackgroundColor = props.uid ? styles.filled : styles.empty;
+  const getBackgroundColor = props.shift && props.shift.shifts_uid ? styles.filled : styles.empty;
 
   return (
     <div className={`${styles.container} ${getBackgroundColor}`}>
-      <p>{props.shift.position}</p>
+      <p>{props.shift.shifts_position}</p>
       <div className={styles.times}>
-        <p>{format(props.shift.startdatetime, "HHmm")}</p>
+        <p>{format(props.shift.shifts_startdatetime, "HHmm")}</p>
         <p>-</p>
-        <p>{format(props.shift.enddatetime, "HHmm")}</p>
+        <p>{format(props.shift.shifts_enddatetime, "HHmm")}</p>
       </div>
 
       <button onClick={handleEditClick}>Edit</button>

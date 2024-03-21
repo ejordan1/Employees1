@@ -99,10 +99,10 @@ export default function AddShiftModal() {
     e.preventDefault();
     try {
       const bodyvalues = {
-        startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
-        enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
-        position: position,
-        uid: uid,
+        shifts_startdatetime: format(startDateTime, "yyyy-MM-dd HH:mm:ss"),
+        shifts_enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
+        shifts_position: position,
+        shifts_uid: uid,
       };
       mutateAddShift(bodyvalues);
       queryClient.invalidateQueries();

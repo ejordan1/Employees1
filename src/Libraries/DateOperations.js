@@ -27,12 +27,12 @@ export function mapObjectsToDate(shift) {
     let shiftByDay = {};
 
     shift.forEach((shift) => {
-      let thisDay = format(shift.startdatetime, formatDateStringKey);
+      let thisDay = format(shift.shifts_startdatetime, formatDateStringKey);
       if (!shiftByDay.hasOwnProperty(thisDay)) {
         shiftByDay[thisDay] = [];
       }
-      shift.startdatetime = new Date (shift.startdatetime);
-      shift.enddatetime = new Date (shift.enddatetime);
+      shift.shifts_startdatetime = new Date (shift.shifts_startdatetime);
+      shift.shifts_enddatetime = new Date (shift.shifts_enddatetime);
       shiftByDay[thisDay].push(shift); // just the id, and should be sorted
     });
     return shiftByDay;

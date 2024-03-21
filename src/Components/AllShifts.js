@@ -58,7 +58,7 @@ function AllShifts() {
             {allShiftsData && allShiftsData[date] ? (
               allShiftsData[date].map((shift) => (
                 <div>
-                  <p>{shift.id}</p>
+                  <p>{shift.shifts_id}</p>
                   <SingleAllShift
                     shift={shift}
                     openEditModal={openEditModal}
