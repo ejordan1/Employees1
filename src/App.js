@@ -8,8 +8,11 @@ import MyShifts from "./Components/MyShifts";
 import AllShifts from "./Components/AllShifts";
 import AllPerms from "./Components/AllPerms";
 import MyPerms from "./Components/MyPerms";
+import { DataContext } from "./Contexts/DataContext";
 import { UserContext } from "./Contexts/UserContext";
 import { useState, useEffect } from "react";
+import axios from "axios";
+// import { allEmployeesData, allEmployeesError, allEmployeesIsLoading } from "./Components/QueryHelper";
 
 import {
   useQuery,
@@ -21,6 +24,25 @@ import {
 // 'https://jsonplaceholder.typicode.com/todos
 
 function App() {
+
+
+
+  const fetchAllEmployees = async () => {
+    const res = await axios.get(`/employees/all`);
+    return res.data;
+  };
+
+  const {
+    data: allEmployeesData,
+    error: allEmployeesError, // not tested
+    isLoading: allEmployeesIsLoading, // not tested
+  } = useQuery({
+    queryKey: ["allemployees"],
+    queryFn: fetchAllEmployees,
+  });
+
+
+
   const [username, setUserName] = useState("john");
   const queryClient = useQueryClient(); // gets the queryclient
   // also can use axios to fetch
@@ -76,7 +98,10 @@ function App() {
 
   // if (isPending) return <div>mutation is pending:</div>;
 
+  console.log(allEmployeesData);
+
   return (
+    <DataContext.Provider value={{ allEmployeesData }}>
     <UserContext.Provider value={{ username, setUserName }}>
       <BrowserRouter>
         <Navbar></Navbar>
@@ -91,6 +116,7 @@ function App() {
         </Routes>
         <div className="App">
 
+        <p>{allEmployeesData && allEmployeesData.length}</p>
           <p>data query test</p>
           {isPending && <p>data is being added</p>}
           {data2 &&
@@ -114,6 +140,7 @@ function App() {
         </div>
       </BrowserRouter>
     </UserContext.Provider>
+    </DataContext.Provider>
   );
 }
 

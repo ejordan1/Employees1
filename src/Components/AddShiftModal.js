@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./AddShiftModal.module.scss";
 import axios from "axios";
 import styles from "./AddShiftModal.module.scss";
@@ -8,8 +8,11 @@ import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 import { format, addDays, isBefore } from "date-fns";
 import { Value } from "sass";
 import { getAdjustedEndDate } from "../Libraries/DateOperations";
+import { DataContext } from "../Contexts/DataContext";
 
 export default function AddShiftModal() {
+  const {allEmployeesData} = useContext(DataContext);
+
   const [modal, setModal] = useState(false);
 
   const queryClient = useQueryClient(); // gets the queryclient
@@ -34,11 +37,12 @@ export default function AddShiftModal() {
     onSuccess: () => {
       queryClient.invalidateQueries();
     },
-  });
+  }); 
 
   const toggleModal = () => {
     resetInputValues();
     setModal(!modal);
+    console.log("Employee data, " + allEmployeesData)
   };
 
   if (modal) {
@@ -63,6 +67,11 @@ export default function AddShiftModal() {
     setPosition("");
     setUID(0);
   }
+
+  const handleSelectEmployee = (event) => { 
+    setUID(event.target.value);
+    console.log("selected employee: " +event.target.value);
+  }; 
 
   function handleSetStart(date) {
     setStartDateTime(date);
@@ -118,13 +127,6 @@ export default function AddShiftModal() {
               <form>
                 <input
                   required
-                  type="number"
-                  placeholder="uid (optional)"
-                  name="uid"
-                  onChange={(e) => setUID(parseInt(e.target.value))}
-                />
-                <input
-                  required
                   type="text"
                   placeholder="position"
                   name="position"
@@ -160,6 +162,14 @@ export default function AddShiftModal() {
               timeCaption="Time"
               dateFormat="h:mm aa"
             />
+
+
+              <select value={uid} onChange={handleSelectEmployee}>
+                  
+              {allEmployeesData && allEmployeesData.map((employee) => (
+                <option value={employee.id}>{employee.firstname} {employee.lastname}</option>
+              ))}
+                </select>
 
             <button className="close-modal" onClick={toggleModal}>
               CLOSE add
