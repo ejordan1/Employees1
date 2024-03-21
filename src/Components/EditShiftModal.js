@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./EditShiftModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -7,8 +7,11 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { getAdjustedEndDate } from "../Libraries/DateOperations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
+import { DataContext } from "../Contexts/DataContext";
 
 export default function EditShiftModal(props) {
+  const { allEmployeesData } = useContext(DataContext);
+
   const [startDateTime, setStartDateTime] = useState(new Date());
   const [endDateTime, setEndDateTime] = useState(new Date());
   const [position, setPosition] = useState("");
@@ -97,6 +100,11 @@ export default function EditShiftModal(props) {
     setEndDateTime(getAdjustedEndDate(startDateTime, date));
   }
 
+  const handleSelectEmployee = (event) => {
+    setUID(event.target.value);
+    console.log("selected employee: " + event.target.value);
+  };
+
   const handleSubmitDelete = async (e) => {
     e.preventDefault();
     try {
@@ -141,14 +149,11 @@ export default function EditShiftModal(props) {
                 <p>position: {props.shift.position} </p>
                 <div className="editShiftForm">
                   <h1>Edit Shift</h1>
+                  <p>
+                    current shift name: {props.shift.firstname}{" "}
+                    {props.shift.lastname}
+                  </p>
                   <form>
-                    <input
-                      required
-                      type="number"
-                      defaultValue={props.shift.uid}
-                      name="uid"
-                      onChange={(e) => setUID(parseInt(e.target.value))}
-                    />
                     <input
                       required
                       type="text"
@@ -184,6 +189,15 @@ export default function EditShiftModal(props) {
                       timeCaption="Time"
                       dateFormat="h:mm aa"
                     />
+
+                    <select value={uid} onChange={handleSelectEmployee}>
+                      {allEmployeesData &&
+                        allEmployeesData.map((employee) => (
+                          <option value={employee.id}>
+                            {employee.firstname} {employee.lastname}
+                          </option>
+                        ))}
+                    </select>
 
                     <button onClick={handleSubmitEdit}>Edit Shift</button>
                     <button onClick={handleSubmitDelete}>Delete Shift</button>

@@ -15,7 +15,16 @@ export const getAllShifts = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const q = "SELECT * FROM shifts";
+        const q = `SELECT 
+        employees1.shifts.id, 
+        employees1.shifts.position,
+        employees1.shifts.uid,
+        employees1.shifts.startdatetime, 
+        employees1.shifts.enddatetime, 
+        employees1.users.firstname,
+        employees1.users.lastname
+        
+        FROM employees1.shifts LEFT JOIN employees1.users    ON employees1.shifts.uid =  users.id`;
 
         db.query(q, (err, data) => {
           if (err) return res.status(500).json(err);
