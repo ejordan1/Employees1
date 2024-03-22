@@ -37,7 +37,7 @@ function AllPerms() {
   const refreshModalPerm = (permsById) => {
     if (editModalVisible) // verify that it goes to null in between
     {
-      setModalEditPerm({ ... permsById[modalEditPerm.id]})
+      setModalEditPerm({ ... permsById[modalEditPerm.perms_id]})
     }
   }
 

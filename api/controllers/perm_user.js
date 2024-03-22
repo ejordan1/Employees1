@@ -41,9 +41,9 @@ export const addPerm_User = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const q = "INSERT INTO perms_users(`permid`, `uid`) VALUES (?)";
+        const q = "INSERT INTO perms_users(`perms_users_permid`, `perms_users_uid`) VALUES (?)";
 
-        const values = [req.body.permid, req.body.uid];
+        const values = [req.body.perms_users_permid, req.body.perms_users_uid];
 
         db.query(q, [values], (err, data) => {
           if (err) return res.status(500).send(err);
@@ -79,12 +79,12 @@ export const deletePerm_User = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const perm_userid = req.body.perm_userid;
-        if (!perm_userid)
-          return res.status(500).json("did not have perm_userid in body");
-        const q = "DELETE FROM perms_users WHERE `perm_userid`=?";
+        const perms_users_id = req.body.perms_users_id;
+        if (!perms_users_id)
+          return res.status(500).json("did not have perms_users_id in body");
+        const q = "DELETE FROM perms_users WHERE `perms_users_id`=?";
 
-        db.query(q, perm_userid, (err, data) => {
+        db.query(q, perms_users_id, (err, data) => {
           if (err) return res.status(500).send(err);
 
           if (data.affectedRows === 0)
@@ -92,7 +92,7 @@ export const deletePerm_User = (req, res) => {
 
           return res
             .status(200)
-            .json("perms_users: " + perm_userid + " has been deleted by admin");
+            .json("perms_users: " + perms_users_id + " has been deleted by admin");
         });
       }
     });

@@ -139,14 +139,14 @@ export default function EditPermModal(props) {
   useEffect(() => {
     if (props.isVisible) {
       setEditPermInputs({
-        id: props.perm.id,
-        position: props.perm.position,
-        startdatetime: props.perm.startdatetime,
-        enddatetime: props.perm.enddatetime,
-        slots: props.perm.slots,
+        id: props.perm.perms_id,
+        position: props.perm.perms_position,
+        startdatetime: props.perm.perms_startdatetime,
+        enddatetime: props.perm.perms_enddatetime,
+        slots: props.perm.perms_slots,
         permUsers: props.perm.permUsers,
       });
-      setSelectedWeekday(format(props.perm.startdatetime, "EEEE"));
+      setSelectedWeekday(format(props.perm.perms_startdatetime, "EEEE"));
     }
   }, [props.isVisible]);
 
@@ -159,8 +159,8 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        permid: props.perm.id,
-        uid: createUserPermInputs.uid,
+        perms_users_permid: props.perm.perms_id,
+        perms_users_uid: createUserPermInputs.uid,
       };
       mutateAddPU(bodyvalues);
     } catch (err) {
@@ -172,7 +172,7 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        perm_userid: e.target.id,
+        perms_users_id: e.target.id,
       };
       mutateDeletePU(bodyvalues);
     } catch (err) {
@@ -193,11 +193,11 @@ export default function EditPermModal(props) {
       );
 
       const bodyvalues = {
-        id: props.perm.id,
-        startdatetime: format(finalStartDateTime, "yyyy-MM-dd HH:mm:ss"),
-        enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"),
-        position: editPermInputs.position,
-        slots: editPermInputs.slots,
+        perms_id: props.perm.perms_id,
+        perms_startdatetime: format(finalStartDateTime, "yyyy-MM-dd HH:mm:ss"),
+        perms_enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"),
+        perms_position: editPermInputs.position,
+        perms_slots: editPermInputs.slots,
       };
 
       mutateEditPerm(bodyvalues);
@@ -212,11 +212,11 @@ export default function EditPermModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        id: props.perm.id,
-        startdatetime: props.perm.startdatetime, // kept as props because that is the original time from the db, to verify correct deletion
-        enddatetime: props.perm.startdatetime, // kept as props because that is the original time from the db, to verify correct deletion
-        position: editPermInputs.position,
-        slots: editPermInputs.slots,
+        perms_id: props.perm.perms_id,
+        perms_startdatetime: props.perm.perms_startdatetime, // kept as props because that is the original time from the db, to verify correct deletion
+        perms_enddatetime: props.perm.perms_startdatetime, // kept as props because that is the original time from the db, to verify correct deletion
+        // position: editPermInputs.position,
+        // slots: editPermInputs.slots,
       };
       mutateDeletePerm(bodyvalues);
       queryClient.invalidateQueries();
@@ -239,13 +239,13 @@ export default function EditPermModal(props) {
             <div className={styles.modal}>
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
-                <p>id: {props.perm.id} </p>
+                <p>id: {props.perm.perms_id} </p>
                 <p>
-                  startdatetime: {format(props.perm.startdatetime, "HHmm")}{" "}
+                  startdatetime: {format(props.perm.perms_startdatetime, "HHmm")}{" "}
                 </p>
-                <p>enddatetime: {format(props.perm.enddatetime, "HHmm")} </p>
-                <p>position: {props.perm.position} </p>
-                <p>slots: {props.perm.slots} </p>
+                <p>enddatetime: {format(props.perm.perms_enddatetime, "HHmm")} </p>
+                <p>position: {props.perm.perms_position} </p>
+                <p>slots: {props.perm.perms_slots} </p>
                 {props.perm.permUsers &&
                   Object.entries(props.perm.permUsers).map((keyvalue) => (
                     <div>
@@ -253,7 +253,7 @@ export default function EditPermModal(props) {
                         {"perm_userid: " +
                           keyvalue[0] +
                           ", uid: " +
-                          keyvalue[1].uid +
+                          keyvalue[1].perms_users_uid +
                           ", " +
                           keyvalue[1].firstname +
                           ", " +
@@ -310,14 +310,14 @@ export default function EditPermModal(props) {
                     <input
                       required
                       type="number"
-                      defaultValue={props.perm.slots}
+                      defaultValue={props.perm.perms_slots}
                       name="slots"
                       onChange={handleEditPermChange}
                     />
                     <input
                       required
                       type="text"
-                      defaultValue={props.perm.position}
+                      defaultValue={props.perm.perms_position}
                       name="position"
                       onChange={handleEditPermChange}
                     />
