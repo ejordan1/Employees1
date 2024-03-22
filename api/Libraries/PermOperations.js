@@ -4,24 +4,24 @@ export function createPermDictFromData(userPermsData) {
       let dataRow = userPermsData[key];
 
       // create perm objects if doesn't exist
-      if (!permsDict.hasOwnProperty(dataRow.id)) {
-        permsDict[dataRow.id] = {
-          startdatetime: new Date(dataRow.startdatetime),
-          enddatetime: new Date(dataRow.enddatetime),
-          position: dataRow.position,
-          slots: dataRow.slots,
+      if (!permsDict.hasOwnProperty(dataRow.perms_id)) {
+        permsDict[dataRow.perms_id] = {
+          perms_startdatetime: new Date(dataRow.perms_startdatetime),
+          perms_enddatetime: new Date(dataRow.perms_enddatetime),
+          perms_position: dataRow.perms_position,
+          perms_slots: dataRow.perms_slots,
           permUsers: {},
-          id: dataRow.id, // this is both the key, and this data field
+          perms_id: dataRow.perms_id, // this is both the key, and this data field
         };
       }
 
       // if it has the user info, add a new entry to the perm.permUsers
-      if (dataRow.firstname && dataRow.lastname && dataRow.uid) {
-        permsDict[dataRow.id].permUsers[dataRow.perm_userid] = {
+      if (dataRow.firstname && dataRow.lastname && dataRow.perms_users_uid) {
+        permsDict[dataRow.perms_id].permUsers[dataRow.perms_users_id] = {
           // naming it by the permUser id.
           firstname: dataRow.firstname,
           lastname: dataRow.lastname,
-          uid: dataRow.uid,
+          uid: dataRow.perms_users_uid,
         };
       }
     });

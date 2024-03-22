@@ -6,7 +6,7 @@ import EditPermModal from "./EditPermModal.js";
 import AddPermModal from "./AddPermModal.js";
 import {
   firstWeekDates,
-  mapObjectsToDate,
+  mapPermsToDate,
 } from "../Libraries/DateOperations.js";
 import {
   useQuery,
@@ -58,7 +58,7 @@ function AllPerms() {
   // refreshes modal and sets permsusersbydday
   useEffect(() => {
     console.log("Called!");
-    if (allPermsData) setPermsByDay(mapObjectsToDate(Object.values(allPermsData)));
+    if (allPermsData) setPermsByDay(mapPermsToDate(Object.values(allPermsData)));
     refreshModalPerm(allPermsData);
   }, [allPermsData]);
 

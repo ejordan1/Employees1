@@ -18,18 +18,18 @@ export const getPerms = (req, res) => {
       } else {
         const getAllPermsQuery = `
         SELECT 
-        employees1.perms.id, 
-        employees1.perms.startdatetime, 
-        employees1.perms.enddatetime, 
-        employees1.perms.position,
-        employees1.perms_users.perm_userid,
-        employees1.perms_users.permid,
-        employees1.perms_users.uid,
+        employees1.perms.perms_id, 
+        employees1.perms.perms_startdatetime, 
+        employees1.perms.perms_enddatetime, 
+        employees1.perms.perms_position,
+        employees1.perms_users.perms_users_id,
+        employees1.perms_users.perms_users_permid,
+        employees1.perms_users.perms_users_uid,
         employees1.users.firstname,
         employees1.users.lastname,
-        employees1.perms.slots
-        FROM employees1.perms LEFT JOIN employees1.perms_users    ON employees1.perms.id =  perms_users.permid
-        LEFT JOIN employees1.users ON employees1.users.id =  employees1.perms_users.uid`;
+        employees1.perms.perms_slots
+        FROM employees1.perms LEFT JOIN employees1.perms_users    ON employees1.perms.perms_id =  perms_users.perms_users_permid
+        LEFT JOIN employees1.users ON employees1.users.id =  employees1.perms_users.perms_users_uid`;
 
         db.query(getAllPermsQuery, (err, data) => {
           if (err) return res.status(500).send(err);
@@ -50,15 +50,15 @@ export const getPermsByUserId = (req, res) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const getPermsByIdQuery = `
-        SELECT employees1.perms.startdatetime, 
-        employees1.perms.enddatetime, 
-        employees1.perms.position, 
-        employees1.perms_users.permid,
-        employees1.perms_users.uid,
+        SELECT employees1.perms.perms_startdatetime, 
+        employees1.perms.perms_enddatetime, 
+        employees1.perms.perms_position, 
+        employees1.perms_users.perms_users_permid,
+        employees1.perms_users.perms_users_uid,
         employees1.users.firstname,
         employees1.users.lastname 
-        FROM employees1.perms JOIN employees1.perms_users    ON employees1.perms.id =  perms_users.permid
-        JOIN employees1.users ON employees1.users.id =  employees1.perms_users.uid
+        FROM employees1.perms JOIN employees1.perms_users    ON employees1.perms.perms_id =  perms_users.perms_users_permid
+        JOIN employees1.users ON employees1.users.id =  employees1.perms_users.perms_users_uid
         WHERE employees1.users.id = ?`;
 
     const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
@@ -91,15 +91,15 @@ export const getMyPerms = (req, res) => {
     if (err) return res.status(403).json("Token is not valid!");
 
     const getPermsByIdQuery = `
-        SELECT employees1.perms.startdatetime, 
-        employees1.perms.enddatetime, 
-        employees1.perms.position, 
-        employees1.perms_users.permid,
-        employees1.perms_users.uid,
+        SELECT employees1.perms.perms_startdatetime, 
+        employees1.perms.perms_enddatetime, 
+        employees1.perms.perms_position, 
+        employees1.perms_users.perms_users_permid,
+        employees1.perms_users.perms_users_uid,
         employees1.users.firstname,
         employees1.users.lastname 
-        FROM employees1.perms JOIN employees1.perms_users    ON employees1.perms.id =  perms_users.permid
-        JOIN employees1.users ON employees1.users.id =  employees1.perms_users.uid
+        FROM employees1.perms JOIN employees1.perms_users    ON employees1.perms.perms_id =  perms_users.perms_users_permid
+        JOIN employees1.users ON employees1.users.id =  employees1.perms_users.perms_users_uid
         WHERE employees1.users.id = ?`;
 
     const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
@@ -119,7 +119,7 @@ export const addPerm = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
+    const getRoleQuery = "SELECT role FROM employees1.users WHERE perms_id = ?";
     db.query(getRoleQuery, [employeeInfo.id], (err, data) => {
       if (err || data[0].role != "admin") {
         return res
@@ -127,13 +127,13 @@ export const addPerm = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "INSERT INTO perms(`position`, `startdatetime`, `enddatetime`, `slots`) VALUES (?)";
+          "INSERT INTO perms(`perms_position`, `perms_startdatetime`, `perms_enddatetime`, `perms_slots`) VALUES (?)";
 
         const values = [
-          req.body.position,
-          req.body.startdatetime,
-          req.body.enddatetime,
-          req.body.slots,
+          req.body.perms_position,
+          req.body.perms_startdatetime,
+          req.body.perms_enddatetime,
+          req.body.perms_slots,
         ];
 
         db.query(q, [values], (err, data) => {
@@ -162,15 +162,15 @@ export const editPerm = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "UPDATE employees1.perms SET `position`=?, `startdatetime`=?, `enddatetime`=?, `slots`=? WHERE `id`=?";
+          "UPDATE employees1.perms SET `perms_position`=?, `perms_startdatetime`=?, `perms_enddatetime`=?, `perms_slots`=? WHERE `perms_id`=?";
         const values = [
-          req.body.position,
-          req.body.startdatetime,
-          req.body.enddatetime,
-          req.body.slots,
-          req.body.id,
+          req.body.perms_position,
+          req.body.perms_startdatetime,
+          req.body.perms_enddatetime,
+          req.body.perms_slots,
+          req.body.perms_id,
         ];
-        if (!req.body.id)
+        if (!req.body.perms_id)
           return res.status(500).json("did not have id in body");
         db.query(q, values, (err, data) => {
           if (err) return res.status(500).send(err);
@@ -200,7 +200,7 @@ export const deletePerm = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-        const id = req.body.id;
+        const id = req.body.perms_id;
         if (!id) return res.status(500).json("did not have id in body");
         const q = "DELETE FROM perms WHERE `id`=?";
 

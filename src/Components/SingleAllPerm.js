@@ -12,13 +12,13 @@ function SingleAllPerm(props) {
 
   return (
     <div className={`${styles.container}`}>
-      <p>id: {props.perm.id}</p>
-      <p>position: {props.perm.position}</p>
+      <p>id: {props.perm.perms_id}</p>
+      <p>position: {props.perm.perms_position}</p>
       <div className={styles.times}>
-        <p>st: {format(props.perm.startdatetime, "HHmm")}</p>
+        <p>st: {format(props.perm.perms_startdatetime, "HHmm")}</p>
         <p>-</p>
-        <p>et: {format(props.perm.enddatetime, "HHmm")}</p>
-        <p>slots: {props.perm.slots}</p>
+        <p>et: {format(props.perm.perms_enddatetime, "HHmm")}</p>
+        <p>slots: {props.perm.perms_slots}</p>
       </div>
 
       {Object.entries(props.perm.permUsers).map((keyvalue) => (
@@ -27,7 +27,7 @@ function SingleAllPerm(props) {
             {"perm_userid: " +
               keyvalue[0] +
               ", uid: " +
-              keyvalue[1].uid +
+              keyvalue[1].perms_users_uid + // need to look at this
               ", " +
               keyvalue[1].firstname +
               ", " +
@@ -36,7 +36,7 @@ function SingleAllPerm(props) {
         </div>
       ))}
 
-      <button id={props.perm.id} onClick={handleEditClick}>
+      <button id={props.perm.perms_id} onClick={handleEditClick}>
         Edit Perm
       </button>
     </div>

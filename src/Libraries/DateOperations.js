@@ -38,6 +38,21 @@ export function mapObjectsToDate(shift) {
     return shiftByDay;
   }
 
+  export function mapPermsToDate(shift) {
+    let shiftByDay = {};
+
+    shift.forEach((shift) => {
+      let thisDay = format(shift.perms_startdatetime, formatDateStringKey);
+      if (!shiftByDay.hasOwnProperty(thisDay)) {
+        shiftByDay[thisDay] = [];
+      }
+      shift.perms_startdatetime = new Date (shift.perms_startdatetime);
+      shift.perms_enddatetime = new Date (shift.perms_enddatetime);
+      shiftByDay[thisDay].push(shift); // just the id, and should be sorted
+    });
+    return shiftByDay;
+  }
+
   function getThisWeekDates() {
     let s = startOfWeek(new Date());
     let e = endOfWeek(new Date());
