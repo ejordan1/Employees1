@@ -119,11 +119,14 @@ export const editShift = (req, res) => {
       } else {
         const q =
           "UPDATE shifts SET `shifts_startdatetime`=?, `shifts_enddatetime`=?, `shifts_position`=?, `shifts_uid`=? WHERE `shifts_id`=?";
+
+         const shifts_uid = req.body.shifts_uid === '-1' ? null : req.body.shifts_uid;
+
         const values = [
           req.body.shifts_startdatetime,
           req.body.shifts_enddatetime,
           req.body.shifts_position,
-          req.body.shifts_uid,
+          shifts_uid,
           req.body.shifts_id,
         ];
 

@@ -119,7 +119,7 @@ export const addPerm = (req, res) => {
   jwt.verify(token, "jwtkey", (err, employeeInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const getRoleQuery = "SELECT role FROM employees1.users WHERE perms_id = ?";
+    const getRoleQuery = "SELECT role FROM employees1.users WHERE id = ?";
     db.query(getRoleQuery, [employeeInfo.id], (err, data) => {
       if (err || data[0].role != "admin") {
         return res

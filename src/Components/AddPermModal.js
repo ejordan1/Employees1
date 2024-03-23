@@ -90,10 +90,10 @@ export default function AddPermModal() {
       let finalStartDateTime = getFinalStartDate(selectedWeekday, startDateTime);
       let finalEndDateTime = getAdjustedEndDate(finalStartDateTime, endDateTime);
       const bodyValues = {
-        startdatetime: format(finalStartDateTime, "yyyy-MM-dd HH:mm:ss"),
-        enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"),
-        position: position,
-        slots: slots,
+        perms_startdatetime: format(finalStartDateTime, "yyyy-MM-dd HH:mm:ss"),
+        perms_enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"),
+        perms_position: position,
+        perms_slots: slots,
       };
       mutate(bodyValues);
     } catch (err) {

@@ -54,10 +54,13 @@ export default function EditShiftModal(props) {
   });
 
   useEffect(() => {
+
+    const uid = props.shift && props.shift.shifts_uid ? props.shift.shifts_uid : -1;
+
     setStartDateTime(props.shift && props.shift.shifts_startdatetime);
     setEndDateTime(props.shift && props.shift.shifts_enddatetime);
     setPosition(props.shift && props.shift.shifts_position);
-    setUID(props.shift && props.shift.shifts_uid);
+    setUID(uid);
   }, [props.isVisible]);
 
   function setInputsToDefault() {
@@ -150,14 +153,14 @@ export default function EditShiftModal(props) {
                 <div className="editShiftForm">
                   <h1>Edit Shift</h1>
                   <p>
-                    current shift name: {props.shift.firstname}{" "}
+                    person's name: {props.shift.firstname}{" "}
                     {props.shift.lastname}
                   </p>
                   <form>
                     <input
                       required
                       type="text"
-                      defaultValue={props.shift.position}
+                      defaultValue={props.shift.shifts_position}
                       name="position"
                       onChange={(e) => setPosition(e.target.value)}
                     />
@@ -191,9 +194,12 @@ export default function EditShiftModal(props) {
                     />
 
                     <select value={uid} onChange={handleSelectEmployee}>
+                    <option key={0} value={-1}>
+                            empty
+                          </option>
                       {allEmployeesData &&
                         allEmployeesData.map((employee) => (
-                          <option value={employee.id}>
+                          <option key={employee.id} value={employee.id}>
                             {employee.firstname} {employee.lastname}
                           </option>
                         ))}
