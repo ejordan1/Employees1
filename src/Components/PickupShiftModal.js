@@ -33,10 +33,10 @@ export default function PickupShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        id: props.shift.id,
-        starttime: props.shift.startdatetime,
-        endtime: props.shift.enddatetime,
-        position: props.shift.position,
+        shifts_id: props.shift.shifts_id,
+        shifts_starttime: props.shift.shifts_startdatetime,
+        shifts_endtime: props.shift.shifts_enddatetime,
+        shifts_position: props.shift.shifts_position,
       };
       mutatePickupShift(bodyvalues);
       queryClient.invalidateQueries();

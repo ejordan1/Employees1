@@ -34,7 +34,7 @@ export default function PickupShiftModal(props) {
     e.preventDefault();
     try {
       const bodyvalues = {
-        id: props.shift.id,
+        shifts_id: props.shift.shifts_id,
       };
       mutateDropShift(bodyvalues);
       queryClient.invalidateQueries();
@@ -50,10 +50,10 @@ export default function PickupShiftModal(props) {
         <div className={styles.modal}>
           <div onClick={props.closeModal} className={styles.overlay}></div>
           <div className={styles.modalContent}>
-            <p>drop shiftid: {props.shift.id}</p>
-            <p>position: {props.position}</p>
-            <p>start: {format(props.shift.startdatetime, "HHmm")}</p>
-            <p>end: {format(props.shift.enddatetime, "HHmm")}</p>
+            <p>drop shiftid: {props.shift.shifts_id}</p>
+            <p>position: {props.shifts_position}</p>
+            <p>start: {format(props.shift.shifts_startdatetime, "HHmm")}</p>
+            <p>end: {format(props.shift.shifts_enddatetime, "HHmm")}</p>
             <button onClick={handleDropSubmit}>Drop Shift</button>
             <button className="close-modal" onClick={props.closeModal}>
               CLOSE add

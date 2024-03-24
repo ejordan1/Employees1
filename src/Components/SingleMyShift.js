@@ -12,14 +12,14 @@ function SingleMyShift(props) {
 
   return (
     <div className={styles.container}>
-      <p>{props.shift.position}</p>
+      <p>{props.shift.shifts_position}</p>
       <div className={styles.times}>
-        <p>{format(props.shift.startdatetime, "HHmm")}</p>
+        <p>{format(props.shift.shifts_startdatetime, "HHmm")}</p>
         <p>-</p>
-        <p>{format(props.shift.enddatetime, "HHmm")}</p>
+        <p>{format(props.shift.shifts_enddatetime, "HHmm")}</p>
       </div>
 
-      <button id={props.shift.id} onClick={handleDropClick}>
+      <button id={props.shift.shifts_id} onClick={handleDropClick}>
         Drop
       </button>
     </div>

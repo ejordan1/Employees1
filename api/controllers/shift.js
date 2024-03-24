@@ -206,7 +206,7 @@ export const dropShift = (req, res) => {
     if (err) return res.status(403).json("token is not valid!");
 
     const q =
-      "SELECT `startdatetime`, `enddatetime` FROM employees1.shifts s WHERE s.id=? AND s.uid=?"; // sid = get from body, and s.uid = employeeInfo.id
+      "SELECT `shifts_startdatetime`, `shifts_enddatetime` FROM employees1.shifts s WHERE s.shifts_id=? AND s.shifts_uid=?"; // sid = get from body, and s.uid = employeeInfo.id
 
     // changed from req.body.uid to employeeInfo.id, verify still works
     const values = [req.body.shifts_id, employeeInfo.id];

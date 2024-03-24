@@ -97,7 +97,7 @@ function MyShifts() {
             {myShiftsData && myShiftsData[date] ? (
               myShiftsData[date].map((shift) => (
                 <div>
-                  <p>{shift.id}</p>
+                  <p>{shift.shifts_id}</p>
                   <SingleMyShift
                     shift={shift}
                     openDropModal={dropModalOpen}
@@ -111,7 +111,7 @@ function MyShifts() {
             {availableShiftsData && availableShiftsData[date] ? (
               availableShiftsData[date].map((shift) => (
                 <div>
-                  <p>{shift.id}</p>
+                  <p>{shift.shifts_id}</p>
                   <SingleAvailableShift
                     shift={shift}
                     openPickupModal={pickupModalOpen}
