@@ -22,7 +22,7 @@ export default function AddShiftModal() {
   const [startDateTime, setStartDateTime] = useState(new Date());
   const [endDateTime, setEndDateTime] = useState(new Date());
   const [position, setPosition] = useState("");
-  const [uid, setUID] = useState(0);
+  const [uid, setUID] = useState(-1);
 
   const addShift = async (bodyValues) => {
     const res = await axios.post(`/shifts/admin/add`, bodyValues);
@@ -56,7 +56,7 @@ export default function AddShiftModal() {
   });
 
   const toggleModal = () => {
-    setSelectedJobType(-1)
+    setSelectedJobType(-1)(-1)
     resetInputValues();
     setModal(!modal);
     console.log("Employee data, " + allEmployeesData);
@@ -200,6 +200,9 @@ export default function AddShiftModal() {
 
             {/* here add the 0 empty option like in edit */}
             <select value={uid} onChange={handleSelectEmployee}>
+            <option key={0} value={-1}>
+                            empty
+                          </option>
               {allEmployeesData &&
                 allEmployeesData.map((employee) => (
                   <option value={employee.id}>

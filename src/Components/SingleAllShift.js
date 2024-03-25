@@ -8,7 +8,7 @@ function SingleAllShift(props) {
     props.setModalValues(props.shift);
     props.openEditModal();
   }
-  const getBackgroundColor = props.shift && props.shift.shifts_uid ? styles.filled : styles.empty;
+  const getBackgroundColor = props.shift && props.shift.shifts_uid != -1 ? styles.filled : styles.empty;
 
   return (
     <div className={`${styles.container} ${getBackgroundColor}`}>

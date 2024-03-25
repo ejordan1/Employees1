@@ -87,14 +87,15 @@ export const addShift = (req, res) => {
         const q =
           "INSERT INTO shifts(`shifts_startdatetime`, `shifts_enddatetime`, `shifts_position`, `shifts_uid`, `shifts_jobtype`) VALUES (?)";
 
-          const jobType = req.body.shifts_jobType === -1 ? null : req.body.shifts_jobType;
+          const shifts_jobType = req.body.shifts_jobType === -1 ? null : req.body.shifts_jobType;
+          const shifts_uid = req.body.shifts_uid === -1 ? null : req.body.shifts_uid;
 
         const values = [
           req.body.shifts_startdatetime,
           req.body.shifts_enddatetime,
           req.body.shifts_position,
-          req.body.shifts_uid ? req.body.shifts_uid : null,
-          jobType
+          shifts_uid,
+          shifts_jobType
         ];
 
         db.query(q, [values], (err, data) => {
@@ -121,15 +122,17 @@ export const editShift = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "UPDATE shifts SET `shifts_startdatetime`=?, `shifts_enddatetime`=?, `shifts_position`=?, `shifts_uid`=? WHERE `shifts_id`=?";
+          "UPDATE shifts SET `shifts_startdatetime`=?, `shifts_enddatetime`=?, `shifts_position`=?, `shifts_uid`=?, `shifts_jobtype`=? WHERE `shifts_id`=?";
 
-         const shifts_uid = req.body.shifts_uid === -1 ? null : req.body.shifts_uid;
+          const shifts_jobType = req.body.shifts_jobType == -1 ? null : req.body.shifts_jobType;
+         const shifts_uid = req.body.shifts_uid == -1 ? null : req.body.shifts_uid;
 
         const values = [
           req.body.shifts_startdatetime,
           req.body.shifts_enddatetime,
           req.body.shifts_position,
           shifts_uid,
+          shifts_jobType,
           req.body.shifts_id,
         ];
 

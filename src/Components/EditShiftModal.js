@@ -3,7 +3,7 @@ import styles from "./EditShiftModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { format } from "date-fns";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { getAdjustedEndDate } from "../Libraries/DateOperations";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
@@ -11,6 +11,8 @@ import { DataContext } from "../Contexts/DataContext";
 
 export default function EditShiftModal(props) {
   const { allEmployeesData } = useContext(DataContext);
+
+  const [selectedJobType, setSelectedJobType] = useState(-1);
 
   const [startDateTime, setStartDateTime] = useState(new Date());
   const [endDateTime, setEndDateTime] = useState(new Date());
@@ -23,6 +25,27 @@ export default function EditShiftModal(props) {
     const res = await axios.put(`/shifts/admin/edit`, bodyValues);
     return res.data;
   };
+
+  const handleSelectJobType = (event) => {
+    setSelectedJobType(event.target.value);
+    console.log("selected jobtype: " + event.target.value);
+  };
+
+
+  // move this out and into a larger class?
+  const fetchJobs = async () => {
+    const res = await axios.get(`/jobtypes`);
+    return res.data;
+  };
+
+  const {
+    data: jobTypesData,
+    error: jobsError, // not tested
+    isLoading: jobsIsLoading, // not tested
+  } = useQuery({
+    queryKey: ["jobs"],
+    queryFn: fetchJobs,
+  });
 
   const {
     mutate: mutateEditShift,
@@ -54,13 +77,21 @@ export default function EditShiftModal(props) {
   });
 
   useEffect(() => {
+    if (props.isVisible)
+    {
 
-    const uid = props.shift && props.shift.shifts_uid ? props.shift.shifts_uid : -1;
+    
+    const uid =
+      props.shift && props.shift.shifts_uid ? props.shift.shifts_uid : -1;
 
     setStartDateTime(props.shift && props.shift.shifts_startdatetime);
     setEndDateTime(props.shift && props.shift.shifts_enddatetime);
     setPosition(props.shift && props.shift.shifts_position);
+    setSelectedJobType(props.shift && props.shift.shifts_jobtype); // confusing situation where db uses not camel case
     setUID(uid);
+    } else {
+      setInputsToDefault();
+    }
   }, [props.isVisible]);
 
   function setInputsToDefault() {
@@ -68,6 +99,7 @@ export default function EditShiftModal(props) {
     setEndDateTime(new Date());
     setPosition(0);
     setUID(0);
+    setSelectedJobType(-1);
   }
 
   const handleSubmitEdit = async (e) => {
@@ -78,6 +110,7 @@ export default function EditShiftModal(props) {
         shifts_enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
         shifts_uid: uid,
         shifts_id: props.shift.shifts_id,
+        shifts_jobType: selectedJobType,
         shifts_position: position,
       };
       mutateEditShift(bodyvalues);
@@ -116,6 +149,7 @@ export default function EditShiftModal(props) {
         shifts_enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
         shifts_uid: uid,
         shifts_position: position,
+        shifts_jobType: "h",
         shifts_id: props.shift.shifts_id,
       };
       mutateDeleteShift(bodyvalues);
@@ -146,8 +180,12 @@ export default function EditShiftModal(props) {
               <div onClick={toggleModal} className={styles.overlay}></div>
               <div className={styles.modalContent}>
                 <p>id: {props.shift.shifts_id} </p>
-                <p>starttime: {format(props.shift.shifts_startdatetime, "HHmm")} </p>
-                <p>endtime: {format(props.shift.shifts_enddatetime, "HHmm")} </p>
+                <p>
+                  starttime: {format(props.shift.shifts_startdatetime, "HHmm")}{" "}
+                </p>
+                <p>
+                  endtime: {format(props.shift.shifts_enddatetime, "HHmm")}{" "}
+                </p>
                 <p>uid: {props.shift.shifts_uid} </p>
                 <p>position: {props.shift.shifts_position} </p>
                 <div className="editShiftForm">
@@ -193,10 +231,28 @@ export default function EditShiftModal(props) {
                       dateFormat="h:mm aa"
                     />
 
-                    <select value={uid} onChange={handleSelectEmployee}>
-                    <option key={0} value={-1}>
-                            empty
+                    <select
+                      value={selectedJobType}
+                      onChange={handleSelectJobType}
+                    >
+                      <option key={0} value={-1}>
+                        Job type undetermined
+                      </option>
+                      {jobTypesData &&
+                        jobTypesData.map((jobType) => (
+                          <option
+                            key={jobType.jobtypes_id}
+                            value={jobType.jobtypes_id}
+                          >
+                            {jobType.jobtypes_title}
                           </option>
+                        ))}
+                    </select>
+
+                    <select value={uid} onChange={handleSelectEmployee}>
+                      <option key={0} value={-1}>
+                        empty
+                      </option>
                       {allEmployeesData &&
                         allEmployeesData.map((employee) => (
                           <option key={employee.id} value={employee.id}>
