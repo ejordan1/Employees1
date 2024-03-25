@@ -6,7 +6,7 @@ import perms_usersRoutes from "./routes/perms_users.js"
 import shiftsRoutes from "./routes/shifts.js"
 import authRoutes from "./routes/auth.js"
 import employeeRoutes from "./routes/employees.js"
-import jobsRoutes from "./routes/jobs.js"
+import jobTypeRoutes from "./routes/jobtypes.js"
 import cookieParser from "cookie-parser"
 
 const app = express()
@@ -20,7 +20,7 @@ app.use("/api/perms_users", perms_usersRoutes)
 app.use("/api/shifts", shiftsRoutes)
 app.use("/api/auth", authRoutes)
 app.use("/api/employees", employeeRoutes)
-app.use("api/jobs", jobsRoutes)
+app.use("/api/jobtypes", jobTypeRoutes)
 
 app.listen(8800, ()=>{
     console.log("Connected!");

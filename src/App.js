@@ -13,6 +13,7 @@ import { UserContext } from "./Contexts/UserContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
 // import { allEmployeesData, allEmployeesError, allEmployeesIsLoading } from "./Components/QueryHelper";
+import JobTypes from "./Components/JobTypes";
 
 import {
   useQuery,
@@ -20,6 +21,7 @@ import {
   QueryClient,
   useQueryClient,
 } from "@tanstack/react-query";
+
 
 // 'https://jsonplaceholder.typicode.com/todos
 
@@ -113,6 +115,7 @@ function App() {
           <Route exact path="/myperms" element={<MyPerms />} />
           <Route exact path="/allshifts" element={<AllShifts />} />
           <Route exact path="/allperms" element={<AllPerms />} />
+          <Route exact path="/jobtypes" element={<JobTypes />} />
         </Routes>
         <div className="App">
 

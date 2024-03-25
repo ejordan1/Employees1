@@ -85,13 +85,16 @@ export const addShift = (req, res) => {
         }
 
         const q =
-          "INSERT INTO shifts(`shifts_startdatetime`, `shifts_enddatetime`, `shifts_position`, `shifts_uid`) VALUES (?)";
+          "INSERT INTO shifts(`shifts_startdatetime`, `shifts_enddatetime`, `shifts_position`, `shifts_uid`, `shifts_jobtype`) VALUES (?)";
+
+          const jobType = req.body.shifts_jobType === -1 ? null : req.body.shifts_jobType;
 
         const values = [
           req.body.shifts_startdatetime,
           req.body.shifts_enddatetime,
           req.body.shifts_position,
           req.body.shifts_uid ? req.body.shifts_uid : null,
+          jobType
         ];
 
         db.query(q, [values], (err, data) => {
@@ -120,7 +123,7 @@ export const editShift = (req, res) => {
         const q =
           "UPDATE shifts SET `shifts_startdatetime`=?, `shifts_enddatetime`=?, `shifts_position`=?, `shifts_uid`=? WHERE `shifts_id`=?";
 
-         const shifts_uid = req.body.shifts_uid === '-1' ? null : req.body.shifts_uid;
+         const shifts_uid = req.body.shifts_uid === -1 ? null : req.body.shifts_uid;
 
         const values = [
           req.body.shifts_startdatetime,

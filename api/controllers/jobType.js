@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 import jwt from "jsonwebtoken";
 
-export const getAllJobs = (req, res) => {
+export const getAllJobTypes = (req, res) => {
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated");
   
@@ -15,7 +15,7 @@ export const getAllJobs = (req, res) => {
             .status(401)
             .json("error:" + err + " , You don't have admin privlages");
         } else {
-          const q = `SELECT * FROM employees1.jobs`;
+          const q = `SELECT * FROM employees1.jobTypes`;
   
           db.query(q, (err, data) => {
             if (err) return res.status(500).json(err);
@@ -26,7 +26,8 @@ export const getAllJobs = (req, res) => {
     });
   };
 
-  export const addJob = (req, res) => {
+  // not yet tested
+  export const addJobType = (req, res) => {
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated");
   
@@ -43,17 +44,17 @@ export const getAllJobs = (req, res) => {
   
           // error handling here for body values
           // This error is not reaching the console for some reason
-          if (!req.body.jobs_title) // had  || !req.body.shifts_uid
+          if (!req.body.jobTypes_title) // had  || !req.body.shifts_uid
           {
             return res.status(500).json("not all required body fields were included, requires title");
           }
   
           const q =
-            "INSERT INTO shifts(`jobs_title`, `jobs_description``) VALUES (?)";
+            "INSERT INTO shifts(`jobtypes_title`, `jobtypes_description``) VALUES (?)";
   
           const values = [
-            req.body.jobs_title,
-            req.body.jobs_description,
+            req.body.jobTypes_title,
+            req.body.jobTypes_description,
           ];
   
           db.query(q, [values], (err, data) => {
@@ -65,8 +66,8 @@ export const getAllJobs = (req, res) => {
     });
   };
   
-
-  export const editJob = (req, res) => {
+  // not yet tested
+  export const editJobType = (req, res) => {
     const token = req.cookies.access_token;
     if (!token) return res.status(401).json("Not authenticated");
   
@@ -81,14 +82,14 @@ export const getAllJobs = (req, res) => {
             .json("error:" + err + " , You don't have admin privlages");
         } else {
           const q =
-            "UPDATE jobs SET `jobs_title`=?, `jobs_description`=?, `shifts_position`=?, `shifts_uid`=? WHERE `jobs_id`=?";
+            "UPDATE jobTypes SET `jobtypes_title`=?, `jobtypes_description`=?, `shifts_position`=?, `shifts_uid`=? WHERE `jobTypes_id`=?";
   
            const shifts_uid = req.body.shifts_uid === '-1' ? null : req.body.shifts_uid;
   
           const values = [
-            req.body.jobs_title,
-            req.body.jobs_description,
-            req.body.jobs_id,
+            req.body.jobTypes_title,
+            req.body.jobTypes_description,
+            req.body.jobTypes_id,
           ];
   
           db.query(q, values, (err, data) => {

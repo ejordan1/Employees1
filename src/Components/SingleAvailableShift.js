@@ -14,12 +14,12 @@ function SingleAvailableShift(props) {
     <div className={styles.container}>
       <p>{props.shift.position}</p>
       <div className={styles.times}>
-        <p>{format(props.shift.shifts_startdatetime, "HHmm")}</p>
+        <p>{format(props.shift.startdatetime, "HHmm")}</p>
         <p>-</p>
-        <p>{format(props.shift.shifts_enddatetime, "HHmm")}</p>
+        <p>{format(props.shift.enddatetime, "HHmm")}</p>
       </div>
 
-      <button id={props.shift.shifts_id} onClick={handlePickupClick}>
+      <button id={props.shift.id} onClick={handlePickupClick}>
         pickup
       </button>
     </div>

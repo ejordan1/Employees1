@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import "./AddShiftModal.module.scss";
 import axios from "axios";
 import styles from "./AddShiftModal.module.scss";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 import { format, addDays, isBefore } from "date-fns";
@@ -11,7 +11,9 @@ import { getAdjustedEndDate } from "../Libraries/DateOperations";
 import { DataContext } from "../Contexts/DataContext";
 
 export default function AddShiftModal() {
-  const {allEmployeesData} = useContext(DataContext);
+  const { allEmployeesData } = useContext(DataContext);
+
+  const [selectedJobType, setSelectedJobType] = useState(-1);
 
   const [modal, setModal] = useState(false);
 
@@ -37,12 +39,27 @@ export default function AddShiftModal() {
     onSuccess: () => {
       queryClient.invalidateQueries();
     },
-  }); 
+  });
+
+  const fetchJobs = async () => {
+    const res = await axios.get(`/jobtypes`);
+    return res.data;
+  };
+
+  const {
+    data: jobTypesData,
+    error: jobsError, // not tested
+    isLoading: jobsIsLoading, // not tested
+  } = useQuery({
+    queryKey: ["jobs"],
+    queryFn: fetchJobs,
+  });
 
   const toggleModal = () => {
+    setSelectedJobType(-1)
     resetInputValues();
     setModal(!modal);
-    console.log("Employee data, " + allEmployeesData)
+    console.log("Employee data, " + allEmployeesData);
   };
 
   if (modal) {
@@ -53,14 +70,14 @@ export default function AddShiftModal() {
 
   function resetInputValues() {
     let tomorrowStart = new Date();
-    tomorrowStart.setDate(tomorrowStart.getDate() + 1); 
-    tomorrowStart.setHours(7); 
+    tomorrowStart.setDate(tomorrowStart.getDate() + 1);
+    tomorrowStart.setHours(7);
     tomorrowStart.setMinutes(0);
     setStartDateTime(tomorrowStart);
 
     let tomorrowEnd = new Date();
-    tomorrowEnd.setDate(tomorrowStart.getDate() + 1); 
-    tomorrowEnd.setHours(15); 
+    tomorrowEnd.setDate(tomorrowStart.getDate() + 1);
+    tomorrowEnd.setHours(15);
     tomorrowEnd.setMinutes(0);
     setEndDateTime(tomorrowEnd);
 
@@ -68,10 +85,10 @@ export default function AddShiftModal() {
     setUID(0);
   }
 
-  const handleSelectEmployee = (event) => { 
+  const handleSelectEmployee = (event) => {
     setUID(event.target.value);
-    console.log("selected employee: " +event.target.value);
-  }; 
+    console.log("selected employee: " + event.target.value);
+  };
 
   function handleSetStart(date) {
     setStartDateTime(date);
@@ -95,6 +112,11 @@ export default function AddShiftModal() {
   //   return tempDate;
   // }
 
+  const handleSelectJobType = (event) => {
+    setSelectedJobType(event.target.value);
+    console.log("selected jobtype: " + event.target.value);
+  };
+
   const handleSubmitCreate = async (e) => {
     e.preventDefault();
     try {
@@ -103,6 +125,7 @@ export default function AddShiftModal() {
         shifts_enddatetime: format(endDateTime, "yyyy-MM-dd HH:mm:ss"),
         shifts_position: position,
         shifts_uid: uid,
+        shifts_jobType: selectedJobType,
       };
       mutateAddShift(bodyvalues);
       queryClient.invalidateQueries();
@@ -163,13 +186,27 @@ export default function AddShiftModal() {
               dateFormat="h:mm aa"
             />
 
+            <select value={selectedJobType} onChange={handleSelectJobType}>
+              <option key={0} value={-1}>
+                Job type undetermined
+              </option>
+              {jobTypesData &&
+                jobTypesData.map((jobType) => (
+                  <option key={jobType.jobtypes_id} value={jobType.jobtypes_id}>
+                    {jobType.jobtypes_title}
+                  </option>
+                ))}
+            </select>
 
-              <select value={uid} onChange={handleSelectEmployee}>
-                  
-              {allEmployeesData && allEmployeesData.map((employee) => (
-                <option value={employee.id}>{employee.firstname} {employee.lastname}</option>
-              ))}
-                </select>
+            {/* here add the 0 empty option like in edit */}
+            <select value={uid} onChange={handleSelectEmployee}>
+              {allEmployeesData &&
+                allEmployeesData.map((employee) => (
+                  <option value={employee.id}>
+                    {employee.firstname} {employee.lastname}
+                  </option>
+                ))}
+            </select>
 
             <button className="close-modal" onClick={toggleModal}>
               CLOSE add
