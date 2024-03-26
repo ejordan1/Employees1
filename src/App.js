@@ -43,6 +43,22 @@ function App() {
     queryFn: fetchAllEmployees,
   });
 
+    // move this out and into a larger class?
+    const fetchJobs = async () => {
+      const res = await axios.get(`/jobtypes`);
+      return res.data;
+    };
+  
+    const {
+      data: jobTypesData,
+      error: jobsError, // not tested
+      isLoading: jobsIsLoading, // not tested
+    } = useQuery({
+      queryKey: ["jobs"],
+      queryFn: fetchJobs,
+    });
+  
+
 
 
   const [username, setUserName] = useState("john");
@@ -103,7 +119,7 @@ function App() {
   console.log(allEmployeesData);
 
   return (
-    <DataContext.Provider value={{ allEmployeesData }}>
+    <DataContext.Provider value={{ allEmployeesData, jobTypesData }}>
     <UserContext.Provider value={{ username, setUserName }}>
       <BrowserRouter>
         <Navbar></Navbar>

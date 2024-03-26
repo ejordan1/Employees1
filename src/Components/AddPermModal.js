@@ -13,11 +13,13 @@ export default function AddPermModal() {
 
   const queryClient = useQueryClient();
 
+  
   const [startDateTime, setStartDateTime] = useState(new Date());
   const [endDateTime, setEndDateTime] = useState(new Date());
   const [position, setPosition] = useState("");
   const [slots, setSlots] = useState(0);
 
+  const [selectedJobType, setSelectedJobType] = useState(-1);
   const [selectedWeekday, setSelectedWeekday] = useState("Sunday"); 
 
 
@@ -46,6 +48,7 @@ export default function AddPermModal() {
 
     setPosition("");
     setSlots(0);
+    setSelectedJobType(-1)
   }
 
   const { mutate, isPending, isError, isSuccess } = useMutation({

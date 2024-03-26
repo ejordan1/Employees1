@@ -11,7 +11,7 @@ import { getAdjustedEndDate } from "../Libraries/DateOperations";
 import { DataContext } from "../Contexts/DataContext";
 
 export default function AddShiftModal() {
-  const { allEmployeesData } = useContext(DataContext);
+  const { allEmployeesData, jobTypesData } = useContext(DataContext);
 
   const [selectedJobType, setSelectedJobType] = useState(-1);
 
@@ -41,22 +41,22 @@ export default function AddShiftModal() {
     },
   });
 
-  const fetchJobs = async () => {
-    const res = await axios.get(`/jobtypes`);
-    return res.data;
-  };
+  // const fetchJobs = async () => {
+  //   const res = await axios.get(`/jobtypes`);
+  //   return res.data;
+  // };
 
-  const {
-    data: jobTypesData,
-    error: jobsError, // not tested
-    isLoading: jobsIsLoading, // not tested
-  } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: fetchJobs,
-  });
+  // const {
+  //   data: jobTypesData,
+  //   error: jobsError, // not tested
+  //   isLoading: jobsIsLoading, // not tested
+  // } = useQuery({
+  //   queryKey: ["jobs"],
+  //   queryFn: fetchJobs,
+  // });
 
   const toggleModal = () => {
-    setSelectedJobType(-1)(-1)
+    
     resetInputValues();
     setModal(!modal);
     console.log("Employee data, " + allEmployeesData);
@@ -82,7 +82,8 @@ export default function AddShiftModal() {
     setEndDateTime(tomorrowEnd);
 
     setPosition("");
-    setUID(0);
+    setUID(-1);
+    setSelectedJobType(-1)
   }
 
   const handleSelectEmployee = (event) => {

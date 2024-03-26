@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css"; // it suggested module .css
 import { DataContext } from "../Contexts/DataContext";
 
 export default function EditShiftModal(props) {
-  const { allEmployeesData } = useContext(DataContext);
+  const { allEmployeesData, jobTypesData } = useContext(DataContext);
 
   const [selectedJobType, setSelectedJobType] = useState(-1);
 
@@ -32,20 +32,6 @@ export default function EditShiftModal(props) {
   };
 
 
-  // move this out and into a larger class?
-  const fetchJobs = async () => {
-    const res = await axios.get(`/jobtypes`);
-    return res.data;
-  };
-
-  const {
-    data: jobTypesData,
-    error: jobsError, // not tested
-    isLoading: jobsIsLoading, // not tested
-  } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: fetchJobs,
-  });
 
   const {
     mutate: mutateEditShift,
