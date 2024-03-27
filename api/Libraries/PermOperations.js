@@ -10,6 +10,7 @@ export function createPermDictFromData(userPermsData) {
         perms_enddatetime: new Date(dataRow.perms_enddatetime),
         perms_position: dataRow.perms_position,
         perms_slots: dataRow.perms_slots,
+        perms_jobtype: dataRow.perms_jobtype,
         permUsers: {},
         perms_id: dataRow.perms_id, // this is both the key, and this data field
       };

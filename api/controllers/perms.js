@@ -22,6 +22,7 @@ export const getPerms = (req, res) => {
         employees1.perms.perms_startdatetime, 
         employees1.perms.perms_enddatetime, 
         employees1.perms.perms_position,
+        employees1.perms.perms_jobtype,
         employees1.perms_users.perms_users_id,
         employees1.perms_users.perms_users_permid,
         employees1.perms_users.perms_users_uid,
@@ -162,12 +163,16 @@ export const editPerm = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "UPDATE employees1.perms SET `perms_position`=?, `perms_startdatetime`=?, `perms_enddatetime`=?, `perms_slots`=? WHERE `perms_id`=?";
-        const values = [
+          "UPDATE employees1.perms SET `perms_position`=?, `perms_startdatetime`=?, `perms_enddatetime`=?, `perms_slots`=?, `perms_jobtype`=? WHERE `perms_id`=?";
+        
+          const permsjobType = req.body.perms_jobType === -1 ? null : req.body.perms_jobType;
+        
+          const values = [
           req.body.perms_position,
           req.body.perms_startdatetime,
           req.body.perms_enddatetime,
           req.body.perms_slots,
+          permsjobType,
           req.body.perms_id,
         ];
         if (!req.body.perms_id)

@@ -16,7 +16,7 @@ import { DataContext } from "../Contexts/DataContext";
 export default function EditPermModal(props) {
   const queryClient = useQueryClient();
   const { allEmployeesData, jobTypesData } = useContext(DataContext);
-  
+
   const [selectedWeekday, setSelectedWeekday] = useState(null); // start as null?
 
   // this has these in an object with helper methods, in addPermModal they are separate useState hooks
@@ -25,6 +25,7 @@ export default function EditPermModal(props) {
     enddatetime: null,
     slots: 0,
     position: "",
+    jobType: -1,
     permUsers: {},
   };
 
@@ -59,12 +60,24 @@ export default function EditPermModal(props) {
     }));
   };
 
+  const handleSetJobTypePerm = (jobType) => {
+    setEditPermInputs((prev) => ({
+      ...prev,
+      jobType: jobType,
+    }));
+  };
+
   // const handleCreateUserPermChange = (e) => {
   //   setCreateUserPermInputs((prev) => ({
   //     ...prev,
   //     [e.target.name]: e.target.value,
   //   }));
   // };
+
+  const handleSelectJobType = (event) => {
+    handleSetJobTypePerm(event.target.value);
+    console.log("selected jobtype: " + event.target.value);
+  };
 
   const handleSelectWeekday = (event) => {
     setSelectedWeekday(event.target.value);
@@ -149,6 +162,7 @@ export default function EditPermModal(props) {
         enddatetime: props.perm.perms_enddatetime,
         slots: props.perm.perms_slots,
         permUsers: props.perm.permUsers,
+        jobType: props.perm.perms_jobtype, // just added
       });
       setSelectedWeekday(format(props.perm.perms_startdatetime, "EEEE"));
     }
@@ -208,6 +222,7 @@ export default function EditPermModal(props) {
         perms_enddatetime: format(finalEndDateTime, "yyyy-MM-dd HH:mm:ss"),
         perms_position: editPermInputs.position,
         perms_slots: editPermInputs.slots,
+        perms_jobType: editPermInputs.jobType,
       };
 
       mutateEditPerm(bodyvalues);
@@ -344,6 +359,26 @@ export default function EditPermModal(props) {
                       name="position"
                       onChange={handleEditPermChange}
                     />
+
+                    <p>job Type</p>
+                    <select
+                      value={editPermInputs.jobType}
+                      onChange={handleSelectJobType}
+                    >
+                      <option key={0} value={-1}>
+                        Job type undetermined
+                      </option>
+                      {jobTypesData &&
+                        jobTypesData.map((jobType) => (
+                          <option
+                            key={jobType.jobtypes_id}
+                            value={jobType.jobtypes_id}
+                          >
+                            {jobType.jobtypes_title}
+                          </option>
+                        ))}
+                    </select>
+
                     <select
                       value={selectedWeekday}
                       onChange={handleSelectWeekday}
