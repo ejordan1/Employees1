@@ -27,7 +27,7 @@ function SingleAllPerm(props) {
             {"perm_userid: " +
               keyvalue[0] +
               ", uid: " +
-              keyvalue[1].perms_users_uid + // need to look at this
+              keyvalue[1].uid + // need to look at this
               ", " +
               keyvalue[1].firstname +
               ", " +

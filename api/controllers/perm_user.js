@@ -43,7 +43,10 @@ export const addPerm_User = (req, res) => {
       } else {
         const q = "INSERT INTO perms_users(`perms_users_permid`, `perms_users_uid`) VALUES (?)";
 
-        const values = [req.body.perms_users_permid, req.body.perms_users_uid];
+        // here I had to use truthy, but in add shift I used true... why?
+        const perms_users_uid = req.body.perms_users_uid == -1 ? null : req.body.perms_users_uid;
+
+        const values = [req.body.perms_users_permid, perms_users_uid];
 
         db.query(q, [values], (err, data) => {
           if (err) return res.status(500).send(err);
@@ -51,6 +54,7 @@ export const addPerm_User = (req, res) => {
             return res.status(404).json("Did not affect any rows");
           }
 
+          // need to implement this and account for null too
           let nameQ = "SELECT firstname, lastname FROM employees1.users WHERE id = 5;"
           db.query(nameQ, req.body.id, (err, dataName) => {
             if (err) return res.status(500).send(err);

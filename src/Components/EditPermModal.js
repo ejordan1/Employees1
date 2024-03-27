@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./EditPermModal.module.scss";
 import PropTypes from "prop-types";
 import axios from "axios";
@@ -11,10 +11,12 @@ import {
   getAdjustedEndDate,
   getFinalStartDate,
 } from "../Libraries/DateOperations";
+import { DataContext } from "../Contexts/DataContext";
 
 export default function EditPermModal(props) {
   const queryClient = useQueryClient();
-
+  const { allEmployeesData, jobTypesData } = useContext(DataContext);
+  
   const [selectedWeekday, setSelectedWeekday] = useState(null); // start as null?
 
   // this has these in an object with helper methods, in addPermModal they are separate useState hooks
@@ -26,13 +28,15 @@ export default function EditPermModal(props) {
     permUsers: {},
   };
 
+  const [uid, setUID] = useState(-1);
+
   const [editPermInputs, setEditPermInputs] = useState({
     editPermDefaultValues,
   });
 
-  const [createUserPermInputs, setCreateUserPermInputs] = useState({
-    uid: 0,
-  });
+  // const [createUserPermInputs, setCreateUserPermInputs] = useState({
+  //   uid: 0,
+  // });
 
   const handleEditPermChange = (e) => {
     setEditPermInputs((prev) => ({
@@ -55,12 +59,12 @@ export default function EditPermModal(props) {
     }));
   };
 
-  const handleCreateUserPermChange = (e) => {
-    setCreateUserPermInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  // const handleCreateUserPermChange = (e) => {
+  //   setCreateUserPermInputs((prev) => ({
+  //     ...prev,
+  //     [e.target.name]: e.target.value,
+  //   }));
+  // };
 
   const handleSelectWeekday = (event) => {
     setSelectedWeekday(event.target.value);
@@ -152,6 +156,7 @@ export default function EditPermModal(props) {
 
   const toggleModal = () => {
     setEditPermInputs(editPermDefaultValues);
+    setUID(-1); // resetting
     props.closeModal();
   };
 
@@ -160,7 +165,7 @@ export default function EditPermModal(props) {
     try {
       const bodyvalues = {
         perms_users_permid: props.perm.perms_id,
-        perms_users_uid: createUserPermInputs.uid,
+        perms_users_uid: uid, // should make this uid variable name better
       };
       mutateAddPU(bodyvalues);
     } catch (err) {
@@ -178,6 +183,11 @@ export default function EditPermModal(props) {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleSelectEmployee = (event) => {
+    setUID(event.target.value);
+    console.log("selected employee: " + event.target.value);
   };
 
   const handleSubmitEdit = async (e) => {
@@ -226,8 +236,6 @@ export default function EditPermModal(props) {
     }
   };
 
-
-
   return (
     <div>
       {props.isVisible && (
@@ -241,9 +249,12 @@ export default function EditPermModal(props) {
               <div className={styles.modalContent}>
                 <p>id: {props.perm.perms_id} </p>
                 <p>
-                  startdatetime: {format(props.perm.perms_startdatetime, "HHmm")}{" "}
+                  startdatetime:{" "}
+                  {format(props.perm.perms_startdatetime, "HHmm")}{" "}
                 </p>
-                <p>enddatetime: {format(props.perm.perms_enddatetime, "HHmm")} </p>
+                <p>
+                  enddatetime: {format(props.perm.perms_enddatetime, "HHmm")}{" "}
+                </p>
                 <p>position: {props.perm.perms_position} </p>
                 <p>slots: {props.perm.perms_slots} </p>
                 {props.perm.permUsers &&
@@ -270,14 +281,26 @@ export default function EditPermModal(props) {
 
                 <div className="createUserPermForm">
                   <h1>Create UserPerm</h1>
+                  {/* here add the 0 empty option like in edit */}
+                  <select value={uid} onChange={handleSelectEmployee}>
+                    <option key={0} value={-1}>
+                      empty
+                    </option>
+                    {allEmployeesData &&
+                      allEmployeesData.map((employee) => (
+                        <option value={employee.id}>
+                          {employee.firstname} {employee.lastname}
+                        </option>
+                      ))}
+                  </select>
                   <form>
-                    <input
+                    {/* <input
                       required
                       type="number"
                       placeholder="uid"
                       name="uid"
                       onChange={handleCreateUserPermChange}
-                    />
+                    /> */}
                     <button onClick={handleSubmitCreateUserPerm}>
                       Create User Perm
                     </button>
