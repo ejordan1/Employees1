@@ -76,26 +76,31 @@ export const addShift = (req, res) => {
           .status(401)
           .json("error:" + err + " , You don't have admin privlages");
       } else {
-
         // error handling here for body values
         // This error is not reaching the console for some reason
-        if (!req.body.shifts_startdatetime || !req.body.shifts_enddatetime) // had  || !req.body.shifts_uid
-        {
-          return res.status(500).json("not all required body fields were included, requires st, et, uid");
+        if (!req.body.shifts_startdatetime || !req.body.shifts_enddatetime) {
+          // had  || !req.body.shifts_uid
+          return res
+            .status(500)
+            .json(
+              "not all required body fields were included, requires st, et, uid"
+            );
         }
 
         const q =
           "INSERT INTO shifts(`shifts_startdatetime`, `shifts_enddatetime`, `shifts_position`, `shifts_uid`, `shifts_jobtype`) VALUES (?)";
 
-          const shifts_jobType = req.body.shifts_jobType === -1 ? null : req.body.shifts_jobType;
-          const shifts_uid = req.body.shifts_uid === -1 ? null : req.body.shifts_uid;
+        const shifts_jobType =
+          req.body.shifts_jobType === -1 ? null : req.body.shifts_jobType;
+        const shifts_uid =
+          req.body.shifts_uid === -1 ? null : req.body.shifts_uid;
 
         const values = [
           req.body.shifts_startdatetime,
           req.body.shifts_enddatetime,
           req.body.shifts_position,
           shifts_uid,
-          shifts_jobType
+          shifts_jobType,
         ];
 
         db.query(q, [values], (err, data) => {
@@ -124,8 +129,10 @@ export const editShift = (req, res) => {
         const q =
           "UPDATE shifts SET `shifts_startdatetime`=?, `shifts_enddatetime`=?, `shifts_position`=?, `shifts_uid`=?, `shifts_jobtype`=? WHERE `shifts_id`=?";
 
-          const shifts_jobType = req.body.shifts_jobType == -1 ? null : req.body.shifts_jobType;
-         const shifts_uid = req.body.shifts_uid == -1 ? null : req.body.shifts_uid;
+        const shifts_jobType =
+          req.body.shifts_jobType == -1 ? null : req.body.shifts_jobType;
+        const shifts_uid =
+          req.body.shifts_uid == -1 ? null : req.body.shifts_uid;
 
         const values = [
           req.body.shifts_startdatetime,

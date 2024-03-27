@@ -1,10 +1,14 @@
-import express from "express"
-import { getAllJobTypes, addJobType, editJobType } from "../controllers/jobType.js"
+import express from "express";
+import {
+  getAllJobTypes,
+  addJobType,
+  editJobType,
+} from "../controllers/jobType.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/", getAllJobTypes)
-router.put("/", addJobType)
-router.put("/edit", editJobType)
+router.get("/", getAllJobTypes);
+router.post("/add", addJobType);
+router.put("/edit", editJobType);
 
-export default router
+export default router;
