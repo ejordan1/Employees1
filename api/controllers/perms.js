@@ -128,13 +128,17 @@ export const addPerm = (req, res) => {
           .json("error:" + err + " , You don't have admin privlages");
       } else {
         const q =
-          "INSERT INTO perms(`perms_position`, `perms_startdatetime`, `perms_enddatetime`, `perms_slots`) VALUES (?)";
+          "INSERT INTO perms(`perms_position`, `perms_startdatetime`, `perms_enddatetime`, `perms_slots`, `perms_jobType`) VALUES (?)";
+
+        const permsjobType =
+          req.body.perms_jobType === -1 ? null : req.body.perms_jobType;
 
         const values = [
           req.body.perms_position,
           req.body.perms_startdatetime,
           req.body.perms_enddatetime,
           req.body.perms_slots,
+          permsjobType,
         ];
 
         db.query(q, [values], (err, data) => {
@@ -164,10 +168,11 @@ export const editPerm = (req, res) => {
       } else {
         const q =
           "UPDATE employees1.perms SET `perms_position`=?, `perms_startdatetime`=?, `perms_enddatetime`=?, `perms_slots`=?, `perms_jobtype`=? WHERE `perms_id`=?";
-        
-          const permsjobType = req.body.perms_jobType === -1 ? null : req.body.perms_jobType;
-        
-          const values = [
+
+        const permsjobType =
+          req.body.perms_jobType === -1 ? null : req.body.perms_jobType;
+
+        const values = [
           req.body.perms_position,
           req.body.perms_startdatetime,
           req.body.perms_enddatetime,
